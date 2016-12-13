@@ -3,10 +3,8 @@ package com.dijiaapp.eatserviceapp.kaizhuo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,6 +18,7 @@ import com.dijiaapp.eatserviceapp.data.OrderInfo;
 import com.dijiaapp.eatserviceapp.data.ResultInfo;
 import com.dijiaapp.eatserviceapp.data.Seat;
 import com.dijiaapp.eatserviceapp.diancan.FoodActivity;
+import com.dijiaapp.eatserviceapp.my.MyFragment;
 import com.dijiaapp.eatserviceapp.network.Network;
 import com.dijiaapp.eatserviceapp.order.OrderAddFoodEvent;
 import com.dijiaapp.eatserviceapp.order.OrderDetailActivity;
@@ -35,22 +34,19 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
-import io.realm.Case;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static android.R.attr.id;
-import static android.R.attr.track;
-import static com.dijiaapp.eatserviceapp.network.Network.getSeatService;
-
 public class MainActivity extends AppCompatActivity {
 
     private static final String HOME_TAG = "home_flag";
     private static final String ORDERS_TAG = "orders_flag";
+    private static final String MY_TAG = "my_flag";
     private static final int CONTENT_ORDERS = 2;
+    private static final int CONTENT_MY = 4;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.bottomBar)
@@ -76,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.tab_order:
                         setContent(CONTENT_ORDERS);
+                        break;
+                    case R.id.tab_mine:
+                        setContent(CONTENT_MY);
                         break;
                 }
             }
@@ -192,6 +191,13 @@ public class MainActivity extends AppCompatActivity {
                     orderFragment = OrdersFragment.newInstance();
                 }
                 setFragment(orderFragment, ORDERS_TAG);
+                break;
+            case CONTENT_MY:
+                MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag(MY_TAG);
+                if (myFragment == null) {
+                    myFragment = MyFragment.newInstance() ;
+                }
+                setFragment(myFragment, MY_TAG);
                 break;
         }
 

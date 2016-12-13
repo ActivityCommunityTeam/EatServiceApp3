@@ -7,4 +7,6 @@
     <color name="black">#444444</color>
     <color name="gray_light">#EBEDF0</color>
     <color name="red">#ee0000</color>
+
+    <color name="whitesmoke">#efefef</color> <!-- 烟白色 -->
 </resources>
