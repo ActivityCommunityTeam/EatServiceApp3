@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".kaizhuo.SeatEatNumberActivityFragment"
+    tools:showIn="@layout/activity_seat_eat_number">
+
+    <LinearLayout
+        android:layout_margin="16dp"
+        android:id="@+id/hotel_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/hotel_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/hotel_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <EditText
+        android:layout_margin="16dp"
+        android:id="@+id/hotel_eat_number_et"
+        android:layout_below="@id/hotel_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned" />
+
+
+    <Button
+        android:id="@+id/hotel_done_bt"
+        android:layout_below="@id/hotel_eat_number_et"
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="确认开始"/>
+
+</RelativeLayout>
