@@ -4,8 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Seat;
@@ -43,8 +43,8 @@ public class SeatRecyclerviewAdapter extends RecyclerView.Adapter<SeatRecyclervi
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Seat seat = seatList.get(position);
         holder.mSeatListitemName.setText(seat.getSeatName());
-        holder.mSeatListitemNumber.setText(String.valueOf(seat.getContainNum()));
-        holder.mSeatListitemStatus.setText(seat.getUseStatus());
+        /*holder.mSeatListitemNumber.setText(String.valueOf(seat.getContainNum()));
+        holder.mSeatListitemStatus.setText(seat.getUseStatus());*/
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @DebugLog
@@ -53,6 +53,22 @@ public class SeatRecyclerviewAdapter extends RecyclerView.Adapter<SeatRecyclervi
                 EventBus.getDefault().post(new EnterActivityEvent(SeatEatNumberActivity.class, seat));
             }
         });
+        switch (seat.getUseStatus()){
+            case "01":
+                holder.mSeatListitemRal.setBackgroundResource(R.color.freegreen);
+                holder.mSeatListitemStatus.setText("空闲");
+                break;
+            case "02":
+                holder.mSeatListitemRal.setBackgroundResource(R.color.usedgary);
+                holder.mSeatListitemStatus.setText("使用中");
+                break;
+            case "03":
+                holder.mSeatListitemRal.setBackgroundResource(R.color.reservationyellow);
+                holder.mSeatListitemStatus.setText("已预定");
+                break;
+        }
+        holder.mSeatListitemNumber.setText(String.valueOf(seat.getContainNum())+"人桌");
+
 
     }
 
@@ -63,6 +79,8 @@ public class SeatRecyclerviewAdapter extends RecyclerView.Adapter<SeatRecyclervi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View view;
+        @BindView(R.id.seat_listitem_ral)
+        RelativeLayout mSeatListitemRal;
         @BindView(R.id.seat_listitem_name)
         TextView mSeatListitemName;
         @BindView(R.id.seat_listitem_number)

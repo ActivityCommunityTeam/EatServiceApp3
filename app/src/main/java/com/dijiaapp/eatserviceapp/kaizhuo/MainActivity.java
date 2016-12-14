@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String HOME_TAG = "home_flag";
     private static final String ORDERS_TAG = "orders_flag";
     private static final String MY_TAG = "my_flag";
+    private static final String FOUND_TAG = "found_flag";
+    private static final int CONTENT_FOUND = 3;
+
     private static final int CONTENT_ORDERS = 2;
     private static final int CONTENT_MY = 4;
     @BindView(R.id.toolbar)
@@ -73,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab_order:
                         setContent(CONTENT_ORDERS);
                         break;
-                    case R.id.tab_find:
-                        setContent(CONTENT_FOUND);
+
                     case R.id.tab_mine:
                         setContent(CONTENT_MY);
                         break;
@@ -194,15 +196,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 setFragment(orderFragment, ORDERS_TAG);
                 break;
-            case CONTENT_FOUND:
-                Log.i("gqf","CONTENT_FOUND");
-                FoundFragment foundFragment = (FoundFragment) getSupportFragmentManager().findFragmentByTag(FOUND_TAG);
-                if (foundFragment == null) {
-                    foundFragment = FoundFragment.newInstance();
-                }
-                setFragment(foundFragment, FOUND_TAG);
-                break;
-
             case CONTENT_MY:
                 MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag(MY_TAG);
                 if (myFragment == null) {
