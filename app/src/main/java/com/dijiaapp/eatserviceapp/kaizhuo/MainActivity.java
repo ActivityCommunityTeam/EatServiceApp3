@@ -61,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         mcompositeSubscription = new CompositeSubscription();
-        setContent(CONTENT_HOME);
-
+//        setContent(CONTENT_HOME);
         mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -208,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param fragment
      */
-
+@DebugLog
     private void setFragment(Fragment fragment, String tag) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, fragment, tag);
