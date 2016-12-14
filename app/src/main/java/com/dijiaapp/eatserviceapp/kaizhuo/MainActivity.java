@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.dijiaapp.eatserviceapp.data.OrderInfo;
 import com.dijiaapp.eatserviceapp.data.ResultInfo;
 import com.dijiaapp.eatserviceapp.data.Seat;
 import com.dijiaapp.eatserviceapp.diancan.FoodActivity;
+import com.dijiaapp.eatserviceapp.found.FoundFragment;
 import com.dijiaapp.eatserviceapp.my.MyFragment;
 import com.dijiaapp.eatserviceapp.network.Network;
 import com.dijiaapp.eatserviceapp.order.OrderAddFoodEvent;
@@ -45,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String HOME_TAG = "home_flag";
     private static final String ORDERS_TAG = "orders_flag";
     private static final String MY_TAG = "my_flag";
+    private static final String FOUND_TAG = "found_flag";
+
     private static final int CONTENT_ORDERS = 2;
+    private static final int CONTENT_FOUND = 3;
     private static final int CONTENT_MY = 4;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -61,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         mcompositeSubscription = new CompositeSubscription();
-        setContent(CONTENT_HOME);
+
 
         mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -73,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab_order:
                         setContent(CONTENT_ORDERS);
                         break;
+                    case R.id.tab_find:
+                        setContent(CONTENT_FOUND);
                     case R.id.tab_mine:
                         setContent(CONTENT_MY);
                         break;
@@ -192,6 +199,15 @@ public class MainActivity extends AppCompatActivity {
                 }
                 setFragment(orderFragment, ORDERS_TAG);
                 break;
+            case CONTENT_FOUND:
+                Log.i("gqf","CONTENT_FOUND");
+                FoundFragment foundFragment = (FoundFragment) getSupportFragmentManager().findFragmentByTag(FOUND_TAG);
+                if (foundFragment == null) {
+                    foundFragment = FoundFragment.newInstance();
+                }
+                setFragment(foundFragment, FOUND_TAG);
+                break;
+
             case CONTENT_MY:
                 MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag(MY_TAG);
                 if (myFragment == null) {
@@ -212,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment(Fragment fragment, String tag) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, fragment, tag);
+        Log.i("gqf",fragment.getTag());
         fragmentTransaction.commit();
     }
 
