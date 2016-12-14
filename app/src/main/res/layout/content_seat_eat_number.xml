@@ -39,13 +39,19 @@
         android:layout_margin="16dp"
         android:inputType="numberSigned" />
 
+    <Spinner android:id="@+id/hotel_eat_number_spinner"
+             android:layout_width="match_parent"
+             android:layout_below="@+id/hotel_eat_number_et"
+             android:layout_height="wrap_content"/>
+
+
 
     <Button
         android:id="@+id/hotel_done_bt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:layout_below="@id/hotel_eat_number_et"
+        android:layout_below="@id/hotel_eat_number_spinner"
         android:layout_margin="16dp"
         android:text="确认开始" />
 

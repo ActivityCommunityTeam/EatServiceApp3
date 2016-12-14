@@ -36,7 +36,6 @@ import butterknife.OnClick;
 import hugo.weaving.DebugLog;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -44,6 +43,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.dijiaapp.eatserviceapp.network.Network.getOrderService;
+import static com.dijiaapp.eatserviceapp.network.Network.getSeatService;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -161,6 +161,7 @@ public class OrderActivity extends AppCompatActivity {
             addFoodOrder();
         } else
             saveOrder();
+        updateSeat();
     }
 
     private void addFoodOrder() {
@@ -194,7 +195,14 @@ public class OrderActivity extends AppCompatActivity {
                 .subscribe(observer);
         compositeSubscription.add(subscription);
     }
+    private void updateSeat(){
 
+        Subscription subscription = getSeatService().updateStatus(order.getSeatName() ,"02")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+        compositeSubscription.add(subscription);
+    }
     Observer<ResultInfo> observer = new Observer<ResultInfo>() {
         @Override
         public void onCompleted() {
