@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -159,8 +160,9 @@ public class OrderActivity extends AppCompatActivity {
             addFoodOrder();
         } else {
             saveOrder();
+            updateSeat();
         }
-        updateSeat();
+
     }
 
     private void addFoodOrder() {
@@ -170,17 +172,18 @@ public class OrderActivity extends AppCompatActivity {
                 .subscribe(new Observer<ResultInfo>() {
                     @Override
                     public void onCompleted() {
-
+                        Log.i("gqf","onCompleted");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.i("gqf","onError"+e.toString());
                     }
 
                     @DebugLog
                     @Override
                     public void onNext(ResultInfo resultInfo) {
+                        Log.i("gqf","onNext"+resultInfo.toString());
                        finishOrder(resultInfo);
                     }
                 });

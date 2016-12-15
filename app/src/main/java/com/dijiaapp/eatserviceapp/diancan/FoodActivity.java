@@ -399,6 +399,7 @@ public class FoodActivity extends AppCompatActivity {
                 cartNew.setMoney(disesBean.getDishesPrice());
                 cartNew.setTime(Calendar.getInstance().getTime().getTime());
                 cartNew.setSeatId(seatId);
+
                 realm.commitTransaction();
             }
         }

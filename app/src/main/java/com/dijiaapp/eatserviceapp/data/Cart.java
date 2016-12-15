@@ -1,9 +1,6 @@
 package com.dijiaapp.eatserviceapp.data;
 
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
-import static android.R.attr.id;
 
 /**
  * Created by wjy on 16/9/28.

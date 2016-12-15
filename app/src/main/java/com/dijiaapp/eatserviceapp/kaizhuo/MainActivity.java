@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -160,8 +161,10 @@ public class MainActivity extends AppCompatActivity {
         FoodActivity.startFoodActivity(this, orderInfo);
     }
 
+
     @DebugLog
     private void submitOrderOver(String id) {
+        Log.i("gqf","id+"+id);
        Subscription  subscription = Network.getSeatService().updateStatus(id, "01")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -185,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         mcompositeSubscription.add(subscription);
+
     }
 
     private void setContent(int contentHome) {
