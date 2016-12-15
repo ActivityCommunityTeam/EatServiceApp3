@@ -56,6 +56,10 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
         return foodTypes.get(section).getDishesList().size();
     }
 
+    public void update(){
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public View getItemView(final int section, final int position, View convertView, ViewGroup parent) {
         RelativeLayout layout = null;

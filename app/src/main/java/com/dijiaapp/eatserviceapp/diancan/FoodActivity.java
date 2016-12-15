@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dijiaapp.eatserviceapp.Impl.ListItemSizeChangeLinsener;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.View.PinnedHeaderListView;
 import com.dijiaapp.eatserviceapp.data.Cart;
@@ -211,7 +212,9 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
     }
+    MainSectionedAdapter mainSectionedAdapter;
     BottomSheetDialog mBottomSheetDialog;
+    CartRecyclerViewAdapter mCartRecyclerViewAdapter;
     private void setListViews(final List<FoodType> foodTypes) {
 
         mBottomSheetDialog = new BottomSheetDialog(this);
@@ -223,11 +226,25 @@ public class FoodActivity extends AppCompatActivity {
         //购物车数据源
         OrderedRealmCollection<Cart> carts1 = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
         //初始化购物车列表adapter
-        CartRecyclerViewAdapter adapter = new CartRecyclerViewAdapter(this, carts1);
+        mCartRecyclerViewAdapter = new CartRecyclerViewAdapter(this, carts1);
 
+        mCartRecyclerViewAdapter.setListItemSizeChangeLinsener(new ListItemSizeChangeLinsener() {
+            @Override
+            public void getListItemSize(int size) {
+
+                if(size==1){
+                    if(mBottomSheetDialog!=null) {
+                        if (mBottomSheetDialog.isShowing()) {
+                            mBottomSheetDialog.dismiss();
+                        }
+                    }
+                }
+            }
+        });
         mFoodCartRecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
-        mFoodCartRecyclerview.setAdapter(adapter);
+        mFoodCartRecyclerview.setAdapter(mCartRecyclerViewAdapter);
+
 
 
 
@@ -256,7 +273,7 @@ public class FoodActivity extends AppCompatActivity {
 
 
         setCartMoney();
-        final MainSectionedAdapter mainSectionedAdapter = new MainSectionedAdapter(this, foodTypes, carts);
+        mainSectionedAdapter = new MainSectionedAdapter(this, foodTypes, carts);
         mPinnedListView.setAdapter(mainSectionedAdapter);
         leftListAdapter = new LeftListAdapter(this, foodTypes, flagArray);
         mLeftListview.setAdapter(leftListAdapter);
@@ -386,7 +403,7 @@ public class FoodActivity extends AppCompatActivity {
                 realm.commitTransaction();
             }
         }
-
+        mainSectionedAdapter.update();
         setCartMoney();
     }
 
@@ -503,10 +520,17 @@ public class FoodActivity extends AppCompatActivity {
                 } else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }*/
-                if (mBottomSheetDialog.isShowing()) {
-                    mBottomSheetDialog.dismiss();
-                } else {
-                    mBottomSheetDialog.show();
+                //Log.i("gqf","getListItemSize"+mCartRecyclerViewAdapter.getItemCount());
+                if(mCartRecyclerViewAdapter.getItemCount()==0){
+
+                    Toast.makeText(FoodActivity.this,"您的购物车中没有商品，请添加",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (mBottomSheetDialog.isShowing()) {
+                        mBottomSheetDialog.dismiss();
+                    } else {
+                        mBottomSheetDialog.show();
+                    }
                 }
 
 

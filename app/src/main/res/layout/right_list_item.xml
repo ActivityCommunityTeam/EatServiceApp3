@@ -39,11 +39,12 @@
     android:layout_alignParentRight="true"
     android:layout_alignBottom="@id/imageItem"
     android:orientation="horizontal">
+
     <Button
         android:id="@+id/minBt"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:background="@drawable/ic_bt_min"/>
     <TextView
         android:id="@+id/amountTv"
