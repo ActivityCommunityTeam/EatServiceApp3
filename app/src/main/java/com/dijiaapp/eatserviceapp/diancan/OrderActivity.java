@@ -159,8 +159,9 @@ public class OrderActivity extends AppCompatActivity {
     public void onClick() {
         if (isAddFood) {
             addFoodOrder();
-        } else
+        } else {
             saveOrder();
+        }
         updateSeat();
     }
 

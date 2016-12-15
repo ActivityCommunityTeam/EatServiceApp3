@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -32,11 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,14 +50,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static android.R.id.list;
-import static com.dijiaapp.eatserviceapp.R.id.list_item;
 import static com.dijiaapp.eatserviceapp.R.id.pinnedListView;
 
 public class FoodActivity extends AppCompatActivity {
     int eatNumber;
     long hotelId;
-    @BindView(R.id.food_cart_recyclerview)
+    //@BindView(R.id.food_cart_recyclerview)
     RecyclerView mFoodCartRecyclerview;
     private boolean[] flagArray;
 
@@ -179,13 +175,72 @@ public class FoodActivity extends AppCompatActivity {
     Button mFoodNext;
     private LeftListAdapter leftListAdapter;
 
+    /*private void createBottomSheetDialog() {
+        mBottomSheetDialog = new BottomSheetDialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_bottom_sheet, null, false);
+        mBottomSheetDialog.setContentView(view);
 
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            list.add("我是第" + i + "个");
+        }
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setSmoothScrollbarEnabled(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        ListRecyclerAdapter adapter = new ListRecyclerAdapter(list);
+        recyclerView.setAdapter(adapter);
+
+        setBehaviorCallback();
+    }*/
+    private void setBehaviorCallback() {
+        View view = mBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet);
+        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(view);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    mBottomSheetDialog.dismiss();
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
+    }
+    BottomSheetDialog mBottomSheetDialog;
     private void setListViews(final List<FoodType> foodTypes) {
+
+        mBottomSheetDialog = new BottomSheetDialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.content_bottomsheet, null, false);
+        mFoodCartRecyclerview= (RecyclerView) view.findViewById(R.id.food_cart_recyclerview);
+
+
         List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
+        //购物车数据源
         OrderedRealmCollection<Cart> carts1 = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
+        //初始化购物车列表adapter
         CartRecyclerViewAdapter adapter = new CartRecyclerViewAdapter(this, carts1);
+
+        mFoodCartRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+
         mFoodCartRecyclerview.setAdapter(adapter);
+
+
+
+        mBottomSheetDialog.setContentView(view);
+        setBehaviorCallback();
+
+
+
+
+
+        /*//装载behavior
         behavior = BottomSheetBehavior.from(mFoodCartRecyclerview);
+        //设置behavior隐藏
         behavior.setHideable(true);
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -197,7 +252,9 @@ public class FoodActivity extends AppCompatActivity {
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
 
             }
-        });
+        });*/
+
+
         setCartMoney();
         final MainSectionedAdapter mainSectionedAdapter = new MainSectionedAdapter(this, foodTypes, carts);
         mPinnedListView.setAdapter(mainSectionedAdapter);
@@ -291,7 +348,6 @@ public class FoodActivity extends AppCompatActivity {
     private void refreshCart(CartEvent event) {
         int id = event.getDisesBeanId();
         Cart cart = realm.where(Cart.class).equalTo("seatId", seatId).equalTo("dishesListBean.id", id).findFirst();
-
         //flag 0代表减 1 加。
         if (cart != null) {
             int amount = cart.getAmount();
@@ -368,7 +424,7 @@ public class FoodActivity extends AppCompatActivity {
         Intent intent = getIntent();
         isAddFood = intent.getBooleanExtra("addFood", false);
         initData(intent);
-        mFoodCartRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        //mFoodCartRecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
         getFood();
 
@@ -440,11 +496,19 @@ public class FoodActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.food_cart_bt:
-                if (behavior != null) {
+                //显示购物车
+
+                /*if (behavior != null) {
                     behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }*/
+                if (mBottomSheetDialog.isShowing()) {
+                    mBottomSheetDialog.dismiss();
+                } else {
+                    mBottomSheetDialog.show();
                 }
+
 
                 break;
             case R.id.food_next:

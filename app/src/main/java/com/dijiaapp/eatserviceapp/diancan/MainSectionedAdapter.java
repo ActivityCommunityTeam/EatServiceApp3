@@ -91,6 +91,7 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
                 if (amount != 0) {
                     amount--;
                     amountTv.setText(amount + "");
+                    min.setVisibility(View.VISIBLE);
                 }
                 if (amount == 0)
                     min.setVisibility(View.INVISIBLE);
