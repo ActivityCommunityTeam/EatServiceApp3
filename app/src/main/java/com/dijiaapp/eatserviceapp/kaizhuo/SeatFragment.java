@@ -1,12 +1,11 @@
 package com.dijiaapp.eatserviceapp.kaizhuo;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,6 @@ import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Seat;
 import com.dijiaapp.eatserviceapp.data.UserInfo;
 import com.dijiaapp.eatserviceapp.data.source.SeatsRemoteDataSource;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -33,7 +28,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
 
 
 /**
@@ -86,9 +80,9 @@ public class SeatFragment extends Fragment {
     public void onStart() {
         super.onStart();
         realm = Realm.getDefaultInstance();
-
         UserInfo userInfo = realm.where(UserInfo.class).findFirst();
         hotelId = userInfo.getHotelId();
+        Log.i("Daniel","-----------onStart");
         setList();
     }
 
@@ -115,7 +109,6 @@ public class SeatFragment extends Fragment {
                 })
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
-
                 .subscribe(new Observer<List<Seat>>() {
                     @Override
                     public void onCompleted() {
@@ -130,6 +123,7 @@ public class SeatFragment extends Fragment {
                     @DebugLog
                     @Override
                     public void onNext(List<Seat> seats) {
+                        Log.i("Daniel","-----------onNext");
                         seatRecyclerviewAdapter.setSeatList(seats);
                     }
                 });

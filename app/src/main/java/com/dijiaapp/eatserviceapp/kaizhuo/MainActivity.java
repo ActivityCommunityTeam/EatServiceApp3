@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "订单未确认，不可翻桌！", Toast.LENGTH_SHORT).show();
         }else if (_status.equals("02")){
             String id = orderInfo.getSeatName();
+
             submitOrderOver(id);
         }
     }

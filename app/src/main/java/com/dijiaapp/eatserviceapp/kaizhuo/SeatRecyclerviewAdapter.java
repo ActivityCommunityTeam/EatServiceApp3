@@ -1,6 +1,7 @@
 package com.dijiaapp.eatserviceapp.kaizhuo;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ public class SeatRecyclerviewAdapter extends RecyclerView.Adapter<SeatRecyclervi
     public void setSeatList(List<Seat> seatList) {
         this.seatList = seatList;
         notifyDataSetChanged();
+        Log.i("Daniel","-----------setSeatList");
+
     }
 
     @Override

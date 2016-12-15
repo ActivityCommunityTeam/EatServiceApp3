@@ -2,7 +2,6 @@ package com.dijiaapp.eatserviceapp.diancan;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -117,7 +116,7 @@ public class OrderActivity extends AppCompatActivity {
 
         for (Cart cart : carts) {
             DishesListBean dishesListBean = cart.getDishesListBean();
-            ConstraintLayout foodItem = (ConstraintLayout) LayoutInflater.from(this).inflate(R.layout.food_listitem, mFoodContainer, false);
+            LinearLayout foodItem = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.food_listitem, mFoodContainer, false);
             TextView name = (TextView) foodItem.findViewById(R.id.foodName);
             TextView number = (TextView) foodItem.findViewById(R.id.number);
             TextView money = (TextView) foodItem.findViewById(R.id.moneyTv);

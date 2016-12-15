@@ -35,7 +35,7 @@ public class SeatEatNumberActivity extends AppCompatActivity {
     private Seat seat;
 
     String [] user_num;
-    int usernum=-1;
+    int usernum=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +70,7 @@ public class SeatEatNumberActivity extends AppCompatActivity {
         mhotel_eat_number_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                usernum=position;
+                usernum=position+1;
                 mHotelDoneBt.setEnabled(true);
             }
 
