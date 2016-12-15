@@ -59,7 +59,6 @@ public class FoodActivity extends AppCompatActivity {
     //@BindView(R.id.food_cart_recyclerview)
     RecyclerView mFoodCartRecyclerview;
     private boolean[] flagArray;
-
     private boolean isScroll = true;
     CompositeSubscription compositeSubscription;
     private BottomSheetBehavior behavior;

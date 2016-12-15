@@ -1,11 +1,13 @@
 package com.dijiaapp.eatserviceapp.order;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.dijiaapp.eatserviceapp.data.OrderInfo;
 import com.dijiaapp.eatserviceapp.data.UserInfo;
 import com.dijiaapp.eatserviceapp.network.Network;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,6 +42,7 @@ public class OrderItemFragment extends Fragment {
     RecyclerView mOrderitemRecyclerview;
     Unbinder unbinder;
     private int type;
+    private List<OrderInfo> mOrderInfos;
 
     Realm realm;
     long hotelId;
@@ -112,6 +116,9 @@ public class OrderItemFragment extends Fragment {
                     @DebugLog
                     @Override
                     public void onNext(List<OrderInfo> orderInfos) {
+                        mOrderInfos = new ArrayList<OrderInfo>();
+                        mOrderInfos=orderInfos;
+                        Log.i("Daniel","---mOrderInfos.size()---"+mOrderInfos.size());
                         ordersItemAdapter.setOrderInfos(orderInfos);
                     }
                 });
@@ -135,6 +142,21 @@ public class OrderItemFragment extends Fragment {
         ordersItemAdapter = new OrdersItemAdapter();
         mOrderitemRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mOrderitemRecyclerview.setAdapter(ordersItemAdapter);
+        ordersItemAdapter.setOnItemClickListener(new OrdersItemAdapter.MyItemClickListener() {
+            @Override
+            public void onItemClick(View view, int postion) {
+                Log.i("Daniel","---跳转到详情");
+                Intent _intent = new Intent(getActivity(),OrderItemDetailActivity.class);
+                Log.i("Daniel","---mOrderInfos.size()---"+mOrderInfos.size());
+                Log.i("Daniel","---postion---"+postion);
+                OrderInfo _orderInfo=mOrderInfos.get(postion);
+                long _orderId=_orderInfo.getOrderId();
+                int _seatId = Integer.parseInt(_orderInfo.getSeatName());
+                _intent.putExtra("_orderId",_orderId);
+                _intent.putExtra("_seatId",_seatId);
+                startActivity(_intent);
+            }
+        });
         return view;
     }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dijiaapp.eatserviceapp">
+   
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -45,6 +46,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".order.OrderDetailActivity"
+            android:label="@string/title_activity_order_detail"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".order.OrderItemDetailActivity"
             android:label="@string/title_activity_order_detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>

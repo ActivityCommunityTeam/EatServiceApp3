@@ -10,14 +10,16 @@ import android.widget.TextView;
 
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.OrderInfo;
-import com.dijiaapp.eatserviceapp.kaizhuo.EnterActivityEvent;
+import com.jakewharton.rxbinding.view.RxView;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.functions.Action1;
 
 /**
  * Created by wjy on 2016/11/7.
@@ -25,16 +27,32 @@ import butterknife.ButterKnife;
 
 public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.ViewHolder> {
     List<OrderInfo> orderInfos;
+    MyItemClickListener mItemClickListener;
 
     public int getLayout() {
         return R.layout.order_listitem;
     }
 
+    /**
+     * 设置Item点击监听
+     *
+     * @param listener
+     */
+    public void setOnItemClickListener(MyItemClickListener listener) {
+        this.mItemClickListener = listener;
+    }
+
+
+    public interface MyItemClickListener {
+        public void onItemClick(View view, int postion);
+    }
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view,mItemClickListener);
     }
 
     @Override
@@ -44,27 +62,40 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
             holder.mOrderItemDone.setVisibility(View.GONE);
             holder.mOrderItemDeliver.setVisibility(View.GONE);
             holder.mOrderItemJiacan.setVisibility(View.GONE);
+        }else {
+            holder.mOrderItemStatus.setText("状态：使用中");
         }
-
-        holder.mOrderItemNumber.setText(orderInfo.getOrderHeaderNo());
-        holder.mOrderItemEat.setText(orderInfo.getDinnerNum() + "");
-        holder.mOrderItemServer.setText(orderInfo.getWaiterName());
-        holder.mOrderItemStatus.setText(orderInfo.getStatusId());
+        holder.mOrderItemNumber.setText("订单编号："+orderInfo.getOrderHeaderNo());
+        holder.mOrderItemEat.setText("就餐人数："+orderInfo.getDinnerNum() + "");
+        holder.mOrderItemServer.setText("服务人员："+orderInfo.getWaiterName());
 //        holder.mOrderItemName.setText(orderInfo.getOrderHeaderNo());
 
-        holder.rootView.setOnClickListener(new View.OnClickListener() {
+//        holder.rootView.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                EventBus.getDefault().post(new EnterActivityEvent(OrderDetailActivity.class, null, orderInfo.getOrderId() + ""));
+//            }
+//        });
+//        holder.mOrderItemDone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
-            @Override
-            public void onClick(View view) {
-                EventBus.getDefault().post(new EnterActivityEvent(OrderDetailActivity.class, null, orderInfo.getOrderId() + ""));
-            }
-        });
-        holder.mOrderItemDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventBus.getDefault().post(new OrderOverEvent(orderInfo));
-            }
-        });
+        RxView.clicks(holder.mOrderItemDone)
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+//                        Log.i("Daniel","--------翻桌翻翻翻");
+                        EventBus.getDefault().post(new OrderOverEvent(orderInfo));
+
+                    }
+                });
+
+
         holder.mOrderItemJiacan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +114,7 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
         notifyDataSetChanged();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         View rootView;
         @BindView(R.id.order_item_name)
         TextView mOrderItemName;
@@ -103,11 +134,22 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
         Button mOrderItemDone;
         @BindView(R.id.order_item_jiacan)
         Button mOrderItemJiacan;
+        MyItemClickListener mListener;
 
-        ViewHolder(View view) {
+        ViewHolder(View view ,MyItemClickListener listener) {
             super(view);
             rootView = view;
             ButterKnife.bind(this, view);
+            this.mListener = listener;
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mListener != null) {
+                mListener.onItemClick(view, getPosition());
+            }
+
         }
     }
 }

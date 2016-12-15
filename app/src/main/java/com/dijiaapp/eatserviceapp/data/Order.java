@@ -14,7 +14,25 @@ public class Order {
     private int dinnerNum;
     private String seatName;
     private String remark;
+    private String orderTime;
+    private String waiterName;
     private List<OrderDishes> dishes;
+
+    public String getWaiterName() {
+        return waiterName;
+    }
+
+    public void setWaiterName(String waiterName) {
+        this.waiterName = waiterName;
+    }
+
+    public String getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
+    }
 
     public String getStatusId() {
         return statusId;

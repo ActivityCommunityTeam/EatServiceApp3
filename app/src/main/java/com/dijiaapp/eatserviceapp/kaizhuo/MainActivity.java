@@ -142,8 +142,14 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void orderOverEvent(OrderOverEvent orderOverEvent) {
         OrderInfo orderInfo = orderOverEvent.getOrderInfo();
-        String id = orderInfo.getSeatName();
-        submitOrderOver(id);
+        String _status = orderInfo.getStatusId();
+//        Log.i("Daniel","---_status---"+_status);
+        if (_status.equals("01")){
+            Toast.makeText(this, "订单未确认，不可翻桌！", Toast.LENGTH_SHORT).show();
+        }else if (_status.equals("02")){
+            String id = orderInfo.getSeatName();
+            submitOrderOver(id);
+        }
     }
 
     @DebugLog

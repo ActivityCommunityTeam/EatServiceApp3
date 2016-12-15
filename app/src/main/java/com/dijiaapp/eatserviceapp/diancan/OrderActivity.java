@@ -92,7 +92,6 @@ public class OrderActivity extends AppCompatActivity {
         if (isAddFood) {
             orderInfo = intent.getParcelableExtra("orderInfo");
             seatId = Integer.parseInt(orderInfo.getSeatName());
-
             dishesList = new ArrayList<>();
         } else {
             eatNubmer = intent.getIntExtra("number", 0);
