@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     @DebugLog
                     @Override
                     public void onNext(ResultInfo resultInfo) {
-                        Toast.makeText(MainActivity.this, resultInfo.getMsg(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "正在翻桌！", Toast.LENGTH_SHORT).show();
                     }
                 });
 

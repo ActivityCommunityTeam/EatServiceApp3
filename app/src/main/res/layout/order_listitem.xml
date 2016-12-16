@@ -11,20 +11,22 @@
         android:layout_height="match_parent"
         android:background="?android:attr/selectableItemBackground"
        >
-    <TextView
-        android:id="@+id/order_item_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="16dp"
-        android:layout_centerVertical="true"
-        android:visibility="gone"
-        />
+        <LinearLayout
+            android:id="@+id/order_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            >
+            <include
+                layout="@layout/seat_listitem"/>
+        </LinearLayout>
+
+
         <LinearLayout
             android:id="@+id/order_item_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
             android:orientation="vertical"
             android:layout_toRightOf="@id/order_item_name">
             <TextView

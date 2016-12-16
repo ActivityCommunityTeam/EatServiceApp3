@@ -38,6 +38,7 @@ import rx.schedulers.Schedulers;
 public class SeatFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_TYPE = "type";
+    private static List<Seat> mSeats;
     @BindView(R.id.seat_recyclerview)
     RecyclerView mSeatRecyclerview;
 
@@ -75,6 +76,14 @@ public class SeatFragment extends Fragment {
 
         }
     }
+    public static Seat getSeat(int seatId){
+        for (int i = 0; i < mSeats.size(); i++) {
+            if (mSeats.get(i).getSeatId()==seatId){
+                return mSeats.get(i);
+            }
+        }
+        return null;
+    }
 
     @Override
     public void onStart() {
@@ -92,6 +101,7 @@ public class SeatFragment extends Fragment {
                 .flatMap(new Func1<List<Seat>, Observable<Seat>>() {
                     @Override
                     public Observable<Seat> call(List<Seat> seats) {
+                        mSeats = seats;
                         return Observable.from(seats);
                     }
                 })

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     tools:context=".user.LoginActivity"
+                android:background="@drawable/s001"
     >
 
     <ScrollView
@@ -33,6 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/username"
+                    android:textColor="@color/white"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -49,6 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
+                    android:textColor="@color/white"
                     android:imeActionId="@+id/login"
                     android:imeOptions="actionGo"
                     android:inputType="textPassword"
@@ -65,6 +68,7 @@
                     android:id="@+id/login_rememberPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
                     android:text="@string/rememberPassword" />
 
                 <CheckBox
@@ -72,6 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:textColor="@color/white"
                     android:text="@string/autoLogin" />
             </RelativeLayout>
 
@@ -80,6 +85,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/login_bt"
                 android:text="@string/login"
+                android:textColor="@color/colorPrimary"
+                android:background="@drawable/s002"
+
                 />
         </LinearLayout>
     </ScrollView>

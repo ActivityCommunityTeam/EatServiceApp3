@@ -23,7 +23,7 @@ public class DishesListBean extends RealmObject{
     private String memoryCode;
     @PrimaryKey
     private int id;
-    private String dishesUnit;
+    private String dishesUnit="";
     private double dishesPrice;
 
     public String getDishesName() {

@@ -89,10 +89,13 @@ public class OrderActivity extends AppCompatActivity {
         Intent intent = getIntent();
         UserInfo user = realm.where(UserInfo.class).findFirst();
         isAddFood = intent.getBooleanExtra("addFood", false);
+        Log.i("Daniel", "---onCreate--isAddFood: ----"+isAddFood);
+
         if (isAddFood) {
             orderInfo = intent.getParcelableExtra("orderInfo");
             seatId = Integer.parseInt(orderInfo.getSeatName());
             dishesList = new ArrayList<>();
+            mOrderNumber.setText(orderInfo.getDinnerNum() + "人");
         } else {
             eatNubmer = intent.getIntExtra("number", 0);
             Seat seat = intent.getParcelableExtra("seat");
@@ -102,11 +105,12 @@ public class OrderActivity extends AppCompatActivity {
             order.setHotelId(user.getHotelId());
             order.setUserId(user.getWaiterId());
             order.setSeatName(seatId + "");
+            mOrderNumber.setText(eatNubmer + "人");
         }
         carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
         mOrderTime.setText(TimeUtils.getCurTimeString());
-        mOrderName.setText(user.getWaiterName());
-        mOrderNumber.setText(eatNubmer + "人");
+        mOrderServerName.setText(user.getWaiterName());
+
 
         setFoodListView(carts);
 
@@ -156,17 +160,23 @@ public class OrderActivity extends AppCompatActivity {
 
     @OnClick(R.id.food_next)
     public void onClick() {
+        Log.i("Daniel", "---onClick--isAddFood: ----" + isAddFood);
         if (isAddFood) {
             addFoodOrder();
         } else {
             saveOrder();
             updateSeat();
         }
-
     }
 
     private void addFoodOrder() {
-       Subscription addFoodSubscription =  Network.getOrderService().addDishes(orderInfo.getOrderId(), orderMoney, new Gson().toJson(dishesList))
+        String _dishes = new Gson().toJson(dishesList);
+        Log.i("Daniel", "-----orderInfo.getOrderId(): ----"+orderInfo.getOrderId());
+        Log.i("Daniel", "-----orderMoney: ----"+orderMoney);
+        Log.i("Daniel", "-----_dishes----"+_dishes);
+
+       Subscription addFoodSubscription =  Network.getOrderService()
+               .addDishes(orderInfo.getOrderId(), orderMoney, _dishes)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResultInfo>() {
@@ -174,10 +184,10 @@ public class OrderActivity extends AppCompatActivity {
                     public void onCompleted() {
                         Log.i("gqf","onCompleted");
                     }
-
+                    @DebugLog
                     @Override
                     public void onError(Throwable e) {
-                        Log.i("gqf","onError"+e.toString());
+
                     }
 
                     @DebugLog

@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.OrderInfo;
+import com.dijiaapp.eatserviceapp.data.Seat;
+import com.dijiaapp.eatserviceapp.kaizhuo.SeatFragment;
 import com.jakewharton.rxbinding.view.RxView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,6 +30,7 @@ import rx.functions.Action1;
 public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.ViewHolder> {
     List<OrderInfo> orderInfos;
     MyItemClickListener mItemClickListener;
+
 
     public int getLayout() {
         return R.layout.order_listitem;
@@ -52,7 +55,7 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false);
 
-        return new ViewHolder(view,mItemClickListener);
+        return new ViewHolder(view, mItemClickListener);
     }
 
     @Override
@@ -62,27 +65,21 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
             holder.mOrderItemDone.setVisibility(View.GONE);
             holder.mOrderItemDeliver.setVisibility(View.GONE);
             holder.mOrderItemJiacan.setVisibility(View.GONE);
-        }else {
-            holder.mOrderItemStatus.setText("状态：使用中");
+        } else {
+            holder.mOrderItemStatus.setText("状态：已点餐");
         }
-        holder.mOrderItemNumber.setText("订单编号："+orderInfo.getOrderHeaderNo());
-        holder.mOrderItemEat.setText("就餐人数："+orderInfo.getDinnerNum() + "");
-        holder.mOrderItemServer.setText("服务人员："+orderInfo.getWaiterName());
-//        holder.mOrderItemName.setText(orderInfo.getOrderHeaderNo());
+        holder.mOrderItemNumber.setText("订单编号：" + orderInfo.getOrderHeaderNo());
+        holder.mOrderItemEat.setText("就餐人数：" + orderInfo.getDinnerNum() + "");
+        holder.mOrderItemServer.setText("服务人员：" + orderInfo.getWaiterName());
+        int _seatId = Integer.parseInt(orderInfo.getSeatName());
+        Seat _seat=SeatFragment.getSeat(_seatId);
+        holder.seatListitemName.setText(_seat.getSeatName());
+        holder.seatListitemNumber.setText(_seat.getContainNum()+"人桌");
+        if (_seat.getUseStatus().equals("02")){
+            holder.seatListitemStatus.setText("使用中");
+        }
 
-//        holder.rootView.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                EventBus.getDefault().post(new EnterActivityEvent(OrderDetailActivity.class, null, orderInfo.getOrderId() + ""));
-//            }
-//        });
-//        holder.mOrderItemDone.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+
 
         RxView.clicks(holder.mOrderItemDone)
                 .throttleFirst(1, TimeUnit.SECONDS)
@@ -117,7 +114,7 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         View rootView;
         @BindView(R.id.order_item_name)
-        TextView mOrderItemName;
+        LinearLayout mOrderItemName;
         @BindView(R.id.order_item_number)
         TextView mOrderItemNumber;
         @BindView(R.id.order_item_eat)
@@ -135,8 +132,14 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
         @BindView(R.id.order_item_jiacan)
         Button mOrderItemJiacan;
         MyItemClickListener mListener;
+        @BindView(R.id.seat_listitem_name)
+        TextView seatListitemName;
+        @BindView(R.id.seat_listitem_number)
+        TextView seatListitemNumber;
+        @BindView(R.id.seat_listitem_status)
+        TextView seatListitemStatus;
 
-        ViewHolder(View view ,MyItemClickListener listener) {
+        ViewHolder(View view, MyItemClickListener listener) {
             super(view);
             rootView = view;
             ButterKnife.bind(this, view);
