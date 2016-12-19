@@ -13,4 +13,10 @@
     <color name="usedgary">#9c9c9c</color> <!-- 桌位使用中灰色-->
     <color name="freegreen">#00da12</color> <!-- 桌位空闲中绿色 -->
     <color name="reservationyellow">#d2e100</color> <!-- 桌位预定黄色 -->
+
+
+    <color name="blue_jc">#25A6E9</color><!--加餐蓝-->
+    <color name="blueDark_jc">#059BE8</color><!--加餐深蓝-->
+
+    <color name="title_ddxq">#464646</color> <!--订单详情title-->
 </resources>

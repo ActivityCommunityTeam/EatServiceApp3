@@ -17,6 +17,15 @@ public class Order {
     private String orderTime;
     private String waiterName;
     private List<OrderDishes> dishes;
+    private String orderHeaderNo;
+
+    public String getOrderHeaderNo() {
+        return orderHeaderNo;
+    }
+
+    public void setOrderHeaderNo(String orderHeaderNo) {
+        this.orderHeaderNo = orderHeaderNo;
+    }
 
     public String getWaiterName() {
         return waiterName;

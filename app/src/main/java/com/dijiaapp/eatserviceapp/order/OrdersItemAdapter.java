@@ -66,7 +66,7 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
             holder.mOrderItemDeliver.setVisibility(View.GONE);
             holder.mOrderItemJiacan.setVisibility(View.GONE);
         } else {
-            holder.mOrderItemStatus.setText("状态：已点餐");
+            holder.mOrderItemStatus.setText("已点餐");
         }
         holder.mOrderItemNumber.setText("订单编号：" + orderInfo.getOrderHeaderNo());
         holder.mOrderItemEat.setText("就餐人数：" + orderInfo.getDinnerNum() + "");
