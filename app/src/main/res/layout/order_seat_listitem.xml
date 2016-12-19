@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:background="@color/white"
+                android:clickable="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                >
+    <LinearLayout
+        android:id="@+id/order_linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/o005"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        >
+        <TextView
+            android:id="@+id/seat_listitem_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="座位01"
+            android:textColor="@color/white"
+            android:layout_marginBottom="8dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/me"
+                />
+            <TextView
+                android:id="@+id/seat_listitem_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/s033"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+
+        />
+</RelativeLayout>

@@ -74,10 +74,10 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
         int _seatId = Integer.parseInt(orderInfo.getSeatName());
         Seat _seat=SeatFragment.getSeat(_seatId);
         holder.seatListitemName.setText(_seat.getSeatName());
-        holder.seatListitemNumber.setText(_seat.getContainNum()+"人桌");
-        if (_seat.getUseStatus().equals("02")){
-            holder.seatListitemStatus.setText("使用中");
-        }
+        holder.seatListitemNumber.setText(_seat.getContainNum()+"");
+//        if (_seat.getUseStatus().equals("02")){
+//            holder.seatListitemStatus.setText("使用中");
+//        }
 
 
 
@@ -136,8 +136,8 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
         TextView seatListitemName;
         @BindView(R.id.seat_listitem_number)
         TextView seatListitemNumber;
-        @BindView(R.id.seat_listitem_status)
-        TextView seatListitemStatus;
+//        @BindView(R.id.seat_listitem_status)
+//        TextView seatListitemStatus;
 
         ViewHolder(View view, MyItemClickListener listener) {
             super(view);
