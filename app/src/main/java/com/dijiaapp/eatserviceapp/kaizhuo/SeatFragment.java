@@ -86,6 +86,7 @@ public class SeatFragment extends Fragment {
         }
         return null;
     }
+
     public static Seat getSeat_order(String seatName){
         for (int i = 0; i < mSeats.size(); i++) {
             if (mSeats.get(i).getSeatName().equals(seatName)){

@@ -49,8 +49,8 @@ public class OrderActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.order_name)
-    TextView mOrderName;
+//    @BindView(R.id.order_name)
+//    TextView mOrderName;
     @BindView(R.id.order_time)
     TextView mOrderTime;
     @BindView(R.id.order_number)
