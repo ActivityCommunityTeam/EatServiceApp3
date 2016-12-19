@@ -24,8 +24,8 @@ import static com.dijiaapp.eatserviceapp.R.id.amountTv;
  * Created by wjy on 16/10/8.
  */
 
-public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, CartRecyclerViewAdapter.MyViewHolder> {
-    private final FoodActivity foodActivity;
+public class CartRecyclerViewOnOrderAdapter extends RealmRecyclerViewAdapter<Cart, CartRecyclerViewOnOrderAdapter.MyViewHolder> {
+    private final OrderActivity foodActivity;
 
     int itemHeight=-1;
 
@@ -41,7 +41,7 @@ public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, Cart
         }
     }
 
-    public CartRecyclerViewAdapter(@NonNull FoodActivity activity, @Nullable OrderedRealmCollection<Cart> data) {
+    public CartRecyclerViewOnOrderAdapter(@NonNull OrderActivity activity, @Nullable OrderedRealmCollection<Cart> data) {
         super(activity, data, true);
         this.foodActivity = activity;
     }
@@ -76,8 +76,10 @@ public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, Cart
                     amount--;
                     //getData().get(position).setAmount(amount);
                     holder.amount.setText(amount + "");
-                    CartEvent c=new CartEvent(0,getData().get(position).getDishesListBean().getId());
+                    CartEvent c=new CartEvent(3,getData().get(position).getDishesListBean().getId());
+
                     EventBus.getDefault().post(c);
+
                 }
                 listItemSizeChange(getData().size());
             }
@@ -89,7 +91,7 @@ public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, Cart
                 int amount =  getData().get(position).getAmount();
                 amount++;
                 //getData().get(position).setAmount(amount);
-                CartEvent c=new CartEvent(1,getData().get(position).getDishesListBean().getId());
+                CartEvent c=new CartEvent(4,getData().get(position).getDishesListBean().getId());
                 holder.amount.setText(amount + "");
                 EventBus.getDefault().post(c);
                 listItemSizeChange(getData().size());

@@ -59,7 +59,10 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
     public void update(){
         this.notifyDataSetChanged();
     }
-
+    public void updateByDate(List<Cart> carts){
+        this.carts=carts;
+        this.notifyDataSetChanged();
+    }
     @Override
     public View getItemView(final int section, final int position, View convertView, ViewGroup parent) {
         RelativeLayout layout = null;

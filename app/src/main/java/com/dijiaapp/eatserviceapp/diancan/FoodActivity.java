@@ -341,9 +341,22 @@ public class FoodActivity extends AppCompatActivity {
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cartEvent(CartEvent event) {
-        refreshCart(event);
+        if(event.getFlag()==0||event.getFlag()==1) {
+            refreshCart(event);
+        }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mainSectionedAdapter.updateByDate(realm.where(Cart.class).equalTo("seatId", seatId).findAll());
+    }
 
     //刷新购物车
     @DebugLog
