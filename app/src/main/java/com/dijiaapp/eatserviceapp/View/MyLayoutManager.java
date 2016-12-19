@@ -17,7 +17,10 @@ public class MyLayoutManager extends LinearLayoutManager {
 
     @Override
     public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec) {
-        Log.i("gqf","heightSpec"+heightSpec);
+        Log.i("gqf","heightSpec"+state.getItemCount());
+        if(state.getItemCount()>=4){
+
+        }
        /* if(recycler.getViewForPosition(0)!=null) {
             View view = recycler.getViewForPosition(0);
             measureChild(view, widthSpec, heightSpec);
@@ -25,5 +28,6 @@ public class MyLayoutManager extends LinearLayoutManager {
             int measuredHeight = view.getMeasuredHeight();
             setMeasuredDimension(measuredWidth, measuredHeight);
         }*/
+
     }
 }

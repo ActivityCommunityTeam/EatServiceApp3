@@ -10,16 +10,13 @@
 
 </android.support.v7.widget.RecyclerView>-->
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_gravity="bottom"
-    android:minHeight="300dp"
-    android:maxHeight="500dp">
+    android:orientation="vertical">
    <!-- <LinearLayout
         android:id="@+id/popupLin"
         android:layout_width="match_parent"
@@ -30,17 +27,16 @@
         android:id="@+id/food_cart_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         >
 
     </android.support.v7.widget.RecyclerView>
+
     <RelativeLayout
+        android:layout_below="@+id/food_cart_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:gravity="center_vertical"
-        android:background="@color/white"
-        android:layout_gravity="bottom"
-        >
+        android:background="@color/white">
         <ImageView
             android:id="@+id/food_cart_bt"
             android:layout_width="wrap_content"
@@ -69,4 +65,4 @@
             android:textColor="@color/white"/>
     </RelativeLayout>
     <!--</LinearLayout>-->
-</LinearLayout>
+</RelativeLayout>
