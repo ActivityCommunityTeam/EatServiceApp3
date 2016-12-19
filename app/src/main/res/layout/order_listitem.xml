@@ -15,11 +15,12 @@
             android:id="@+id/order_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             >
 
             <include
-                layout="@layout/seat_listitem"/>
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                layout="@layout/order_seat_listitem"/>
         </LinearLayout>
 
 
@@ -28,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="10dp"
             android:layout_alignTop="@id/order_item_name"
             android:layout_toRightOf="@id/order_item_name">
             <TextView
@@ -35,11 +37,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="订单编号："
+                android:layout_marginBottom="10dp"
                 />
             <TextView
                 android:id="@+id/order_item_eat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="就餐人数："
 
                 />
@@ -53,18 +57,6 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/order_item_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="状态："
-            android:textColor="@color/colorPrimary"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/order_item_name"
-            android:layout_marginRight="16dp"
-
-            />
-
 
         <View
             android:id="@+id/order_item_deliver"
@@ -75,25 +67,54 @@
             android:background="@drawable/recylist_item_line_shap"
             android:layout_below="@id/order_item_name"
             />
-        <Button
-            android:id="@+id/order_item_done"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:layout_below="@+id/order_item_deliver"
+            android:orientation="horizontal"
+
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+
+            <Button
+                android:id="@+id/order_item_jiacan"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="加餐"
+                android:layout_margin="6dp"
+                android:background="@drawable/jc_btn_selector"
+                android:textColor="@color/white"/>
+            <Button
+                android:id="@+id/order_item_done"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="翻桌"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:background="@drawable/fz_btn_selector"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/order_item_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/order_item_deliver"
-            android:layout_alignParentRight="true"
-            android:text="翻桌"
-            android:textColor="@color/white"
-            android:background="@drawable/fz_btn_selector"
-            android:layout_margin="16dp"/>
-        <Button
-            android:id="@+id/order_item_jiacan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/order_item_deliver"
-            android:layout_margin="16dp"
-            android:text="加餐"
-            android:background="@drawable/jc_btn_selector"
-            android:textColor="@color/white"
-            android:layout_toLeftOf="@id/order_item_done"/>
+            android:text="状态："
+            android:textColor="@color/colorPrimary"
+            android:layout_alignTop="@+id/order_item_layout"
+            android:layout_alignRight="@+id/order_item_deliver"
+            android:layout_alignEnd="@+id/order_item_deliver"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
