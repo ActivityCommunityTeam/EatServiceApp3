@@ -183,7 +183,7 @@ public class OrderActivity extends AppCompatActivity {
             @Override
             public void nextOrder(){
                 mBottomSheetDialog.dismiss();
-
+                next();
             }
         });
     }
@@ -274,17 +274,19 @@ public class OrderActivity extends AppCompatActivity {
 
                 break;
             case R.id.food_next:
-                if (isAddFood) {
-                    addFoodOrder();
-                } else {
-                    saveOrder();
-                    updateSeat();
-                }
+                next();
                 break;
         }
 
     }
-
+    public void next(){
+        if (isAddFood) {
+            addFoodOrder();
+        } else {
+            saveOrder();
+            updateSeat();
+        }
+    }
     private void addFoodOrder() {
         String _dishes = new Gson().toJson(dishesList);
         Log.i("Daniel", "-----orderInfo.getOrderId(): ----"+orderInfo.getOrderId());
