@@ -1,23 +1,17 @@
-<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment"
-
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:food_listitem="@food_listitem/fragment_seat_eat_number" />-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/whitesmoke">
 
     <LinearLayout
         android:id="@+id/hotel_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
         android:layout_margin="16dp"
+        android:gravity="center"
+        android:background="@drawable/seat_eat_num_write_txt_shap"
         android:orientation="horizontal">
 
         <TextView
@@ -42,9 +36,11 @@
     <Spinner android:id="@+id/hotel_eat_number_spinner"
              android:layout_width="match_parent"
              android:layout_below="@id/hotel_layout"
+             android:background="@drawable/seat_eat_num_red_spinner_shap"
              android:layout_margin="16dp"
-             android:layout_height="wrap_content"/>
 
+             android:spinnerMode="dropdown"
+             android:layout_height="?actionBarSize"/>
 
 
     <Button
@@ -52,8 +48,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
+        android:textColor="@color/white"
         android:layout_below="@id/hotel_eat_number_spinner"
         android:layout_margin="16dp"
+        android:background="@drawable/seat_eat_num_btn_sel"
         android:text="确认开始" />
 
 </RelativeLayout>

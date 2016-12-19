@@ -18,7 +18,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:divider="@null"
+            android:divider="@color/whitesmoke"
+            android:dividerHeight="1dp"
             android:scrollbars="none">
 
         </ListView>
@@ -47,6 +48,7 @@
             android:src="@drawable/icon_shopping"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+
             />
         <TextView
             android:id="@+id/food_money"
@@ -62,6 +64,7 @@
             android:layout_alignParentRight="true"
             android:id="@+id/food_next"
             android:background="@color/red"
+
             android:text="@string/next_step"
             android:textColor="@color/white"/>
     </RelativeLayout>

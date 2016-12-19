@@ -1,10 +1,12 @@
 package com.dijiaapp.eatserviceapp.kaizhuo;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,11 +26,14 @@ import hugo.weaving.DebugLog;
  */
 public class SeatRecyclerviewAdapter extends RecyclerView.Adapter<SeatRecyclerviewAdapter.ViewHolder> {
     private List<Seat> seatList;
-
+    private Context mContext;
     public int getLayout() {
         return R.layout.seat_listitem;
     }
-
+    public SeatRecyclerviewAdapter(){}
+    public SeatRecyclerviewAdapter(Context mContext){
+        this.mContext=mContext;
+    }
     public void setSeatList(List<Seat> seatList) {
         this.seatList = seatList;
         notifyDataSetChanged();
@@ -58,19 +63,31 @@ public class SeatRecyclerviewAdapter extends RecyclerView.Adapter<SeatRecyclervi
         });
         switch (seat.getUseStatus()){
             case "01":
-                holder.mSeatListitemRal.setBackgroundResource(R.color.freegreen);
+                holder.mSeatListitemName.setTextColor(mContext.getResources().getColor(R.color.black));
+                holder.mSeatListitemNumber.setTextColor(mContext.getResources().getColor(R.color.black));
+                holder.mSeatListitemStatus.setTextColor(mContext.getResources().getColor(R.color.black));
+                holder.mseat_img_bg.setImageResource(R.drawable.bg004);
                 holder.mSeatListitemStatus.setText("空闲");
+                holder.mseat_listitem_img.setImageResource(R.drawable.mandark);
                 break;
             case "02":
-                holder.mSeatListitemRal.setBackgroundResource(R.color.usedgary);
+                holder.mSeatListitemName.setTextColor(mContext.getResources().getColor(R.color.white));
+                holder.mSeatListitemNumber.setTextColor(mContext.getResources().getColor(R.color.white));
+                holder.mSeatListitemStatus.setTextColor(mContext.getResources().getColor(R.color.white));
+                holder.mseat_img_bg.setImageResource(R.drawable.bg005);
                 holder.mSeatListitemStatus.setText("使用中");
+                holder.mseat_listitem_img.setImageResource(R.drawable.manlight);
                 break;
             case "03":
-                holder.mSeatListitemRal.setBackgroundResource(R.color.reservationyellow);
+                holder.mSeatListitemName.setTextColor(mContext.getResources().getColor(R.color.white));
+                holder.mSeatListitemNumber.setTextColor(mContext.getResources().getColor(R.color.white));
+                holder.mSeatListitemStatus.setTextColor(mContext.getResources().getColor(R.color.white));
+                holder.mseat_img_bg.setImageResource(R.drawable.bg003);
                 holder.mSeatListitemStatus.setText("已预定");
+                holder.mseat_listitem_img.setImageResource(R.drawable.manlight);
                 break;
         }
-        holder.mSeatListitemNumber.setText(String.valueOf(seat.getContainNum())+"人桌");
+        holder.mSeatListitemNumber.setText(String.valueOf(seat.getContainNum())+"");
 
 
     }
@@ -90,6 +107,11 @@ public class SeatRecyclerviewAdapter extends RecyclerView.Adapter<SeatRecyclervi
         TextView mSeatListitemNumber;
         @BindView(R.id.seat_listitem_status)
         TextView mSeatListitemStatus;
+        @BindView(R.id.seat_img_bg)
+        ImageView mseat_img_bg;
+        @BindView(R.id.seat_listitem_img)
+        ImageView mseat_listitem_img;
+
 
         ViewHolder(View view) {
             super(view);

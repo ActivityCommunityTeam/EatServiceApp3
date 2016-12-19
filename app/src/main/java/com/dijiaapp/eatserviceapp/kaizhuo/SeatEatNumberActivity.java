@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Seat;
@@ -35,7 +36,7 @@ public class SeatEatNumberActivity extends AppCompatActivity {
     private Seat seat;
 
     String [] user_num;
-    int usernum=1;
+    int usernum=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +50,14 @@ public class SeatEatNumberActivity extends AppCompatActivity {
         user_num=new String[seat.getContainNum()];
         for(int i=0;i<seat.getContainNum();i++){
             int num=i+1;
-            user_num[i]=num+"";
+            user_num[i]=num+"人";
         }
         //将可选内容与ArrayAdapter连接起来
         ArrayAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,user_num);
 
         //设置下拉列表的风格
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
+        mhotel_eat_number_spinner.setPrompt("请选择人数");
         //将adapter 添加到spinner中
         mhotel_eat_number_spinner.setAdapter(adapter);
 
@@ -79,35 +80,16 @@ public class SeatEatNumberActivity extends AppCompatActivity {
 
             }
         });
-        /*RxTextView.textChanges(mHotelEatNumberEt).skip(1)
-                .map(new Func1<CharSequence, Boolean>() {
-                    @DebugLog
-                    @Override
-                    public Boolean call(CharSequence charSequence) {
-                        return !StringUtils.isEmpty(charSequence);
-                    }
-                })
-                .subscribe(new Observer<Boolean>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        mHotelDoneBt.setEnabled(aBoolean);
-                    }
-                });*/
     }
 
     @OnClick(R.id.hotel_done_bt)
     public void onClick() {
-        enterFoodActivity();
+        if(usernum>=1) {
+            enterFoodActivity();
+        }else{
+            Toast.makeText(this,"请选择用户人数",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void enterFoodActivity() {

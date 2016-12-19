@@ -35,11 +35,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".diancan.FoodActivity"
-            android:label="@string/title_activity_food"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".diancan.OrderActivity"
             android:label="@string/title_activity_order"
             android:screenOrientation="portrait"
@@ -52,6 +47,11 @@
         <activity
             android:name=".order.OrderItemDetailActivity"
             android:label="@string/title_activity_order_detail"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".diancan.FoodActivity"
+            android:label="@string/title_activity_food"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

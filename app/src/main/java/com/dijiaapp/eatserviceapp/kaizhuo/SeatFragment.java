@@ -49,6 +49,8 @@ public class SeatFragment extends Fragment {
     private Realm realm;
     private long hotelId;
 
+
+
     public SeatFragment() {
         // Required empty public constructor
     }
@@ -134,11 +136,13 @@ public class SeatFragment extends Fragment {
                     @Override
                     public void onNext(List<Seat> seats) {
                         Log.i("Daniel","-----------onNext");
+                        if(mSeats==null){
+                            mSeats= seats;
+                        }
                         seatRecyclerviewAdapter.setSeatList(seats);
                     }
                 });
     }
-
     @DebugLog
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -146,7 +150,7 @@ public class SeatFragment extends Fragment {
         // Inflate the food_listitem for this fragment
         View view = inflater.inflate(R.layout.fragment_seat, container, false);
         unbinder = ButterKnife.bind(this, view);
-        seatRecyclerviewAdapter = new SeatRecyclerviewAdapter();
+        seatRecyclerviewAdapter = new SeatRecyclerviewAdapter(getContext());
         mSeatRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         mSeatRecyclerview.setAdapter(seatRecyclerviewAdapter);
         return view;

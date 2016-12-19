@@ -9,6 +9,8 @@
     <color name="red">#ee0000</color>
 
     <color name="whitesmoke">#efefef</color> <!-- 烟白色 -->
+    <color name="gary">#b9b9b9</color> <!-- 烟白色 -->
+
 
     <color name="usedgary">#9c9c9c</color> <!-- 桌位使用中灰色-->
     <color name="freegreen">#00da12</color> <!-- 桌位空闲中绿色 -->
