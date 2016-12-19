@@ -23,7 +23,32 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentBottom="true">-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/smallhdp"
+        android:id="@+id/delect_cat_lin"
+        android:background="@color/whitesmoke"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/delect020"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
+            android:layout_toLeftOf="@+id/delect_car_txt"
+            />
+        <TextView
+            android:id="@+id/delect_car_txt"
+            android:text="清空购物车"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/tinymdp"
+            android:layout_marginRight="@dimen/tinymdp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/delect_cat_lin"
         android:id="@+id/food_cart_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

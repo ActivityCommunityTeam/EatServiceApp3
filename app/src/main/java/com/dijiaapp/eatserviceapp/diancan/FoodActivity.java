@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dijiaapp.eatserviceapp.Impl.ListItemSizeChangeLinsener;
+import com.dijiaapp.eatserviceapp.Impl.ShopCarDelectAllLinsener;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.View.PinnedHeaderListView;
 import com.dijiaapp.eatserviceapp.View.StrongBottomSheetDialog;
@@ -176,27 +178,6 @@ public class FoodActivity extends AppCompatActivity {
     Button mFoodNext;
     private LeftListAdapter leftListAdapter;
 
-    /*private void createBottomSheetDialog() {
-        mBottomSheetDialog = new BottomSheetDialog(this);
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_bottom_sheet, null, false);
-        mBottomSheetDialog.setContentView(view);
-
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            list.add("我是第" + i + "个");
-        }
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setSmoothScrollbarEnabled(true);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        ListRecyclerAdapter adapter = new ListRecyclerAdapter(list);
-        recyclerView.setAdapter(adapter);
-
-        setBehaviorCallback();
-    }*/
-
-
 
     private void setBehaviorCallback() {
         View view = mBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet);
@@ -254,28 +235,26 @@ public class FoodActivity extends AppCompatActivity {
 
 
         mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setSeatId(seatId);
+        mBottomSheetDialog.setmShopCarDelectAllLinsener(new ShopCarDelectAllLinsener() {
+            @Override
+            public void delectAll() {
+                mainSectionedAdapter.update();
+                mBottomSheetDialog.dismiss();
+                mFoodMoney.setText("￥" + 0);
+            }
+
+            @Override
+            public void dimess() {
+                mBottomSheetDialog.dismiss();
+            }
+            @Override
+            public void nextOrder(){
+                mBottomSheetDialog.dismiss();
+                next();
+            }
+        });
         setBehaviorCallback();
-
-
-
-
-
-        /*//装载behavior
-        behavior = BottomSheetBehavior.from(mFoodCartRecyclerview);
-        //设置behavior隐藏
-        behavior.setHideable(true);
-        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-            }
-        });*/
-
 
         setCartMoney();
         mainSectionedAdapter = new MainSectionedAdapter(this, foodTypes, carts);
@@ -365,6 +344,7 @@ public class FoodActivity extends AppCompatActivity {
         refreshCart(event);
     }
 
+
     //刷新购物车
     @DebugLog
     private void refreshCart(CartEvent event) {
@@ -379,6 +359,13 @@ public class FoodActivity extends AppCompatActivity {
                     realm.beginTransaction();
                     cart.deleteFromRealm();
                     realm.commitTransaction();
+                    if(mBottomSheetDialog.isShowing()) {
+                        if (mCartRecyclerViewAdapter.getItemCount() <= 3) {
+                            if (mCartRecyclerViewAdapter.itemHeight != -1) {
+                                mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * (mCartRecyclerViewAdapter.getItemCount() - 1));
+                            }
+                        }
+                    }
                 } else {
                     amount--;
                     realm.beginTransaction();
@@ -417,6 +404,9 @@ public class FoodActivity extends AppCompatActivity {
         double money = getMoney();
 
         mFoodMoney.setText("￥" + money);
+        if(mBottomSheetDialog.food_money!=null){
+            mBottomSheetDialog.food_money.setText("￥" + money);
+        }
     }
 
     private double getMoney() {
@@ -521,12 +511,6 @@ public class FoodActivity extends AppCompatActivity {
             case R.id.food_cart_bt:
                 //显示购物车
 
-                /*if (behavior != null) {
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                } else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }*/
-                //Log.i("gqf","getListItemSize"+mCartRecyclerViewAdapter.getItemCount());
                 if(mCartRecyclerViewAdapter.getItemCount()==0){
 
                     Toast.makeText(FoodActivity.this,"您的购物车中没有商品，请添加",Toast.LENGTH_SHORT).show();
@@ -537,11 +521,28 @@ public class FoodActivity extends AppCompatActivity {
                     } else {
 
                         mBottomSheetDialog.show();
-                        if(mCartRecyclerViewAdapter.getItemCount()>=3){
-                            android.view.ViewGroup.LayoutParams pp =mBottomSheetDialog.mFoodCartRecyclerview.getLayoutParams();
-                            mBottomSheetDialog.mFoodCartRecyclerview.getLayoutParams();
-                            pp.height =1000;
-                            mBottomSheetDialog.mFoodCartRecyclerview.setLayoutParams(pp);
+                        if(mCartRecyclerViewAdapter.itemHeight==-1){
+                            ViewTreeObserver vto = mFoodCartRecyclerview.getViewTreeObserver();
+                            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    mFoodCartRecyclerview.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                                    mCartRecyclerViewAdapter.itemHeight=mFoodCartRecyclerview.getHeight()/mCartRecyclerViewAdapter.getItemCount();
+
+                                    if(mCartRecyclerViewAdapter.getItemCount()>=3){
+                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight*3);
+                                    }else{
+                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight*mCartRecyclerViewAdapter.getItemCount());
+                                    }
+                                }
+                            });
+                        }else {
+                            if (mCartRecyclerViewAdapter.getItemCount() >= 3) {
+                                mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * 3);
+                            }else{
+                                mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight*mCartRecyclerViewAdapter.getItemCount());
+
+                            }
                         }
                     }
                 }
@@ -549,21 +550,24 @@ public class FoodActivity extends AppCompatActivity {
 
                 break;
             case R.id.food_next:
-                List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
-                if (carts.size() > 0) {
-                    Intent intent = new Intent(this, OrderActivity.class);
-                    if (isAddFood) {
-                        intent.putExtra("addFood",true);
-                        intent.putExtra("orderInfo",orderInfo);
-                    } else {
-                        intent.putExtra("seat", seat);
-                        intent.putExtra("number", eatNumber);
-                    }
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(this, "请先选菜品", Toast.LENGTH_SHORT).show();
-                }
+                next();
                 break;
+        }
+    }
+    public void next(){
+        List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
+        if (carts.size() > 0) {
+            Intent intent = new Intent(this, OrderActivity.class);
+            if (isAddFood) {
+                intent.putExtra("addFood",true);
+                intent.putExtra("orderInfo",orderInfo);
+            } else {
+                intent.putExtra("seat", seat);
+                intent.putExtra("number", eatNumber);
+            }
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "请先选菜品", Toast.LENGTH_SHORT).show();
         }
     }
 }

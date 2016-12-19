@@ -3,8 +3,10 @@ package com.dijiaapp.eatserviceapp.diancan;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,6 +28,8 @@ import static com.dijiaapp.eatserviceapp.R.id.amountTv;
 public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, CartRecyclerViewAdapter.MyViewHolder> {
     private final FoodActivity foodActivity;
 
+    int itemHeight=-1;
+
     private ListItemSizeChangeLinsener listItemSizeChangeLinsener;
 
     public void setListItemSizeChangeLinsener(ListItemSizeChangeLinsener listItemSizeChangeLinsener){
@@ -46,7 +50,12 @@ public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, Cart
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = inflater.inflate(R.layout.right_list_item, parent, false);
+        final View v=itemView;
+        if(itemHeight==-1){
 
+        }
+
+        Log.i("gqf","getMeasuredHeight"+itemHeight);
         return new MyViewHolder(itemView);
     }
 
@@ -56,6 +65,7 @@ public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, Cart
         holder.data = cart;
         if (cart != null) {
             holder.title.setText(cart.getDishesListBean().getDishesName());
+            holder.priceItem.setText("￥"+cart.getMoney()+"");
             holder.amount.setText(cart.getAmount() + "");
         }
 
@@ -96,13 +106,14 @@ public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, Cart
         public Button plus;
         public TextView amount;
         public Cart data;
-
+        public TextView priceItem;
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.textItem);
             min = (Button) view.findViewById(R.id.minBt);
             plus = (Button) view.findViewById(R.id.plusBt);
             amount = (TextView) view.findViewById(amountTv);
+            priceItem=(TextView)view.findViewById(R.id.priceItem);
         }
 
 
