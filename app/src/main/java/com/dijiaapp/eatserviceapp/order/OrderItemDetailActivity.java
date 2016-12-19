@@ -3,7 +3,6 @@ package com.dijiaapp.eatserviceapp.order;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,8 @@ import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Cart;
 import com.dijiaapp.eatserviceapp.data.Order;
 import com.dijiaapp.eatserviceapp.data.OrderDishes;
+import com.dijiaapp.eatserviceapp.data.Seat;
+import com.dijiaapp.eatserviceapp.kaizhuo.SeatFragment;
 import com.dijiaapp.eatserviceapp.network.Network;
 
 import java.util.List;
@@ -45,12 +46,18 @@ public class OrderItemDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.order_detail_food_container)
     LinearLayout orderDetailFoodContainer;
-    @BindView(R.id.order_detail_sum)
-    TextView orderDetailSum;
-    @BindView(R.id.order_detail_totalPrice)
-    TextView orderDetailTotalPrice;
+//    @BindView(R.id.order_detail_sum)
+//    TextView orderDetailSum;
+//    @BindView(R.id.order_detail_totalPrice)
+//    TextView orderDetailTotalPrice;
     @BindView(R.id.content_order_detail)
     LinearLayout contentOrderDetail;
+    @BindView(R.id.order_detail_seatName_tv)
+    TextView orderDetailSeatNameTv;
+    @BindView(R.id.order_detail_dinnerNum_tv)
+    TextView orderDetailDinnerNumTv;
+    @BindView(R.id.order_detail_seatNum_tv)
+    TextView orderDetailSeatNumTv;
     private List<OrderDishes> dishes;
     private Subscription subscription;
     private Unbinder mUnbinder;
@@ -86,15 +93,16 @@ public class OrderItemDetailActivity extends AppCompatActivity {
     private void setFoodListView(List<OrderDishes> dishes) {
 
         for (OrderDishes orderDishes : dishes) {
-            LinearLayout foodItem = (LinearLayout) LayoutInflater.from(OrderItemDetailActivity.this).inflate(R.layout.food_listitem, orderDetailFoodContainer, false);
+            LinearLayout foodItem = (LinearLayout) LayoutInflater.from(OrderItemDetailActivity.this)
+                    .inflate(R.layout.food_listitem, orderDetailFoodContainer, false);
             TextView name = (TextView) foodItem.findViewById(R.id.foodName);
             TextView number = (TextView) foodItem.findViewById(R.id.number);
             TextView money = (TextView) foodItem.findViewById(R.id.moneyTv);
             name.setText(orderDishes.getDishesName());
             double _totalPrice = orderDishes.getTotalPrice();
-            number.setText(orderDishes.getOrderNum() + orderDishes.getDishesUnit());
+            number.setText("" + orderDishes.getOrderNum());
             money.setText("￥" + _totalPrice);
-            mSumPrice +=_totalPrice;
+            mSumPrice += _totalPrice;
             orderDetailFoodContainer.addView(foodItem);
 
         }
@@ -151,21 +159,21 @@ public class OrderItemDetailActivity extends AppCompatActivity {
      * 订单信息
      */
     private void setOrderDetail(Order order) {
+        orderDetailSeatNameTv.setText(order.getSeatName());
         orderDetailTime.setText("开台时间：" + order.getOrderTime());
-        orderDetailOrderNumber.setText("就餐人数：" + order.getDinnerNum());
+        orderDetailOrderNumber.setText("订单号：" + order.getOrderHeaderNo());
         orderDetailServer.setText("服务人员：" + order.getWaiterName());
-        if (TextUtils.isEmpty(order.getRemark())) {
-            orderDetailMarkTv.setText("备注：");
-        } else {
-
-            orderDetailMarkTv.setText("备注：" + order.getRemark());
-        }
+        orderDetailDinnerNumTv.setText("就餐人数：" + order.getDinnerNum());
+        //通过座位名找到Seat对应的model
+        Seat _seat=SeatFragment.getSeat_order(order.getSeatName());
+        orderDetailSeatNumTv.setText(""+_seat.getContainNum());
+        orderDetailMarkTv.setText(order.getRemark());
         Log.i("Daniel", "------");
         dishes = order.getDishes();
         Log.i("Daniel", "---dishes.size()---" + dishes.size());
         setFoodListView(dishes);
-        orderDetailSum.setText("共"+dishes.size()+"份");
-        orderDetailTotalPrice.setText("￥"+mSumPrice);
+//        orderDetailSum.setText("共" + dishes.size() + "份");
+//        orderDetailTotalPrice.setText("￥" + mSumPrice);
     }
 
     @Override

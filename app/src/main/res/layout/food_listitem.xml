@@ -17,14 +17,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/number"
+        android:gravity="center"
         android:layout_weight="1"
+        android:textColor="@color/black"
         />
 
     <TextView
         android:text="TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
         android:id="@+id/moneyTv"
+        android:gravity="right"
+        android:paddingRight="16dp"
         android:layout_weight="1"
        />
 
