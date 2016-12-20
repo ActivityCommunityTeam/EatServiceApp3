@@ -104,15 +104,13 @@
                 />
 
             <!--菜单-->
-            <LinearLayout
-                android:id="@+id/order_detail_food_container"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/order_detail_food_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="200dp"
                 android:background="@color/white"
-                android:padding="16dp">
-
-            </LinearLayout>
+                android:layout_marginLeft="16dp">
+            </android.support.v7.widget.RecyclerView>
 
             <!--总价-->
             <!-- <LinearLayout

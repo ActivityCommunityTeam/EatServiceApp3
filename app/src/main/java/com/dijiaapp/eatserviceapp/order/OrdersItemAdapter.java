@@ -86,7 +86,6 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-//                        Log.i("Daniel","--------翻桌翻翻翻");
                         EventBus.getDefault().post(new OrderOverEvent(orderInfo));
 
                     }

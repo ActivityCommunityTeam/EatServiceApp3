@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     BottomBar mBottomBar;
     private static final int CONTENT_HOME = 1;
     private CompositeSubscription mcompositeSubscription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,14 +125,18 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
+                    @DebugLog
                     @Override
                     public void onNext(OrderInfo orderInfo) {
                         if (orderInfo != null && orderInfo.getOrderId() == 0) {
                             Intent intent = new Intent(MainActivity.this, SeatEatNumberActivity.class);
                             intent.putExtra("Seat", seat);
                             startActivity(intent);
-                        }else{
-                            Toast.makeText(MainActivity.this, orderInfo.toString(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent _intent = new Intent(MainActivity.this, SeatActivity.class);
+                            _intent.putExtra("orderInfo", orderInfo);
+                            startActivity(_intent);
+//                            Toast.makeText(MainActivity.this, "1111", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -144,10 +149,10 @@ public class MainActivity extends AppCompatActivity {
     public void orderOverEvent(OrderOverEvent orderOverEvent) {
         OrderInfo orderInfo = orderOverEvent.getOrderInfo();
         String _status = orderInfo.getStatusId();
-//        Log.i("Daniel","---_status---"+_status);
-        if (_status.equals("01")){
+        Log.i("Daniel", "---_status---" + _status);
+        if (_status.equals("01")) {
             Toast.makeText(this, "订单未确认，不可翻桌！", Toast.LENGTH_SHORT).show();
-        }else if (_status.equals("02")){
+        } else if (_status.equals("02")) {
             String id = orderInfo.getSeatName();
 
             submitOrderOver(id);
@@ -164,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
 
     @DebugLog
     private void submitOrderOver(String id) {
-        Log.i("gqf","id+"+id);
-       Subscription  subscription = Network.getSeatService().updateStatus(id, "01")
+        Log.i("gqf", "id+" + id);
+        Subscription subscription = Network.getSeatService().updateStatus(id, "01")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResultInfo>() {
@@ -210,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             case CONTENT_MY:
                 MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag(MY_TAG);
                 if (myFragment == null) {
-                    myFragment = MyFragment.newInstance() ;
+                    myFragment = MyFragment.newInstance();
                 }
                 setFragment(myFragment, MY_TAG);
                 break;
@@ -223,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param fragment
      */
-@DebugLog
+    @DebugLog
     private void setFragment(Fragment fragment, String tag) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, fragment, tag);

@@ -2,9 +2,10 @@ package com.dijiaapp.eatserviceapp.order;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,9 +45,9 @@ public class OrderItemDetailActivity extends AppCompatActivity {
     TextView orderDetailMarkTv;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.order_detail_food_container)
-    LinearLayout orderDetailFoodContainer;
-//    @BindView(R.id.order_detail_sum)
+//    @BindView(R.id.order_detail_food_container)
+//    LinearLayout orderDetailFoodContainer;
+    //    @BindView(R.id.order_detail_sum)
 //    TextView orderDetailSum;
 //    @BindView(R.id.order_detail_totalPrice)
 //    TextView orderDetailTotalPrice;
@@ -58,6 +59,8 @@ public class OrderItemDetailActivity extends AppCompatActivity {
     TextView orderDetailDinnerNumTv;
     @BindView(R.id.order_detail_seatNum_tv)
     TextView orderDetailSeatNumTv;
+    @BindView(R.id.order_detail_food_list)
+    RecyclerView orderDetailFoodList;
     private List<OrderDishes> dishes;
     private Subscription subscription;
     private Unbinder mUnbinder;
@@ -92,20 +95,25 @@ public class OrderItemDetailActivity extends AppCompatActivity {
 
     private void setFoodListView(List<OrderDishes> dishes) {
 
-        for (OrderDishes orderDishes : dishes) {
-            LinearLayout foodItem = (LinearLayout) LayoutInflater.from(OrderItemDetailActivity.this)
-                    .inflate(R.layout.food_listitem, orderDetailFoodContainer, false);
-            TextView name = (TextView) foodItem.findViewById(R.id.foodName);
-            TextView number = (TextView) foodItem.findViewById(R.id.number);
-            TextView money = (TextView) foodItem.findViewById(R.id.moneyTv);
-            name.setText(orderDishes.getDishesName());
-            double _totalPrice = orderDishes.getTotalPrice();
-            number.setText("" + orderDishes.getOrderNum());
-            money.setText("￥" + _totalPrice);
-            mSumPrice += _totalPrice;
-            orderDetailFoodContainer.addView(foodItem);
+        orderDetailFoodList.setLayoutManager(new LinearLayoutManager(this));
+        OrderItemDetailAdapter cartListAdapter = new OrderItemDetailAdapter(this,dishes);
+        orderDetailFoodList.setAdapter(cartListAdapter);
 
-        }
+
+//        for (OrderDishes orderDishes : dishes) {
+//            LinearLayout foodItem = (LinearLayout) LayoutInflater.from(OrderItemDetailActivity.this)
+//                    .inflate(R.layout.food_listitem, orderDetailFoodContainer, false);
+//            TextView name = (TextView) foodItem.findViewById(R.id.foodName);
+//            TextView number = (TextView) foodItem.findViewById(R.id.number);
+//            TextView money = (TextView) foodItem.findViewById(R.id.moneyTv);
+//            name.setText(orderDishes.getDishesName());
+//            double _totalPrice = orderDishes.getTotalPrice();
+//            number.setText("" + orderDishes.getOrderNum());
+//            money.setText("￥" + _totalPrice);
+//            mSumPrice += _totalPrice;
+//            orderDetailFoodContainer.addView(foodItem);
+//
+//        }
 //        if (!isAddFood) {
 //            order.setOrdreTotal(orderMoney);
 //            order.setDishes(dishesList);
@@ -165,8 +173,8 @@ public class OrderItemDetailActivity extends AppCompatActivity {
         orderDetailServer.setText("服务人员：" + order.getWaiterName());
         orderDetailDinnerNumTv.setText("就餐人数：" + order.getDinnerNum());
         //通过座位名找到Seat对应的model
-        Seat _seat=SeatFragment.getSeat_order(order.getSeatName());
-        orderDetailSeatNumTv.setText(""+_seat.getContainNum());
+        Seat _seat = SeatFragment.getSeat_order(order.getSeatName());
+        orderDetailSeatNumTv.setText("" + _seat.getContainNum());
         orderDetailMarkTv.setText(order.getRemark());
         Log.i("Daniel", "------");
         dishes = order.getDishes();

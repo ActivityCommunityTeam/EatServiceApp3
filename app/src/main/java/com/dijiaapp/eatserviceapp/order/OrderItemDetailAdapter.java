@@ -1,4 +1,4 @@
-package com.dijiaapp.eatserviceapp.diancan;
+package com.dijiaapp.eatserviceapp.order;
 
 import android.app.FragmentManager;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dijiaapp.eatserviceapp.R;
-import com.dijiaapp.eatserviceapp.data.Cart;
+import com.dijiaapp.eatserviceapp.data.OrderDishes;
 
 import java.util.List;
 
@@ -21,15 +21,15 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2016/11/10.
  */
 
-public class CartListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class OrderItemDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<Cart> mDatas;
+    private List<OrderDishes> mDatas;
     private FragmentManager fragmentManager;
     private final LayoutInflater mLayoutInflater;
     private MyItemClickListener mItemClickListener;
 
-    public CartListAdapter(Context mContext, List<Cart> mDatas) {
+    public OrderItemDetailAdapter(Context mContext, List<OrderDishes> mDatas) {
         this.mContext = mContext;
         this.mDatas = mDatas;
         this.fragmentManager = fragmentManager;
@@ -57,10 +57,10 @@ public class CartListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Log.i("Daniel","---position---"+position);
         MyViewHoder myViewHoder = (MyViewHoder) holder;
-        Cart _Cart = mDatas.get(position);
-        myViewHoder.foodName.setText(_Cart.getDishesListBean().getDishesName());
-        myViewHoder.number.setText(""+_Cart.getAmount());
-        myViewHoder.moneyTv.setText(""+_Cart.getMoney());
+        OrderDishes _OrderDishes = mDatas.get(position);
+        myViewHoder.foodName.setText(_OrderDishes.getDishesName());
+        myViewHoder.number.setText(""+_OrderDishes.getDishesName());
+        myViewHoder.moneyTv.setText("￥"+_OrderDishes.getTotalPrice());
 
 
     }

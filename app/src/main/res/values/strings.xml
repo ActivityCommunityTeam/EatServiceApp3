@@ -23,4 +23,7 @@
         <item>深圳</item>
     </string-array>
 
+    <!--提交订单-->
+    <string name="submitOrder">提交订单</string>
+
 </resources>

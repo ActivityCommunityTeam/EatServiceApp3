@@ -83,7 +83,8 @@ public class OrderItemFragment extends Fragment {
      */
     @DebugLog
     private void getOrders() {
-        subscription = Network.getOrderService().listOrder(hotelId).subscribeOn(Schedulers.io())
+        subscription = Network.getOrderService().listOrder(hotelId)
+                .subscribeOn(Schedulers.io())
                 .flatMap(new Func1<List<OrderInfo>, Observable<OrderInfo>>() {
                     @Override
                     public Observable<OrderInfo> call(List<OrderInfo> orderInfos) {
