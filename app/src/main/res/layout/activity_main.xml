@@ -32,6 +32,6 @@
         android:layout_height="60dp"
         android:layout_gravity="bottom"
         app:bb_tabXmlResource="@xml/bottombar_tabs"
-        app:bb_behavior="underNavbar"/>
+        />
 
 </android.support.design.widget.CoordinatorLayout>

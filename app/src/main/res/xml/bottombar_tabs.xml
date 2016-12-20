@@ -7,7 +7,7 @@
     <tab
         id="@+id/tab_order"
         icon="@drawable/ic_bottom_order"
-        title="订单" />
+        title="餐单" />
   <!--  <tab
         id="@+id/tab_find"
         icon="@drawable/ic_bottom_find"
