@@ -20,6 +20,7 @@ import com.dijiaapp.eatserviceapp.Impl.ShopCarDelectAllLinsener;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Cart;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import io.realm.Realm;
@@ -112,7 +113,7 @@ public class StrongBottomSheetDialog extends BottomSheetDialog {
         delectTxt=(TextView)this.findViewById(R.id.delect_car_txt);
         food_money=(TextView)this.findViewById(R.id.food_money);
         mFoodNum=(TextView)this.findViewById(R.id.food_num);
-        food_money.setText("￥" + getMoney());
+        food_money.setText("￥" + new BigDecimal(getMoney()).setScale(2,BigDecimal.ROUND_DOWN));
         food_next=(Button)this.findViewById(R.id.food_next);
         food_next.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -136,7 +136,14 @@ public class OrderActivity extends AppCompatActivity {
         initBottomSheetDialog();
 
     }
-
+    public int getFoodNum(){
+        List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
+        int num=0;
+        for(Cart cart:carts){
+            num=num+cart.getAmount();
+        }
+        return  num;
+    }
     StrongBottomSheetDialog mBottomSheetDialog;
     RecyclerView mFoodCartRecyclerview;
     CartRecyclerViewOnOrderAdapter mCartRecyclerViewAdapter;
@@ -157,7 +164,7 @@ public class OrderActivity extends AppCompatActivity {
             @Override
             public void getListItemSize(int size) {
                 Log.i("gqf", "size" + size);
-                if (size == 1) {
+                if (size == 0) {
                     if (mBottomSheetDialog != null) {
                         if (mBottomSheetDialog.isShowing()) {
                             mBottomSheetDialog.dismiss();
@@ -285,7 +292,7 @@ public class OrderActivity extends AppCompatActivity {
 
                             }
                         }
-                        mBottomSheetDialog.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
+                        mBottomSheetDialog.setFoodNum(getFoodNum());
                     }
                 }
 
@@ -472,10 +479,10 @@ public class OrderActivity extends AppCompatActivity {
         BigDecimal bmoney=new BigDecimal(money).setScale(2,BigDecimal.ROUND_DOWN);
 
         mFoodMoney.setText("￥" + bmoney);
-        setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
+        setFoodNum(getFoodNum());
         if (mBottomSheetDialog != null) {
             mBottomSheetDialog.food_money.setText("￥" + bmoney);
-            mBottomSheetDialog.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
+            mBottomSheetDialog.setFoodNum(getFoodNum());
         }
     }
     public void setFoodNum(int num){

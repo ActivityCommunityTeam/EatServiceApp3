@@ -88,8 +88,6 @@ public class SeatRecyclerviewAdapter extends RecyclerView.Adapter<SeatRecyclervi
                 break;
         }
         holder.mSeatListitemNumber.setText(String.valueOf(seat.getContainNum())+"");
-
-
     }
 
     @Override
