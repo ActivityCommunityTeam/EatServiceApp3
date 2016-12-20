@@ -62,19 +62,49 @@
         android:layout_height="?actionBarSize"
         android:gravity="center_vertical"
         android:background="@color/white">
-        <ImageView
-            android:id="@+id/food_cart_bt"
+        <!--<RelativeLayout
+            android:id="@+id/food_cart_rel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_shopping"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content">-->
 
+            <ImageView
+                android:id="@+id/food_cart_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_shopping"
+                android:layout_centerVertical="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                />
+          <!--  <TextView
+                android:layout_width="@dimen/smallmdp"
+                android:layout_height="@dimen/smallmdp"
+                android:text="1"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/red"
+                />
+        </RelativeLayout>-->
+        <TextView
+            android:id="@+id/food_num"
+            android:layout_width="@dimen/mediummdp"
+            android:layout_height="@dimen/mediummdp"
+            android:layout_marginTop="@dimen/tinymdp"
+            android:layout_marginRight="@dimen/tinymdp"
+            android:text="1"
+            android:textSize="@dimen/tinysp"
+            android:textColor="@color/white"
+            android:layout_alignRight="@+id/food_cart_bt"
+            android:layout_alignTop="@+id/food_cart_bt"
+            android:background="@drawable/food_num_shap"
+            android:gravity="center"
             />
         <TextView
             android:id="@+id/food_money"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/food_cart_bt"
+            android:textColor="@color/red"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

@@ -176,6 +176,8 @@ public class FoodActivity extends AppCompatActivity {
     TextView mFoodMoney;
     @BindView(R.id.food_next)
     Button mFoodNext;
+    @BindView(R.id.food_num)
+    TextView mFoodNum;
     private LeftListAdapter leftListAdapter;
 
 
@@ -217,7 +219,7 @@ public class FoodActivity extends AppCompatActivity {
             @Override
             public void getListItemSize(int size) {
                 Log.i("gqf","size"+size);
-                if(size==1){
+                if(size==0){
                     if(mBottomSheetDialog!=null) {
                         if (mBottomSheetDialog.isShowing()) {
                             mBottomSheetDialog.dismiss();
@@ -240,6 +242,8 @@ public class FoodActivity extends AppCompatActivity {
             @Override
             public void delectAll() {
                 mainSectionedAdapter.update();
+
+                mainSectionedAdapter.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
                 mBottomSheetDialog.dismiss();
                 mFoodMoney.setText("￥" + 0);
             }
@@ -258,7 +262,10 @@ public class FoodActivity extends AppCompatActivity {
 
         setCartMoney();
         mainSectionedAdapter = new MainSectionedAdapter(this, foodTypes, carts);
+
         mPinnedListView.setAdapter(mainSectionedAdapter);
+        mainSectionedAdapter.setMfoodNum(mFoodNum);
+        mainSectionedAdapter.setFoodNum(carts.size());
         leftListAdapter = new LeftListAdapter(this, foodTypes, flagArray);
         mLeftListview.setAdapter(leftListAdapter);
 
@@ -356,6 +363,7 @@ public class FoodActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         mainSectionedAdapter.updateByDate(realm.where(Cart.class).equalTo("seatId", seatId).findAll());
+        mainSectionedAdapter.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
     }
 
     //刷新购物车
@@ -410,6 +418,7 @@ public class FoodActivity extends AppCompatActivity {
             }
         }
         mainSectionedAdapter.update();
+        mainSectionedAdapter.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
         setCartMoney();
     }
 
@@ -417,8 +426,11 @@ public class FoodActivity extends AppCompatActivity {
         double money = getMoney();
 
         mFoodMoney.setText("￥" + money);
+
+
         if(mBottomSheetDialog.food_money!=null){
             mBottomSheetDialog.food_money.setText("￥" + money);
+            mBottomSheetDialog.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
         }
     }
 
@@ -438,6 +450,7 @@ public class FoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
         ButterKnife.bind(this);
+        mFoodNum.setVisibility(View.INVISIBLE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         EventBus.getDefault().register(this);
@@ -557,6 +570,7 @@ public class FoodActivity extends AppCompatActivity {
 
                             }
                         }
+                        mBottomSheetDialog.setFoodNum(Integer.parseInt(mFoodNum.getText().toString()));
                     }
                 }
 

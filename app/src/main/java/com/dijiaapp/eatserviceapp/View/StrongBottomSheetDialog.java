@@ -48,6 +48,7 @@ public class StrongBottomSheetDialog extends BottomSheetDialog {
 
     private ImageView food_cart_bt;
     TextView delectTxt;
+    public TextView mFoodNum;
     public TextView food_money;
     private int seatId=-1;
     Context mContext;
@@ -110,6 +111,7 @@ public class StrongBottomSheetDialog extends BottomSheetDialog {
         food_cart_bt=(ImageView)this.findViewById(R.id.food_cart_bt);
         delectTxt=(TextView)this.findViewById(R.id.delect_car_txt);
         food_money=(TextView)this.findViewById(R.id.food_money);
+        mFoodNum=(TextView)this.findViewById(R.id.food_num);
         food_money.setText("￥" + getMoney());
         food_next=(Button)this.findViewById(R.id.food_next);
         food_next.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +182,16 @@ public class StrongBottomSheetDialog extends BottomSheetDialog {
 
         }
     }
-
+    public void setFoodNum(int num){
+        if(mFoodNum!=null) {
+            if (num > 0) {
+                mFoodNum.setVisibility(View.VISIBLE);
+                mFoodNum.setText(num+"");
+            } else {
+                mFoodNum.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
     private void setPeekHeight() {
         if (mPeekHeight <= 0) {
             return;

@@ -30,7 +30,18 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
     private List<FoodType> foodTypes;
     private List<Cart> carts;
 
-    public MainSectionedAdapter(Context context, List<FoodType> foodTypes,List<Cart> carts) {
+    TextView mfoodNum;
+
+    public TextView getMfoodNum() {
+        return mfoodNum;
+    }
+
+    public void setMfoodNum(TextView mfoodNum) {
+        this.mfoodNum = mfoodNum;
+
+    }
+
+    public MainSectionedAdapter(Context context, List<FoodType> foodTypes, List<Cart> carts) {
         this.mContext = context;
         this.foodTypes = foodTypes;
         this.carts = carts;
@@ -58,10 +69,22 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
 
     public void update(){
         this.notifyDataSetChanged();
+
     }
     public void updateByDate(List<Cart> carts){
         this.carts=carts;
         this.notifyDataSetChanged();
+
+    }
+    public void setFoodNum(int num){
+        if(mfoodNum!=null) {
+            if (num > 0) {
+                mfoodNum.setVisibility(View.VISIBLE);
+                mfoodNum.setText(num+"");
+            } else {
+                mfoodNum.setVisibility(View.INVISIBLE);
+            }
+        }
     }
     @Override
     public View getItemView(final int section, final int position, View convertView, ViewGroup parent) {
@@ -99,6 +122,7 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
                     amount--;
                     amountTv.setText(amount + "");
                     min.setVisibility(View.VISIBLE);
+
                 }
                 if (amount == 0)
                     min.setVisibility(View.INVISIBLE);

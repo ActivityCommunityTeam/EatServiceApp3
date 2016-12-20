@@ -78,8 +78,10 @@ public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, Cart
                     holder.amount.setText(amount + "");
                     CartEvent c=new CartEvent(0,getData().get(position).getDishesListBean().getId());
                     EventBus.getDefault().post(c);
+                    listItemSizeChange(getData().size()-1 );
+                }else {
+                    listItemSizeChange(getData().size() );
                 }
-                listItemSizeChange(getData().size());
             }
         });
 
