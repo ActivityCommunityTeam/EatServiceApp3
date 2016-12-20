@@ -38,6 +38,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 
@@ -365,6 +366,7 @@ public class FoodActivity extends AppCompatActivity {
         mainSectionedAdapter.updateByDate(realm.where(Cart.class).equalTo("seatId", seatId).findAll());
         setCartMoney();
         mainSectionedAdapter.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
+
     }
 
     //刷新购物车
@@ -425,12 +427,12 @@ public class FoodActivity extends AppCompatActivity {
 
     private void setCartMoney() {
         double money = getMoney();
-
-        mFoodMoney.setText("￥" + money);
+        BigDecimal bmoney=new BigDecimal(money);
+        mFoodMoney.setText("￥" + bmoney);
 
 
         if(mBottomSheetDialog.food_money!=null){
-            mBottomSheetDialog.food_money.setText("￥" + money);
+            mBottomSheetDialog.food_money.setText("￥" + bmoney);
             mBottomSheetDialog.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
         }
     }
