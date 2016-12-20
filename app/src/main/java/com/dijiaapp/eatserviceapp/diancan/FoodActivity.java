@@ -363,6 +363,7 @@ public class FoodActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         mainSectionedAdapter.updateByDate(realm.where(Cart.class).equalTo("seatId", seatId).findAll());
+        setCartMoney();
         mainSectionedAdapter.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
     }
 

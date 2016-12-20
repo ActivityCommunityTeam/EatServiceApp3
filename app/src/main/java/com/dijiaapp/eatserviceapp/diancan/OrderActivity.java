@@ -82,7 +82,8 @@ public class OrderActivity extends AppCompatActivity {
     TextView orderDetailSeatNameTv;
     @BindView(R.id.order_detail_list)
     RecyclerView orderDetailList;
-
+    @BindView(R.id.food_num)
+    TextView mFoodNum;
 
     private Realm realm;
     private double orderMoney;
@@ -129,7 +130,7 @@ public class OrderActivity extends AppCompatActivity {
         mOrderTime.setText("开台时间：" + TimeUtils.getCurTimeString());
         mOrderServerName.setText("服务人员：" + user.getWaiterName());
         setFoodListView(carts);
-
+        setCartMoney();
 
         initBottomSheetDialog();
 
@@ -159,6 +160,7 @@ public class OrderActivity extends AppCompatActivity {
                     if (mBottomSheetDialog != null) {
                         if (mBottomSheetDialog.isShowing()) {
                             mBottomSheetDialog.dismiss();
+                            finish();
                         }
                     }
                 }
@@ -176,6 +178,7 @@ public class OrderActivity extends AppCompatActivity {
             @Override
             public void delectAll() {
                 mBottomSheetDialog.dismiss();
+                setCartMoney();
                 mFoodMoney.setText("￥" + 0);
                 finish();
             }
@@ -183,6 +186,7 @@ public class OrderActivity extends AppCompatActivity {
             @Override
             public void dimess() {
                 mBottomSheetDialog.dismiss();
+                setCartMoney();
             }
 
             @Override
@@ -280,6 +284,7 @@ public class OrderActivity extends AppCompatActivity {
 
                             }
                         }
+                        mBottomSheetDialog.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
                     }
                 }
 
@@ -300,6 +305,8 @@ public class OrderActivity extends AppCompatActivity {
             updateSeat();
         }
     }
+
+
 
     private void addFoodOrder() {
         String _dishes = new Gson().toJson(dishesList);
@@ -448,15 +455,37 @@ public class OrderActivity extends AppCompatActivity {
         setCartMoney();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setCartMoney();
+    }
+
     private void setCartMoney() {
         double money = getMoney();
 
         mFoodMoney.setText("￥" + money);
-        if (mBottomSheetDialog.food_money != null) {
+        setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
+        if (mBottomSheetDialog != null) {
             mBottomSheetDialog.food_money.setText("￥" + money);
+            mBottomSheetDialog.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
         }
     }
-
+    public void setFoodNum(int num){
+        if(mFoodNum!=null) {
+            if (num > 0) {
+                mFoodNum.setVisibility(View.VISIBLE);
+                mFoodNum.setText(num+"");
+            } else {
+                mFoodNum.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
     private double getMoney() {
         double money = 0;
         List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
