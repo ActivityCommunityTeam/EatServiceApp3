@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +60,7 @@ public class OrderActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-//    @BindView(R.id.order_name)
+    //    @BindView(R.id.order_name)
 //    TextView mOrderName;
     @BindView(R.id.order_time)
     TextView mOrderTime;
@@ -70,16 +68,22 @@ public class OrderActivity extends AppCompatActivity {
     TextView mOrderNumber;
     @BindView(R.id.order_server_name)
     TextView mOrderServerName;
-    @BindView(R.id.food_container)
-    LinearLayout mFoodContainer;
-    @BindView(R.id.order_mark)
-    RelativeLayout mOrderMark;
+//    @BindView(R.id.food_container)
+//    LinearLayout mFoodContainer;
+//    @BindView(R.id.order_mark)
+//    RelativeLayout mOrderMark;
     @BindView(R.id.food_cart_bt)
     ImageView mFoodCartBt;
     @BindView(R.id.food_money)
     TextView mFoodMoney;
     @BindView(R.id.food_next)
     Button mFoodNext;
+    @BindView(R.id.order_detail_seatName_tv)
+    TextView orderDetailSeatNameTv;
+    @BindView(R.id.order_detail_list)
+    RecyclerView orderDetailList;
+
+
     private Realm realm;
     private double orderMoney;
     private Order order;
@@ -90,6 +94,7 @@ public class OrderActivity extends AppCompatActivity {
     private int eatNubmer;
     private OrderInfo orderInfo;
     private CompositeSubscription compositeSubscription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,10 +108,8 @@ public class OrderActivity extends AppCompatActivity {
         Intent intent = getIntent();
         UserInfo user = realm.where(UserInfo.class).findFirst();
         isAddFood = intent.getBooleanExtra("addFood", false);
-        Log.i("Daniel", "---onCreate--isAddFood: ----"+isAddFood);
-
+        orderInfo = intent.getParcelableExtra("orderInfo");
         if (isAddFood) {
-            orderInfo = intent.getParcelableExtra("orderInfo");
             seatId = Integer.parseInt(orderInfo.getSeatName());
             dishesList = new ArrayList<>();
             mOrderNumber.setText(orderInfo.getDinnerNum() + "人");
@@ -119,24 +122,27 @@ public class OrderActivity extends AppCompatActivity {
             order.setHotelId(user.getHotelId());
             order.setUserId(user.getWaiterId());
             order.setSeatName(seatId + "");
-            mOrderNumber.setText(eatNubmer + "人");
+            mOrderNumber.setText("就餐人数：" + eatNubmer);
+            orderDetailSeatNameTv.setText(seat.getSeatName());
         }
-        carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
-        mOrderTime.setText(TimeUtils.getCurTimeString());
-        mOrderServerName.setText(user.getWaiterName());
-
-
+        carts=realm.where(Cart.class).equalTo("seatId", seatId).findAll();
+        mOrderTime.setText("开台时间：" + TimeUtils.getCurTimeString());
+        mOrderServerName.setText("服务人员：" + user.getWaiterName());
         setFoodListView(carts);
+
+
         initBottomSheetDialog();
 
     }
+
     StrongBottomSheetDialog mBottomSheetDialog;
     RecyclerView mFoodCartRecyclerview;
     CartRecyclerViewOnOrderAdapter mCartRecyclerViewAdapter;
-    public void initBottomSheetDialog(){
+
+    public void initBottomSheetDialog() {
         mBottomSheetDialog = new StrongBottomSheetDialog(this);
         View view = LayoutInflater.from(this).inflate(R.layout.content_bottomsheet, null, false);
-        mFoodCartRecyclerview= (RecyclerView) view.findViewById(R.id.food_cart_recyclerview);
+        mFoodCartRecyclerview = (RecyclerView) view.findViewById(R.id.food_cart_recyclerview);
 
 
         List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
@@ -148,9 +154,9 @@ public class OrderActivity extends AppCompatActivity {
         mCartRecyclerViewAdapter.setListItemSizeChangeLinsener(new ListItemSizeChangeLinsener() {
             @Override
             public void getListItemSize(int size) {
-                Log.i("gqf","size"+size);
-                if(size==1){
-                    if(mBottomSheetDialog!=null) {
+                Log.i("gqf", "size" + size);
+                if (size == 1) {
+                    if (mBottomSheetDialog != null) {
                         if (mBottomSheetDialog.isShowing()) {
                             mBottomSheetDialog.dismiss();
                         }
@@ -162,8 +168,6 @@ public class OrderActivity extends AppCompatActivity {
         mFoodCartRecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
         mFoodCartRecyclerview.setAdapter(mCartRecyclerViewAdapter);
-
-
 
 
         mBottomSheetDialog.setContentView(view);
@@ -180,43 +184,52 @@ public class OrderActivity extends AppCompatActivity {
             public void dimess() {
                 mBottomSheetDialog.dismiss();
             }
+
             @Override
-            public void nextOrder(){
+            public void nextOrder() {
                 mBottomSheetDialog.dismiss();
                 next();
             }
         });
     }
+
     private void setFoodListView(List<Cart> carts) {
-
-        for (Cart cart : carts) {
-            DishesListBean dishesListBean = cart.getDishesListBean();
-            LinearLayout foodItem = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.food_listitem, mFoodContainer, false);
-            TextView name = (TextView) foodItem.findViewById(R.id.foodName);
-            TextView number = (TextView) foodItem.findViewById(R.id.number);
-            TextView money = (TextView) foodItem.findViewById(R.id.moneyTv);
-            name.setText(cart.getDishesListBean().getDishesName());
-            number.setText(cart.getAmount() + dishesListBean.getDishesUnit());
-            money.setText("￥" + cart.getMoney());
+//        MyLayoutManager linearLayoutManager = new MyLayoutManager(this);
+//        linearLayoutManager.setAutoMeasureEnabled(true);
+//        orderDetailList.setHasFixedSize(false);
+        orderDetailList.setLayoutManager(new LinearLayoutManager(this));
+        CartListAdapter cartListAdapter = new CartListAdapter(OrderActivity.this, carts);
+        orderDetailList.setAdapter(cartListAdapter);
 
 
-            OrderDishes orderDishes = new OrderDishes();
-            orderDishes.setDishesId(dishesListBean.getId());
-            orderDishes.setDishesName(dishesListBean.getDishesName());
-            orderDishes.setDishesPrice(dishesListBean.getDishesPrice());
-            orderDishes.setDishesUnit(dishesListBean.getDishesUnit() != null ? dishesListBean.getDishesUnit() : "");
-            orderDishes.setOrderNum(cart.getAmount());
-            orderDishes.setTotalPrice(cart.getMoney());
-
-            dishesList.add(orderDishes);
-            orderMoney += cart.getMoney();
-            mFoodContainer.addView(foodItem);
-
-        }
-        if (!isAddFood) {
-            order.setOrdreTotal(orderMoney);
-            order.setDishes(dishesList);
-        }
+//        for (Cart cart : carts) {
+//            DishesListBean dishesListBean = cart.getDishesListBean();
+//            LinearLayout foodItem = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.food_listitem, mFoodContainer, false);
+//            TextView name = (TextView) foodItem.findViewById(R.id.foodName);
+//            TextView number = (TextView) foodItem.findViewById(R.id.number);
+//            TextView money = (TextView) foodItem.findViewById(R.id.moneyTv);
+//            name.setText(cart.getDishesListBean().getDishesName());
+//            number.setText(cart.getAmount() + "");
+//            money.setText("￥" + cart.getMoney());
+//
+//
+//            OrderDishes orderDishes = new OrderDishes();
+//            orderDishes.setDishesId(dishesListBean.getId());
+//            orderDishes.setDishesName(dishesListBean.getDishesName());
+//            orderDishes.setDishesPrice(dishesListBean.getDishesPrice());
+//            orderDishes.setDishesUnit(dishesListBean.getDishesUnit() != null ? dishesListBean.getDishesUnit() : "");
+//            orderDishes.setOrderNum(cart.getAmount());
+//            orderDishes.setTotalPrice(cart.getMoney());
+//
+//            dishesList.add(orderDishes);
+//            orderMoney += cart.getMoney();
+//            mFoodContainer.addView(foodItem);
+//
+//        }
+//        if (!isAddFood) {
+//            order.setOrdreTotal(orderMoney);
+//            order.setDishes(dishesList);
+//        }
     }
 
     @Override
@@ -229,42 +242,41 @@ public class OrderActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.food_next,R.id.food_cart_bt})
+    @OnClick({R.id.food_next, R.id.food_cart_bt})
     public void onClick(View view) {
         Log.i("Daniel", "---onClick--isAddFood: ----" + isAddFood);
         switch (view.getId()) {
             case R.id.food_cart_bt:
 
-                if(mCartRecyclerViewAdapter.getItemCount()==0){
+                if (mCartRecyclerViewAdapter.getItemCount() == 0) {
 
-                    Toast.makeText(OrderActivity.this,"您的购物车中没有商品，请添加",Toast.LENGTH_SHORT).show();
-                }
-                else {
+                    Toast.makeText(OrderActivity.this, "您的购物车中没有商品，请添加", Toast.LENGTH_SHORT).show();
+                } else {
                     if (mBottomSheetDialog.isShowing()) {
                         mBottomSheetDialog.dismiss();
                     } else {
 
                         mBottomSheetDialog.show();
-                        if(mCartRecyclerViewAdapter.itemHeight==-1){
+                        if (mCartRecyclerViewAdapter.itemHeight == -1) {
                             ViewTreeObserver vto = mFoodCartRecyclerview.getViewTreeObserver();
                             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                                 @Override
                                 public void onGlobalLayout() {
                                     mFoodCartRecyclerview.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                                    mCartRecyclerViewAdapter.itemHeight=mFoodCartRecyclerview.getHeight()/mCartRecyclerViewAdapter.getItemCount();
+                                    mCartRecyclerViewAdapter.itemHeight = mFoodCartRecyclerview.getHeight() / mCartRecyclerViewAdapter.getItemCount();
 
-                                    if(mCartRecyclerViewAdapter.getItemCount()>=3){
-                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight*3);
-                                    }else{
-                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight*mCartRecyclerViewAdapter.getItemCount());
+                                    if (mCartRecyclerViewAdapter.getItemCount() >= 3) {
+                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * 3);
+                                    } else {
+                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * mCartRecyclerViewAdapter.getItemCount());
                                     }
                                 }
                             });
-                        }else {
+                        } else {
                             if (mCartRecyclerViewAdapter.getItemCount() >= 3) {
                                 mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * 3);
-                            }else{
-                                mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight*mCartRecyclerViewAdapter.getItemCount());
+                            } else {
+                                mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * mCartRecyclerViewAdapter.getItemCount());
 
                             }
                         }
@@ -279,7 +291,8 @@ public class OrderActivity extends AppCompatActivity {
         }
 
     }
-    public void next(){
+
+    public void next() {
         if (isAddFood) {
             addFoodOrder();
         } else {
@@ -287,21 +300,23 @@ public class OrderActivity extends AppCompatActivity {
             updateSeat();
         }
     }
+
     private void addFoodOrder() {
         String _dishes = new Gson().toJson(dishesList);
-        Log.i("Daniel", "-----orderInfo.getOrderId(): ----"+orderInfo.getOrderId());
-        Log.i("Daniel", "-----orderMoney: ----"+orderMoney);
-        Log.i("Daniel", "-----_dishes----"+_dishes);
+        Log.i("Daniel", "-----orderInfo.getOrderId(): ----" + orderInfo.getOrderId());
+        Log.i("Daniel", "-----orderMoney: ----" + orderMoney);
+        Log.i("Daniel", "-----_dishes----" + _dishes);
 
-       Subscription addFoodSubscription =  Network.getOrderService()
-               .addDishes(orderInfo.getOrderId(), orderMoney, _dishes)
+        Subscription addFoodSubscription = Network.getOrderService()
+                .addDishes(orderInfo.getOrderId(), orderMoney, _dishes)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResultInfo>() {
                     @Override
                     public void onCompleted() {
-                        Log.i("gqf","onCompleted");
+                        Log.i("gqf", "onCompleted");
                     }
+
                     @DebugLog
                     @Override
                     public void onError(Throwable e) {
@@ -311,28 +326,30 @@ public class OrderActivity extends AppCompatActivity {
                     @DebugLog
                     @Override
                     public void onNext(ResultInfo resultInfo) {
-                        Log.i("gqf","onNext"+resultInfo.toString());
-                       finishOrder(resultInfo);
+                        Log.i("gqf", "onNext" + resultInfo.toString());
+                        finishOrder(resultInfo);
                     }
                 });
         compositeSubscription.add(addFoodSubscription);
     }
 
     private void saveOrder() {
-       Subscription subscription = getOrderService().saveOrder(order.getHotelId(), order.getUserId(), order.getOrdreTotal(), order.getDinnerNum(), order.getSeatName(), new Gson().toJson(order.getDishes()))
+        Subscription subscription = getOrderService().saveOrder(order.getHotelId(), order.getUserId(), order.getOrdreTotal(), order.getDinnerNum(), order.getSeatName(), new Gson().toJson(order.getDishes()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
         compositeSubscription.add(subscription);
     }
-    private void updateSeat(){
 
-        Subscription subscription = getSeatService().updateStatus(order.getSeatName() ,"02")
+    private void updateSeat() {
+
+        Subscription subscription = getSeatService().updateStatus(order.getSeatName(), "02")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
         compositeSubscription.add(subscription);
     }
+
     Observer<ResultInfo> observer = new Observer<ResultInfo>() {
         @Override
         public void onCompleted() {
@@ -356,6 +373,7 @@ public class OrderActivity extends AppCompatActivity {
 
     /**
      * 结束本次订单
+     *
      * @param resultInfo
      */
     private void finishOrder(ResultInfo resultInfo) {
@@ -365,11 +383,12 @@ public class OrderActivity extends AppCompatActivity {
         carts.deleteAllFromRealm();
         realm.commitTransaction();
     }
+
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cartEventOrder(CartEvent event) {
-        Log.i("gqf","cartEventOrder");
-        if(event.getFlag()==3||event.getFlag()==4) {
+        Log.i("gqf", "cartEventOrder");
+        if (event.getFlag() == 3 || event.getFlag() == 4) {
             refreshCart(event);
         }
     }
@@ -388,7 +407,7 @@ public class OrderActivity extends AppCompatActivity {
                     realm.beginTransaction();
                     cart.deleteFromRealm();
                     realm.commitTransaction();
-                    if(mBottomSheetDialog.isShowing()) {
+                    if (mBottomSheetDialog.isShowing()) {
                         if (mCartRecyclerViewAdapter.getItemCount() <= 3) {
                             if (mCartRecyclerViewAdapter.itemHeight != -1) {
                                 mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * (mCartRecyclerViewAdapter.getItemCount() - 1));
@@ -403,7 +422,7 @@ public class OrderActivity extends AppCompatActivity {
                     realm.commitTransaction();
                 }
 
-            } else if(event.getFlag() == 4){
+            } else if (event.getFlag() == 4) {
                 amount++;
                 realm.beginTransaction();
                 cart.setMoney(amount * cart.getDishesListBean().getDishesPrice());
@@ -428,11 +447,12 @@ public class OrderActivity extends AppCompatActivity {
         setFoodListView(realm.where(Cart.class).equalTo("seatId", seatId).findAll());
         setCartMoney();
     }
+
     private void setCartMoney() {
         double money = getMoney();
 
         mFoodMoney.setText("￥" + money);
-        if(mBottomSheetDialog.food_money!=null){
+        if (mBottomSheetDialog.food_money != null) {
             mBottomSheetDialog.food_money.setText("￥" + money);
         }
     }
