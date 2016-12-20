@@ -469,7 +469,8 @@ public class OrderActivity extends AppCompatActivity {
 
     private void setCartMoney() {
         double money = getMoney();
-        BigDecimal bmoney=new BigDecimal(money);
+        BigDecimal bmoney=new BigDecimal(money).setScale(2,BigDecimal.ROUND_DOWN);
+
         mFoodMoney.setText("￥" + bmoney);
         setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
         if (mBottomSheetDialog != null) {
