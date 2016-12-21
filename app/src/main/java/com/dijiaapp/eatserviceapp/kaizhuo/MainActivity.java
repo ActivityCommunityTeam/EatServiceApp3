@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setToolbar() {
 
-        mToolbar.setTitle("艾特美食");
+        mToolbar.setTitle("服务员app");
         setSupportActionBar(mToolbar);
         /*toolbar.setNavigationIcon(R.drawable.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

@@ -2,6 +2,7 @@ package com.dijiaapp.eatserviceapp.diancan;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,12 +11,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.View.SectionedBaseAdapter;
 import com.dijiaapp.eatserviceapp.data.Cart;
 import com.dijiaapp.eatserviceapp.data.DishesListBean;
 import com.dijiaapp.eatserviceapp.data.FoodType;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 /**
@@ -30,7 +34,28 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
     private List<FoodType> foodTypes;
     private List<Cart> carts;
 
+    public List<FoodType> getFoodTypes() {
+        return foodTypes;
+    }
+
+    public void setFoodTypes(List<FoodType> foodTypes) {
+        this.foodTypes = foodTypes;
+    }
+
     TextView mfoodNum;
+
+    String foodCode="";
+
+    public String getFoodCode() {
+        return foodCode;
+    }
+
+    public void setFoodCode(String foodCode, List<FoodType> foodTypes) {
+        this.foodCode = foodCode;
+        this.foodTypes=foodTypes;
+        this.notifyDataSetChanged();
+
+    }
 
     public TextView getMfoodNum() {
         return mfoodNum;
@@ -101,6 +126,22 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
         final DishesListBean dishesListBean = foodTypes.get(section).getDishesList().get(position);
         ((TextView) layout.findViewById(R.id.textItem)).setText(dishesListBean.getDishesName());
         ((TextView) layout.findViewById(R.id.priceItem)).setText("￥" + dishesListBean.getDishesPrice());
+        Log.i("gqf","dishesListBean"+dishesListBean.toString());
+
+         /*if(foodCode!=null&!foodCode.equals("")){
+             if(dishesListBean.getMemoryCode()!=null){
+                 if(dishesListBean.getMemoryCode().contains(foodCode)){
+                     layout.setVisibility(View.VISIBLE);
+                 }else{
+                     layout.setVisibility(View.GONE);
+                 }
+             }
+             else{
+                 layout.setVisibility(View.GONE);
+             }
+         }else{
+             layout.setVisibility(View.VISIBLE);
+         }*/
 
         final Button min = (Button) layout.findViewById(R.id.minBt);
         Button plus = (Button) layout.findViewById(R.id.plusBt);
@@ -109,8 +150,11 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
             if(cart.getDishesListBean().getId() == dishesListBean.getId()){
                 isInCart = true;
                 amount = cart.getAmount();
+
             }
+
         }
+
 
         min.setVisibility(isInCart?View.VISIBLE:View.INVISIBLE);
         amountTv.setText(amount+"");

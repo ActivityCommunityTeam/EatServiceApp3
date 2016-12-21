@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -47,6 +51,7 @@ import butterknife.OnClick;
 import hugo.weaving.DebugLog;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmList;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -88,6 +93,8 @@ public class FoodActivity extends AppCompatActivity {
 
     private Seat seat;
     Realm realm;
+    List<FoodType> allfoodTypes;
+
     Observer<List<FoodType>> observerFoodFromNet = new Observer<List<FoodType>>() {
         @Override
         public void onCompleted() {
@@ -137,6 +144,7 @@ public class FoodActivity extends AppCompatActivity {
 
             setListViews(foodTypes);
 
+
         }
     };
 
@@ -178,27 +186,73 @@ public class FoodActivity extends AppCompatActivity {
     Button mFoodNext;
     @BindView(R.id.food_num)
     TextView mFoodNum;
+
+    @BindView(R.id.food_code_edi)
+    EditText food_code_edi;
+
     private LeftListAdapter leftListAdapter;
 
-
-    /*private void setBehaviorCallback() {
-        View view = mBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet);
-        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(view);
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+    public void initFoodCodeEdi(){
+        food_code_edi.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                    mBottomSheetDialog.dismiss();
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(mainSectionedAdapter!=null){
+                    boolean isCode=false;
+                    /*for(FoodType f:allfoodTypes){
+
+                        for(DishesListBean d :f.getDishesList()){
+                            Log.i("gqf",d.toString());
+                            if(d.getMemoryCode()!=null){
+                                if(d.getMemoryCode().contains(s)){
+                                    isCode=true;
+                                }
+                            }
+                        }
+
+                    }*/
+                    List<FoodType> foodTypes=new ArrayList<FoodType>();
+                    for(int i=0;i<allfoodTypes.size();i++){
+                        FoodType foodType=new FoodType();
+                        foodType.setDishesTypeDesc(allfoodTypes.get(i).getDishesTypeDesc());
+                        foodType.setId(allfoodTypes.get(i).getId());
+                        foodType.setShowSort(allfoodTypes.get(i).getShowSort());
+
+
+
+                        RealmList<DishesListBean> dishesListBeen=new RealmList<DishesListBean>();
+                        for(int j=0;j<allfoodTypes.get(i).getDishesList().size();j++){
+                            DishesListBean d= allfoodTypes.get(i).getDishesList().get(j);
+                            if(d.getMemoryCode()!=null) {
+                                if (d.getMemoryCode().contains(s)) {
+                                    dishesListBeen.add(d);
+                                }else{
+                                    //foodTypes.get(i).getDishesList().remove(j);
+                                }
+                            }else{
+                               // foodTypes.get(i).getDishesList().remove(j);
+                            }
+                        }
+                        foodType.setDishesList(dishesListBeen);
+                        foodTypes.add(foodType);
+                    }
+                    mainSectionedAdapter.setFoodCode(s.toString(),foodTypes);
+
+                    Log.i("gqf","Editable"+s.toString());
                 }
             }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-            }
         });
-    }*/
+    }
+
      public int getFoodNum(){
         List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
         int num=0;
@@ -211,6 +265,10 @@ public class FoodActivity extends AppCompatActivity {
     StrongBottomSheetDialog mBottomSheetDialog;
     CartRecyclerViewAdapter mCartRecyclerViewAdapter;
     private void setListViews(final List<FoodType> foodTypes) {
+
+
+
+        Log.i("gqf","foodTypes"+foodTypes.toString());
 
         mBottomSheetDialog = new StrongBottomSheetDialog(this);
         View view = LayoutInflater.from(this).inflate(R.layout.content_bottomsheet, null, false);
@@ -273,12 +331,13 @@ public class FoodActivity extends AppCompatActivity {
 
 
         setCartMoney();
+        //初始化菜单adapter（菜品，购物车）
         mainSectionedAdapter = new MainSectionedAdapter(this, foodTypes, carts);
 
         mPinnedListView.setAdapter(mainSectionedAdapter);
         mainSectionedAdapter.setMfoodNum(mFoodNum);
         mainSectionedAdapter.setFoodNum(getFoodNum());
-
+        allfoodTypes=mainSectionedAdapter.getFoodTypes();
 
         leftListAdapter = new LeftListAdapter(this, foodTypes, flagArray);
         mLeftListview.setAdapter(leftListAdapter);
@@ -455,7 +514,7 @@ public class FoodActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("点菜");
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationIcon(R.drawable.barcode__back_arrow);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -495,7 +554,7 @@ public class FoodActivity extends AppCompatActivity {
         //mFoodCartRecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
         getFood();
-
+        initFoodCodeEdi();
 
     }
 

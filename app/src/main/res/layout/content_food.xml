@@ -5,11 +5,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/smallmdp"
+        android:paddingTop="@dimen/smallmdp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/food_code_edi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/food_code_red_edi_shap"
+            android:gravity="center_vertical"
+            android:hint="请输入助记码"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="2dp"
+            android:cursorVisible="true"
+            android:paddingBottom="2dp"
+            android:textSize="@dimen/smallsp"
+            android:textColorHint="@color/gary_dark"
+            android:textCursorDrawable="@drawable/edi_cursor_red_shap"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
         android:orientation="horizontal"
         tools:showIn="@layout/activity_food">
 
@@ -49,16 +74,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             />
-        <!--  <TextView
-              android:layout_width="@dimen/smallmdp"
-              android:layout_height="@dimen/smallmdp"
-              android:text="1"
-              android:textColor="@color/white"
-              android:layout_alignParentRight="true"
-              android:layout_alignParentTop="true"
-              android:background="@color/red"
-              />
-      </RelativeLayout>-->
         <TextView
             android:id="@+id/food_num"
             android:layout_width="@dimen/mediummdp"
