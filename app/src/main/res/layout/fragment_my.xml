@@ -1,50 +1,53 @@
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              tools:context="com.dijiaapp.eatserviceapp.my.MyFragment"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              tools:context="com.dijiaapp.eatserviceapp.my.MyFragment">
+
     <!--头像，姓名-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:gravity="center_vertical"
         android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
         >
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_image"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
             android:background="?android:selectableItemBackground"
             android:clickable="true"
             android:src="@drawable/s033"
-            android:layout_marginLeft="20dp"
             />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="张小三"
             android:textColor="@color/white"
-            android:layout_marginLeft="20dp"
-            android:gravity="center_vertical"
             />
 
 
     </LinearLayout>
     <!--服务统计-->
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/whitesmoke"
+
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,17 +56,19 @@
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
             >
+
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="服务统计"
                 android:layout_marginLeft="20dp"
-                android:drawablePadding="5dp"
                 android:drawableLeft="@drawable/my_025"
-                android:id="@+id/textView"/>
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:text="服务统计"/>
 
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -75,304 +80,323 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             >
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:layout_weight="1"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
+                android:orientation="vertical"
                 >
-
                 <ImageView
+                    android:id="@+id/imageView2"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="5"
-                    android:src="@drawable/my026"
                     android:scaleX="0.5"
                     android:scaleY="0.5"
-                    android:id="@+id/imageView2"/>
+                    android:src="@drawable/wd03"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
+                    android:gravity="center"
                     android:text="服务订单"
-                    android:gravity="center"
                     />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:layout_weight="1"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
+                android:orientation="vertical"
                 >
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="5"
-                    android:src="@drawable/my027"
                     android:scaleX="0.5"
                     android:scaleY="0.5"
+                    android:src="@drawable/wd02"
                     />
 
                 <TextView
+                    android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    android:text="顾客评价"
                     android:gravity="center"
-                    android:id="@+id/textView2"/>
+                    android:text="顾客评价"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:layout_weight="1"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
+                android:orientation="vertical"
                 >
 
                 <ImageView
+                    android:id="@+id/imageView"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="5"
-                    android:src="@drawable/my028"
                     android:scaleX="0.5"
                     android:scaleY="0.5"
-                    android:id="@+id/imageView"/>
+                    android:src="@drawable/wd01"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
+                    android:gravity="center"
                     android:text="打赏"
-                    android:gravity="center"
                     />
             </LinearLayout>
 
 
-           <!-- <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:layout_weight="1"
-                android:text="服务订单"
-                android:drawablePadding="5dp"
-                android:gravity="center"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:drawableTop="@drawable/my026"
-                android:id="@+id/textView2"/>
+            <!-- <TextView
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:paddingTop="5dp"
+                 android:paddingBottom="5dp"
+                 android:layout_weight="1"
+                 android:text="服务订单"
+                 android:drawablePadding="5dp"
+                 android:gravity="center"
+                 android:background="?android:selectableItemBackground"
+                 android:clickable="true"
+                 android:focusable="true"
+                 android:drawableTop="@drawable/my026"
+                 android:id="@+id/textView2"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="顾客评论"
-                android:drawablePadding="5dp"
-                android:gravity="center"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:drawableTop="@drawable/my027"
-                />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:layout_weight="1"
-                android:text="打赏"
-                android:drawablePadding="5dp"
-                android:gravity="center"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:drawableTop="@drawable/my028"
-                />-->
+             <TextView
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight="1"
+                 android:paddingTop="5dp"
+                 android:paddingBottom="5dp"
+                 android:text="顾客评论"
+                 android:drawablePadding="5dp"
+                 android:gravity="center"
+                 android:background="?android:selectableItemBackground"
+                 android:clickable="true"
+                 android:focusable="true"
+                 android:drawableTop="@drawable/my027"
+                 />
+             <TextView
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:paddingTop="5dp"
+                 android:paddingBottom="5dp"
+                 android:layout_weight="1"
+                 android:text="打赏"
+                 android:drawablePadding="5dp"
+                 android:gravity="center"
+                 android:background="?android:selectableItemBackground"
+                 android:clickable="true"
+                 android:focusable="true"
+                 android:drawableTop="@drawable/my028"
+                 />-->
 
 
         </LinearLayout>
     </LinearLayout>
-    </android.support.v7.widget.CardView>
     <!--餐厅通知-->
-    <android.support.v7.widget.CardView
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--&gt;-->
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="5dp"-->
+            <!--android:background="@color/whitesmoke"-->
+
+            <!--/>-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical"-->
+            <!--android:paddingBottom="16dp"-->
+            <!--android:paddingTop="16dp"-->
+            <!--&gt;-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/textView3"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="25dp"-->
+                <!--android:drawableLeft="@drawable/my_029"-->
+                <!--android:drawablePadding="5dp"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:text="餐厅通知"/>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:background="@drawable/recylist_item_line_shap"-->
+            <!--/>-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="horizontal"-->
+            <!--&gt;-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="?android:selectableItemBackground"-->
+                <!--android:clickable="true"-->
+                <!--android:orientation="vertical"-->
+                <!--&gt;-->
+
+                <!--<ImageView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:scaleX="0.5"-->
+                    <!--android:scaleY="0.5"-->
+                    <!--android:src="@drawable/my030"-->
+                    <!--/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="考勤信息"-->
+                    <!--/>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="?android:selectableItemBackground"-->
+                <!--android:clickable="true"-->
+                <!--android:orientation="vertical"-->
+                <!--&gt;-->
+
+                <!--<ImageView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:scaleX="0.5"-->
+                    <!--android:scaleY="0.5"-->
+                    <!--android:src="@drawable/my31"-->
+                    <!--/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="餐厅通知"-->
+                    <!--/>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:orientation="vertical"-->
+                <!--&gt;-->
+
+
+            <!--</LinearLayout>-->
+
+
+            <!--&lt;!&ndash; <TextView-->
+                 <!--android:layout_width="0dp"-->
+                 <!--android:layout_height="match_parent"-->
+                 <!--android:paddingTop="5dp"-->
+                 <!--android:paddingBottom="5dp"-->
+                 <!--android:layout_weight="1"-->
+                 <!--android:text="服务订单"-->
+                 <!--android:drawablePadding="5dp"-->
+                 <!--android:gravity="center"-->
+                 <!--android:background="?android:selectableItemBackground"-->
+                 <!--android:clickable="true"-->
+                 <!--android:focusable="true"-->
+                 <!--android:drawableTop="@drawable/my026"-->
+                 <!--android:id="@+id/textView2"/>-->
+
+             <!--<TextView-->
+                 <!--android:layout_width="0dp"-->
+                 <!--android:layout_height="match_parent"-->
+                 <!--android:layout_weight="1"-->
+                 <!--android:paddingTop="5dp"-->
+                 <!--android:paddingBottom="5dp"-->
+                 <!--android:text="顾客评论"-->
+                 <!--android:drawablePadding="5dp"-->
+                 <!--android:gravity="center"-->
+                 <!--android:background="?android:selectableItemBackground"-->
+                 <!--android:clickable="true"-->
+                 <!--android:focusable="true"-->
+                 <!--android:drawableTop="@drawable/my027"-->
+                 <!--/>-->
+             <!--<TextView-->
+                 <!--android:layout_width="0dp"-->
+                 <!--android:layout_height="match_parent"-->
+                 <!--android:paddingTop="5dp"-->
+                 <!--android:paddingBottom="5dp"-->
+                 <!--android:layout_weight="1"-->
+                 <!--android:text="打赏"-->
+                 <!--android:drawablePadding="5dp"-->
+                 <!--android:gravity="center"-->
+                 <!--android:background="?android:selectableItemBackground"-->
+                 <!--android:clickable="true"-->
+                 <!--android:focusable="true"-->
+                 <!--android:drawableTop="@drawable/my028"-->
+                 <!--/>&ndash;&gt;-->
+
+
+        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+    <!--关于我们-->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
 
-        <LinearLayout
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/whitesmoke"
+
+            />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp"
-                >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="餐厅通知"
-                    android:drawablePadding="5dp"
-                    android:layout_marginLeft="25dp"
-                    android:drawableLeft="@drawable/my_029"
-                    android:id="@+id/textView3"/>
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@drawable/recylist_item_line_shap"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                >
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:background="?android:selectableItemBackground"
-                    android:clickable="true"
-                    >
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/my030"
-                        android:scaleX="0.5"
-                        android:scaleY="0.5"
-                        />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="考勤信息"
-                        android:gravity="center"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:background="?android:selectableItemBackground"
-                    android:clickable="true"
-                    >
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/my31"
-                        android:scaleX="0.5"
-                        android:scaleY="0.5"
-                        />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="餐厅通知"
-                        android:gravity="center"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    >
-
-
-                </LinearLayout>
-
-
-                <!-- <TextView
-                     android:layout_width="0dp"
-                     android:layout_height="match_parent"
-                     android:paddingTop="5dp"
-                     android:paddingBottom="5dp"
-                     android:layout_weight="1"
-                     android:text="服务订单"
-                     android:drawablePadding="5dp"
-                     android:gravity="center"
-                     android:background="?android:selectableItemBackground"
-                     android:clickable="true"
-                     android:focusable="true"
-                     android:drawableTop="@drawable/my026"
-                     android:id="@+id/textView2"/>
-
-                 <TextView
-                     android:layout_width="0dp"
-                     android:layout_height="match_parent"
-                     android:layout_weight="1"
-                     android:paddingTop="5dp"
-                     android:paddingBottom="5dp"
-                     android:text="顾客评论"
-                     android:drawablePadding="5dp"
-                     android:gravity="center"
-                     android:background="?android:selectableItemBackground"
-                     android:clickable="true"
-                     android:focusable="true"
-                     android:drawableTop="@drawable/my027"
-                     />
-                 <TextView
-                     android:layout_width="0dp"
-                     android:layout_height="match_parent"
-                     android:paddingTop="5dp"
-                     android:paddingBottom="5dp"
-                     android:layout_weight="1"
-                     android:text="打赏"
-                     android:drawablePadding="5dp"
-                     android:gravity="center"
-                     android:background="?android:selectableItemBackground"
-                     android:clickable="true"
-                     android:focusable="true"
-                     android:drawableTop="@drawable/my028"
-                     />-->
-
-
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-    <!--关于我们-->
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:background="?android:selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:text="关于我们"
-                    android:paddingLeft="25dp"
-                    android:drawablePadding="5dp"
-                    android:drawableLeft="@drawable/my_032"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="16dp"
-                    />
-    </android.support.v7.widget.CardView>
+            android:background="?android:selectableItemBackground"
+            android:clickable="true"
+            android:drawableLeft="@drawable/my_032"
+            android:drawablePadding="5dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:paddingBottom="16dp"
+            android:paddingLeft="25dp"
+            android:paddingTop="16dp"
+            android:text="关于我们"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/recylist_item_line_shap"
+            />
+    </LinearLayout>
 
 
 </LinearLayout>
