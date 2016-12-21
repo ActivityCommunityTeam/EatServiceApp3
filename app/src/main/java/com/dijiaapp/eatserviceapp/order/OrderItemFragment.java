@@ -141,7 +141,10 @@ public class OrderItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_order_item, container, false);
         unbinder = ButterKnife.bind(this, view);
         ordersItemAdapter = new OrdersItemAdapter();
-        mOrderitemRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager  = new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        mOrderitemRecyclerview.setLayoutManager(layoutManager);
         mOrderitemRecyclerview.setAdapter(ordersItemAdapter);
         ordersItemAdapter.setOnItemClickListener(new OrdersItemAdapter.MyItemClickListener() {
             @Override
