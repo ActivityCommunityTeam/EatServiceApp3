@@ -534,7 +534,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
 
     private void setCartMoney() {
         double money = getMoney();
-        BigDecimal bmoney = new BigDecimal(money).setScale(2, BigDecimal.ROUND_DOWN);
+        BigDecimal bmoney = new BigDecimal(money).setScale(2, BigDecimal.ROUND_HALF_DOWN);
 
         mFoodMoney.setText("￥" + bmoney);
         setFoodNum(getFoodNum());
