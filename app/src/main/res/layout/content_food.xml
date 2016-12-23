@@ -7,13 +7,13 @@
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="@dimen/smallhdp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/smallmdp"
         android:paddingTop="@dimen/smallmdp"
         android:background="@color/white"
+        android:minHeight="@dimen/smallhdp"
         android:orientation="vertical">
         <EditText
             android:id="@+id/food_code_edi"
@@ -24,6 +24,7 @@
             android:hint="请输入助记码"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="2dp"
+            android:minHeight="@dimen/tinyhdp"
             android:cursorVisible="true"
             android:paddingBottom="2dp"
             android:textSize="@dimen/smallsp"
