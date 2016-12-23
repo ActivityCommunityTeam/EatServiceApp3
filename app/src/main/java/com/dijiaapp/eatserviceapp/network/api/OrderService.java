@@ -32,7 +32,7 @@ public interface OrderService {
     @POST("order/save")
     @FormUrlEncoded
     Observable<ResultInfo> saveOrder(@Field("hotelId") long hotelId, @Field("userId") long userId, @Field("orderTotal") double orderTotal, @Field("dinnerNum") int number,
-                                     @Field("seatName") String seatName, @Field("dishes") String dishes);
+                                     @Field("seatName") String seatName,@Field("remark") String remark, @Field("dishes") String dishes);
 
     /**
      * 订单详情

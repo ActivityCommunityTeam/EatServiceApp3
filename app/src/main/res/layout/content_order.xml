@@ -1,9 +1,13 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+<RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="?attr/actionBarSize"
     >
-
     <LinearLayout
         android:id="@+id/order_detail_title"
         android:layout_width="match_parent"
@@ -52,6 +56,7 @@
 
 
     <LinearLayout
+        android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -127,9 +132,7 @@
             android:layout_height="5dp"
             android:background="@color/whitesmoke"
             />
-
         <LinearLayout
-            android:id="@+id/order_mark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -143,81 +146,26 @@
                 android:gravity="center_vertical"
                 android:text="备注: "/>
 
-            <TextView
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/order_mark_top_et"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:paddingRight="16dp"
                 android:hint="(选填)请添加备注"
+                android:cursorVisible="true"
+                android:textColor="@color/colorPrimaryDark"
                 android:gravity="right"
+                android:lines="1"
+                android:textCursorDrawable="@drawable/cursor_shap"
                 android:textColorHint="@color/gary"
                 />
         </LinearLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/whitesmoke"
             />
     </LinearLayout>
-    <!--下一步-->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:gravity="center_vertical"
-        android:background="@color/white"
-        android:layout_alignParentBottom="true"
-        >
-        <ImageView
-            android:id="@+id/food_cart_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/icon_shopping"
-            android:layout_centerVertical="true"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            />
-        <!--  <TextView
-              android:layout_width="@dimen/smallmdp"
-              android:layout_height="@dimen/smallmdp"
-              android:text="1"
-              android:textColor="@color/white"
-              android:layout_alignParentRight="true"
-              android:layout_alignParentTop="true"
-              android:background="@color/red"
-              />
-      </RelativeLayout>-->
-        <TextView
-            android:id="@+id/food_num"
-            android:layout_width="@dimen/mediummdp"
-            android:layout_height="@dimen/mediummdp"
-            android:layout_marginTop="@dimen/tinymdp"
-            android:layout_marginRight="@dimen/tinymdp"
-            android:text="1"
-            android:textSize="@dimen/tinysp"
-            android:textColor="@color/white"
-            android:layout_alignRight="@+id/food_cart_bt"
-            android:layout_alignTop="@+id/food_cart_bt"
-            android:background="@drawable/food_num_shap"
-            android:gravity="center"
-            />
-        <TextView
-            android:id="@+id/food_money"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/food_cart_bt"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/red"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:id="@+id/food_next"
-            android:background="@color/red"
-
-            android:text="@string/next_step"
-            android:textColor="@color/white"/>
-    </RelativeLayout>
 </RelativeLayout>
+</ScrollView>

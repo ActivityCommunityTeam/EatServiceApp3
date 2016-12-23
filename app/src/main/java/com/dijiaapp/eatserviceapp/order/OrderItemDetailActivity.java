@@ -94,13 +94,15 @@ public class OrderItemDetailActivity extends AppCompatActivity {
     }
 
     private void setFoodListView(List<OrderDishes> dishes) {
-
-        orderDetailFoodList.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        orderDetailFoodList.setLayoutManager(linearLayoutManager);
         OrderItemDetailAdapter cartListAdapter = new OrderItemDetailAdapter(this,dishes);
         orderDetailFoodList.setAdapter(cartListAdapter);
 
 
+
 //        for (OrderDishes orderDishes : dishes) {
+//            orderDishes orderDishes1
 //            LinearLayout foodItem = (LinearLayout) LayoutInflater.from(OrderItemDetailActivity.this)
 //                    .inflate(R.layout.food_listitem, orderDetailFoodContainer, false);
 //            TextView name = (TextView) foodItem.findViewById(R.id.foodName);
