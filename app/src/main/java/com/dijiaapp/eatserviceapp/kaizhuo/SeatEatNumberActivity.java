@@ -3,14 +3,16 @@ package com.dijiaapp.eatserviceapp.kaizhuo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Seat;
 import com.dijiaapp.eatserviceapp.diancan.FoodActivity;
@@ -31,8 +33,8 @@ public class SeatEatNumberActivity extends AppCompatActivity {
     EditText mHotelEatNumberEt;*/
     @BindView(R.id.hotel_done_bt)
     Button mHotelDoneBt;
-    @BindView(R.id.hotel_eat_number_spinner)
-    Spinner mhotel_eat_number_spinner;
+    @BindView(R.id.hotel_done_auto)
+    AutoCompleteTextView autoText;
     private Seat seat;
 
     String [] user_num;
@@ -40,9 +42,11 @@ public class SeatEatNumberActivity extends AppCompatActivity {
     /**
      * 设置toolbar
      */
-    private void setToolbar() {
+    private void setToolbar(String seatname) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("开桌");
+        TextView toolbartxt=(TextView)toolbar.findViewById(R.id.toolbartxt);
+        toolbartxt.setText("操作员："+seatname);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.barcode__back_arrow);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -58,7 +62,7 @@ public class SeatEatNumberActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seat_eat_number);
         ButterKnife.bind(this);
-        setToolbar();
+
         mHotelDoneBt.setEnabled(false);
         seat = getIntent().getParcelableExtra("Seat");
 
@@ -67,35 +71,37 @@ public class SeatEatNumberActivity extends AppCompatActivity {
             int num=i+1;
             user_num[i]=num+"人";
         }
-        //将可选内容与ArrayAdapter连接起来
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,user_num);
 
-        //设置下拉列表的风格
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mhotel_eat_number_spinner.setPrompt("请选择人数");
-        //将adapter 添加到spinner中
-        mhotel_eat_number_spinner.setAdapter(adapter);
-
-
-
-        //设置默认值
-        mhotel_eat_number_spinner.setVisibility(View.VISIBLE);
+        setToolbar(EatServiceApplication.username);
 
         mHotelName.setText(seat.getSeatName());
-        mHotelType.setText(seat.getSeatType());
-        mhotel_eat_number_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                usernum=position+1;
-                mHotelDoneBt.setEnabled(true);
-            }
+        if(seat.getSeatType().equals("01")){
+            mHotelType.setText("大厅");
+        }else{
+            mHotelType.setText("包间");
+        }
 
+        ArrayAdapter<String> autoadapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.simple_dropdown_item, user_num);
+
+        autoText.setAdapter(autoadapter);
+        autoText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onClick(View v) {
+
+                autoText.showDropDown();
 
             }
         });
+        autoText.setInputType(InputType.TYPE_NULL);
+        autoText.setKeyListener(null);
 
+        autoText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                usernum=position+1;
+                mHotelDoneBt.setEnabled(true);
+            }
+        });
     }
 
     @OnClick(R.id.hotel_done_bt)

@@ -11,6 +11,7 @@ import io.realm.RealmConfiguration;
 public class EatServiceApplication extends Application {
 
 //七星x渊渊弘x玄太阿x尊太阿x尊太阿
+    public static String username;
     @Override
     public void onCreate() {
         super.onCreate();

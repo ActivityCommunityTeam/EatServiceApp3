@@ -10,7 +10,7 @@
         android:layout_height="@dimen/smallhdp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/smallmdp"
+        android:paddingBottom="@dimen/tinymdp"
         android:paddingTop="@dimen/smallmdp"
         android:background="@color/white"
         android:minHeight="@dimen/smallhdp"
@@ -22,7 +22,7 @@
             android:background="@drawable/food_code_red_edi_shap"
             android:gravity="center_vertical"
             android:hint="请输入助记码"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/mediummdp"
             android:paddingTop="2dp"
             android:minHeight="@dimen/tinyhdp"
             android:cursorVisible="true"
@@ -103,8 +103,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:id="@+id/food_next"
-            android:background="@color/red"
-
+            android:background="@color/colorPrimaryDark"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/tinymdp"
             android:text="@string/next_step"
             android:textColor="@color/white"/>
     </RelativeLayout>

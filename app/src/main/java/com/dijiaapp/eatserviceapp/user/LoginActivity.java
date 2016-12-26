@@ -1,12 +1,9 @@
 package com.dijiaapp.eatserviceapp.user;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -14,13 +11,12 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.blankj.utilcode.utils.SPUtils;
+import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.UserInfo;
 import com.dijiaapp.eatserviceapp.kaizhuo.MainActivity;
 import com.dijiaapp.eatserviceapp.network.Network;
 import com.dijiaapp.eatserviceapp.util.SettingsUtils;
-import com.google.gson.Gson;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxCompoundButton;
 import com.jakewharton.rxbinding.widget.RxTextView;
@@ -29,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import hugo.weaving.DebugLog;
 import io.realm.Realm;
 import rx.Observable;
@@ -37,13 +32,9 @@ import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-
-import static android.R.attr.checked;
-import static android.R.attr.settingsActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -107,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         if (SettingsUtils.isRememberPassword(getApplicationContext())) {
             UserInfo userInfo = realm.where(UserInfo.class).findFirst();
             name = userInfo.getUsername();
+            EatServiceApplication.username=name;
             password = userInfo.getPassword();
             mLoginNameEt.setText(name);
             mLoginPasswordEt.setText(password);
@@ -164,6 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                             deletUser();
                         } else {
+                            EatServiceApplication.username=name;
                             realm.beginTransaction();
                             userInfo.setPassword(password);
                             userInfo.setUsername(name);

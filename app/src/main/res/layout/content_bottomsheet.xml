@@ -114,8 +114,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:id="@+id/food_next"
-            android:background="@color/red"
-
+            android:background="@color/colorPrimaryDark"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/tinymdp"
             android:text="@string/next_step"
             android:textColor="@color/white"/>
     </RelativeLayout>
