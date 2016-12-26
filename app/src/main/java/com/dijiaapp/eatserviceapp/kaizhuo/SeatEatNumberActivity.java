@@ -60,6 +60,7 @@ public class SeatEatNumberActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EatServiceApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_seat_eat_number);
         ButterKnife.bind(this);
 

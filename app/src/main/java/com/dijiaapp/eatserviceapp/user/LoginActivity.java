@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -61,9 +62,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        EatServiceApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mLoginBt.setEnabled(false);
+        if (EatServiceApplication.getInstance().getListSize()!=0){
+            EatServiceApplication.getInstance().exit();
+        }
 
         compositeSubscription = new CompositeSubscription();
         realm = Realm.getDefaultInstance();
@@ -72,6 +77,31 @@ public class LoginActivity extends AppCompatActivity {
         initLoginBt();
 
 
+    }
+
+    //退出时的时间
+    private long mExitTime;
+    //对返回键进行监听
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void exit() {
+        if ((System.currentTimeMillis() - mExitTime) > 2000) {
+            Toast.makeText(LoginActivity.this, "再按一次退出服务员app", Toast.LENGTH_SHORT).show();
+            mExitTime = System.currentTimeMillis();
+        } else {
+//            MyConfig.clearSharePre(this, "users");
+            finish();
+            System.exit(0);
+        }
     }
 
     /**

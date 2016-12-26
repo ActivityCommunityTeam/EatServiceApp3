@@ -37,8 +37,8 @@
             android:name=".diancan.OrderActivity"
             android:label="@string/submitOrder"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
             android:name=".order.OrderDetailActivity"
             android:label="@string/title_activity_order_detail"
@@ -52,10 +52,12 @@
         <activity
             android:name=".diancan.FoodActivity"
             android:label="@string/title_activity_food"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity android:name=".kaizhuo.SeatActivity">
+        </activity>
+        <activity android:name=".my.UserInfoActivity">
         </activity>
     </application>
 

@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.Impl.ListItemSizeChangeLinsener;
 import com.dijiaapp.eatserviceapp.Impl.ShopCarDelectAllLinsener;
 import com.dijiaapp.eatserviceapp.R;
@@ -510,6 +511,7 @@ public class FoodActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EatServiceApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_food);
         ButterKnife.bind(this);
         mFoodNum.setVisibility(View.INVISIBLE);

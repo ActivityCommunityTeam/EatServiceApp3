@@ -8,10 +8,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.blankj.utilcode.utils.KeyboardUtils;
 import com.blankj.utilcode.utils.StringUtils;
+import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.OrderInfo;
 import com.dijiaapp.eatserviceapp.data.ResultInfo;
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EatServiceApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
@@ -101,6 +104,29 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    //退出时的时间
+    private long mExitTime;
+    //对返回键进行监听
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void exit() {
+        if ((System.currentTimeMillis() - mExitTime) > 2000) {
+            Toast.makeText(MainActivity.this, "再按一次退出服务员app", Toast.LENGTH_SHORT).show();
+            mExitTime = System.currentTimeMillis();
+        } else {
+//            MyConfig.clearSharePre(this, "users");
+            EatServiceApplication.getInstance().addActivity(this);
+        }
     }
 
     @DebugLog

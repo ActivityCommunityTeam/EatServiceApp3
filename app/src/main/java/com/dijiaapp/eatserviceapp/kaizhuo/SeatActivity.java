@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Order;
 import com.dijiaapp.eatserviceapp.data.OrderInfo;
@@ -69,6 +70,7 @@ public class SeatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EatServiceApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_seat);
         mUnbinder = ButterKnife.bind(this);
         getData();

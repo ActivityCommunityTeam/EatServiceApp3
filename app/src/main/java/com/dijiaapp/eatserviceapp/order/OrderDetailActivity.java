@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Order;
 import com.dijiaapp.eatserviceapp.network.Network;
@@ -23,6 +24,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EatServiceApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_order_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

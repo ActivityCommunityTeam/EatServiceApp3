@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Cart;
 import com.dijiaapp.eatserviceapp.data.Order;
@@ -73,6 +74,7 @@ public class OrderItemDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EatServiceApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_orderitem_detail);
         mUnbinder = ButterKnife.bind(this);
         mCompositeSubscription = new CompositeSubscription();
