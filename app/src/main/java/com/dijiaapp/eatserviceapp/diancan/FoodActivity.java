@@ -98,14 +98,10 @@ public class FoodActivity extends AppCompatActivity {
     Observer<List<FoodType>> observerFoodFromNet = new Observer<List<FoodType>>() {
         @Override
         public void onCompleted() {
-
         }
-
         @Override
         public void onError(Throwable e) {
-
         }
-
         @DebugLog
         @Override
         public void onNext(List<FoodType> foodTypes) {
@@ -114,9 +110,7 @@ public class FoodActivity extends AppCompatActivity {
             for (int i = 1; i < foodTypes.size(); i++) {
                 flagArray[i] = false;
             }
-
             saveFood(foodTypes);
-
             setListViews(foodTypes);
 
         }
@@ -125,14 +119,10 @@ public class FoodActivity extends AppCompatActivity {
     Observer<List<FoodType>> observerFoodFromLocal = new Observer<List<FoodType>>() {
         @Override
         public void onCompleted() {
-
         }
-
         @Override
         public void onError(Throwable e) {
-
         }
-
         @DebugLog
         @Override
         public void onNext(List<FoodType> foodTypes) {
@@ -141,10 +131,7 @@ public class FoodActivity extends AppCompatActivity {
             for (int i = 1; i < foodTypes.size(); i++) {
                 flagArray[i] = false;
             }
-
             setListViews(foodTypes);
-
-
         }
     };
 
@@ -196,39 +183,20 @@ public class FoodActivity extends AppCompatActivity {
         food_code_edi.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 if(mainSectionedAdapter!=null){
                     boolean isCode=false;
-                    /*for(FoodType f:allfoodTypes){
-
-                        for(DishesListBean d :f.getDishesList()){
-                            Log.i("gqf",d.toString());
-                            if(d.getMemoryCode()!=null){
-                                if(d.getMemoryCode().contains(s)){
-                                    isCode=true;
-                                }
-                            }
-                        }
-
-                    }*/
                     List<FoodType> foodTypes=new ArrayList<FoodType>();
                     for(int i=0;i<allfoodTypes.size();i++){
                         FoodType foodType=new FoodType();
                         foodType.setDishesTypeDesc(allfoodTypes.get(i).getDishesTypeDesc());
                         foodType.setId(allfoodTypes.get(i).getId());
                         foodType.setShowSort(allfoodTypes.get(i).getShowSort());
-
-
-
                         RealmList<DishesListBean> dishesListBeen=new RealmList<DishesListBean>();
                         for(int j=0;j<allfoodTypes.get(i).getDishesList().size();j++){
                             DishesListBean d= allfoodTypes.get(i).getDishesList().get(j);
@@ -246,7 +214,6 @@ public class FoodActivity extends AppCompatActivity {
                         foodTypes.add(foodType);
                     }
                     mainSectionedAdapter.setFoodCode(s.toString(),foodTypes);
-
                     Log.i("gqf","Editable"+s.toString());
                 }
             }

@@ -96,16 +96,18 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:text="加餐"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/jc_btn_selector"
                     android:textColor="@color/white"/>
                 <Button
                     android:id="@+id/order_item_done"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="翻桌"
+                    android:layout_marginRight="8dp"
                     android:layout_marginLeft="8dp"
-                    android:layout_weight="1"
+                    android:layout_weight="0.91"
                     android:textColor="@color/white"
                     android:background="@drawable/fz_btn_selector"
                     />
