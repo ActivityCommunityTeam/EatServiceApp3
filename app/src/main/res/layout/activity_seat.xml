@@ -35,6 +35,7 @@
             <!--座位名-->
             <LinearLayout
                 android:id="@+id/seatName"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/title_ddxq"
@@ -43,10 +44,33 @@
                 <!--餐桌名-->
                 <TextView
                     android:id="@+id/order_detail_seatName_tv"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:textColor="@color/white"
+                    android:layout_marginLeft="16dp"
+                    android:drawablePadding="5dp"
+                    />
+                <!--人数-->
+                <TextView
+                    android:id="@+id/order_detail_seatNum_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/me"
+                    android:textColor="@color/white"
+                    />
+                <!--就餐人数-->
+                <TextView
+                    android:id="@+id/order_detail_dinnerNum_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginRight="16dp"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical|right"
                     />
             </LinearLayout>
             <!--座位信息-->

@@ -10,5 +10,4 @@
     tools:context=".kaizhuo.MainActivity"
     tools:showIn="@layout/activity_main">
 
-
 </FrameLayout>
