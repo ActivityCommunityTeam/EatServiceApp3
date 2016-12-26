@@ -63,6 +63,7 @@ public class CartRecyclerViewOnOrderAdapter extends RealmRecyclerViewAdapter<Car
         final Cart cart = getData().get(position);
         holder.data = cart;
         if (cart != null) {
+            holder.oldpriceItem.setVisibility(View.INVISIBLE);
             holder.title.setText(cart.getDishesListBean().getDishesName());
             holder.priceItem.setText("￥"+cart.getMoney()+"");
             holder.amount.setText(cart.getAmount() + "");
@@ -108,6 +109,7 @@ public class CartRecyclerViewOnOrderAdapter extends RealmRecyclerViewAdapter<Car
         public TextView amount;
         public Cart data;
         public TextView priceItem;
+        public TextView oldpriceItem;
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.textItem);
@@ -115,6 +117,7 @@ public class CartRecyclerViewOnOrderAdapter extends RealmRecyclerViewAdapter<Car
             plus = (Button) view.findViewById(R.id.plusBt);
             amount = (TextView) view.findViewById(amountTv);
             priceItem=(TextView)view.findViewById(R.id.priceItem);
+            oldpriceItem=(TextView)view.findViewById(R.id.oldpriceItem);
         }
 
 

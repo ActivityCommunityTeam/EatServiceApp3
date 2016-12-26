@@ -2,6 +2,7 @@ package com.dijiaapp.eatserviceapp.diancan;
 
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,7 +126,10 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
         }
         final DishesListBean dishesListBean = foodTypes.get(section).getDishesList().get(position);
         ((TextView) layout.findViewById(R.id.textItem)).setText(dishesListBean.getDishesName());
-        ((TextView) layout.findViewById(R.id.priceItem)).setText("￥" + dishesListBean.getDishesPrice());
+        TextView oldpriceItem=((TextView) layout.findViewById(R.id.oldpriceItem));
+        oldpriceItem.setText("￥" +dishesListBean.getDishesPrice());
+        oldpriceItem.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
+        ((TextView) layout.findViewById(R.id.priceItem)).setText("￥" + dishesListBean.getOnSalePrice());
         Log.i("gqf","dishesListBean"+dishesListBean.toString());
 
          /*if(foodCode!=null&!foodCode.equals("")){

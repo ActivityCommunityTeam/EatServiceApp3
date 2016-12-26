@@ -285,7 +285,7 @@ public class FoodActivity extends AppCompatActivity {
             @Override
             public void getListItemSize(int size) {
                 Log.i("gqf","size"+size);
-                if(size==0){
+                if(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size()==0){
                     if(mBottomSheetDialog!=null) {
                         if (mBottomSheetDialog.isShowing()) {
                             mBottomSheetDialog.dismiss();
@@ -465,7 +465,7 @@ public class FoodActivity extends AppCompatActivity {
                 } else {
                     amount--;
                     realm.beginTransaction();
-                    cart.setMoney(cart.getDishesListBean().getDishesPrice() * amount);
+                    cart.setMoney(cart.getDishesListBean().getOnSalePrice() * amount);
                     cart.setAmount(amount);
                     realm.commitTransaction();
                 }
@@ -473,7 +473,7 @@ public class FoodActivity extends AppCompatActivity {
             } else {
                 amount++;
                 realm.beginTransaction();
-                cart.setMoney(amount * cart.getDishesListBean().getDishesPrice());
+                cart.setMoney(amount * cart.getDishesListBean().getOnSalePrice());
                 cart.setAmount(amount);
                 realm.commitTransaction();
             }
@@ -485,7 +485,7 @@ public class FoodActivity extends AppCompatActivity {
                 Cart cartNew = realm.createObject(Cart.class);
                 cartNew.setAmount(1);
                 cartNew.setDishesListBean(disesBean);
-                cartNew.setMoney(disesBean.getDishesPrice());
+                cartNew.setMoney(disesBean.getOnSalePrice());
                 cartNew.setTime(Calendar.getInstance().getTime().getTime());
                 cartNew.setSeatId(seatId);
 
@@ -506,7 +506,11 @@ public class FoodActivity extends AppCompatActivity {
 
         if(mBottomSheetDialog.food_money!=null){
             mBottomSheetDialog.food_money.setText("￥" + bmoney);
-            mBottomSheetDialog.setFoodNum(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size());
+            int num=0;
+            for(Cart c:realm.where(Cart.class).equalTo("seatId", seatId).findAll()){
+                num=num+c.getAmount();
+            }
+            mBottomSheetDialog.setFoodNum(num);
         }
     }
     /**
