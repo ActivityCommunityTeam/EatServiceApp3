@@ -57,6 +57,10 @@ public class SeatActivity extends AppCompatActivity {
     Button orderItemDone;
     @BindView(R.id.seatName)
     LinearLayout seatName;
+    @BindView(R.id.order_detail_seatNum_tv)
+    TextView orderDetailSeatNumTv;
+    @BindView(R.id.order_detail_dinnerNum_tv)
+    TextView orderDetailDinnerNumTv;
     private Unbinder mUnbinder;
     private OrderInfo mOrderInfo;
     private Realm realm;
@@ -126,7 +130,7 @@ public class SeatActivity extends AppCompatActivity {
                 .filter(new Func1<OrderInfo, Boolean>() {
                     @Override
                     public Boolean call(OrderInfo orderInfo) {
-                            return orderInfo.getOrderId()==mOrderInfo.getOrderId();
+                        return orderInfo.getOrderId() == mOrderInfo.getOrderId();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -153,15 +157,16 @@ public class SeatActivity extends AppCompatActivity {
 
                     }
                 });
-
-
-
     }
 
     @DebugLog
     private void setData(Order order) {
         Seat _seat = SeatFragment.getSeat_order(order.getSeatName());
         orderDetailSeatNameTv.setText(order.getSeatName());
+        orderDetailDinnerNumTv.setText("就餐人数："+order.getDinnerNum());
+        Log.i("Daniel","---_seat.getContainNum()---"+_seat.getContainNum());
+
+        orderDetailSeatNumTv.setText(""+_seat.getContainNum());
         seatOrderNumber.setText("订单号：" + order.getOrderHeaderNo());
         seatWaiter.setText("操作员：" + order.getWaiterName());
         seatTime.setText("开台时间：" + order.getOrderTime());
