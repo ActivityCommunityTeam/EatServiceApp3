@@ -173,7 +173,7 @@ public class SeatActivity extends AppCompatActivity {
     }
 
     private void setToolBar() {
-        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationIcon(R.drawable.barcode__back_arrow);
         toolbar.setTitle("座位详情");
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

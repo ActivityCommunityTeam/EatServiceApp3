@@ -42,7 +42,7 @@
         android:orientation="vertical"
         >
 
-        <View
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:background="@color/whitesmoke"
@@ -85,18 +85,17 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="?android:selectableItemBackground"
                 android:clickable="true"
                 android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:layout_marginBottom="8dp"
                 >
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="5"
-                    android:scaleX="0.5"
-                    android:scaleY="0.5"
-                    android:src="@drawable/wd03"/>
+                    android:src="@drawable/my02"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -111,18 +110,17 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="?android:selectableItemBackground"
                 android:clickable="true"
                 android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:layout_marginBottom="8dp"
                 >
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="5"
-                    android:scaleX="0.5"
-                    android:scaleY="0.5"
-                    android:src="@drawable/wd02"
+                    android:src="@drawable/my03"
                     />
 
                 <TextView
@@ -138,9 +136,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="?android:selectableItemBackground"
                 android:clickable="true"
                 android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:layout_marginBottom="8dp"
                 >
 
                 <ImageView
@@ -148,9 +147,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="5"
-                    android:scaleX="0.5"
-                    android:scaleY="0.5"
-                    android:src="@drawable/wd01"/>
+                    android:src="@drawable/my01"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -370,7 +367,7 @@
         android:orientation="vertical"
         >
 
-        <View
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:background="@color/whitesmoke"

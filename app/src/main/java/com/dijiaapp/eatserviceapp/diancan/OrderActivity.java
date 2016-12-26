@@ -344,6 +344,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
     public void next() {
         if (isAddFood) {
             addFoodOrder();
+            showDialog();
         } else {
             order.setRemark(remark);
             Log.i("Daniel","---order.getRemark()---"+order.getRemark());
@@ -436,6 +437,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
      * @param resultInfo
      */
     private void finishOrder(ResultInfo resultInfo) {
+
         Observable.timer(2, TimeUnit.SECONDS)
                 .subscribe(new Observer<Long>() {
                     @Override

@@ -15,6 +15,7 @@
             android:id="@+id/order_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             >
 
             <include
@@ -99,7 +100,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="翻桌"
-                android:layout_margin="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginRight="16dp"
                 android:layout_weight="1"
                 android:textColor="@color/white"
                 android:background="@drawable/fz_btn_selector"
