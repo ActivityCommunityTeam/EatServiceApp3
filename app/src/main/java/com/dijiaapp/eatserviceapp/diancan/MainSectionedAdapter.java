@@ -131,25 +131,11 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
         oldpriceItem.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
         ((TextView) layout.findViewById(R.id.priceItem)).setText("￥" + dishesListBean.getOnSalePrice());
         Log.i("gqf","dishesListBean"+dishesListBean.toString());
-
-         /*if(foodCode!=null&!foodCode.equals("")){
-             if(dishesListBean.getMemoryCode()!=null){
-                 if(dishesListBean.getMemoryCode().contains(foodCode)){
-                     layout.setVisibility(View.VISIBLE);
-                 }else{
-                     layout.setVisibility(View.GONE);
-                 }
-             }
-             else{
-                 layout.setVisibility(View.GONE);
-             }
-         }else{
-             layout.setVisibility(View.VISIBLE);
-         }*/
-
         final Button min = (Button) layout.findViewById(R.id.minBt);
         Button plus = (Button) layout.findViewById(R.id.plusBt);
         final TextView amountTv = (TextView) layout.findViewById(R.id.amountTv);
+
+        //当前菜品是否在购物车中，获得数量
         for(Cart cart :carts){
             if(cart.getDishesListBean().getId() == dishesListBean.getId()){
                 isInCart = true;
@@ -158,7 +144,6 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
             }
 
         }
-
 
         min.setVisibility(isInCart?View.VISIBLE:View.INVISIBLE);
         amountTv.setText(amount+"");

@@ -5,5 +5,6 @@ package com.dijiaapp.eatserviceapp.Impl;
  */
 
 public interface ListItemSizeChangeLinsener {
+    //获取删除后列表长度
     public void getListItemSize(int size);
 }

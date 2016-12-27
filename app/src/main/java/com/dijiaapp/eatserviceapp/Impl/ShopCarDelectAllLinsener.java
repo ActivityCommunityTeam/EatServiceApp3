@@ -5,7 +5,10 @@ package com.dijiaapp.eatserviceapp.Impl;
  */
 
 public interface ShopCarDelectAllLinsener {
+    //删除全部时调用
     public void delectAll();
+    //消失时调用
     public void dimess();
+    //下一步时调用
     public void nextOrder();
 }

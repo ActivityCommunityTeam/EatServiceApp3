@@ -3,7 +3,6 @@ package com.dijiaapp.eatserviceapp.diancan;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,14 +63,13 @@ import static com.dijiaapp.eatserviceapp.R.id.pinnedListView;
 
 public class FoodActivity extends AppCompatActivity {
     int eatNumber;
-    long hotelId;
+    long hotelId;//酒店id
     //@BindView(R.id.food_cart_recyclerview)
     RecyclerView mFoodCartRecyclerview;
     private boolean[] flagArray;
     private boolean isScroll = true;
     CompositeSubscription compositeSubscription;
-    private BottomSheetBehavior behavior;
-    private int seatId;
+    private int seatId;//桌位id
     private OrderInfo orderInfo;
     private boolean isAddFood = false;//是不是添加订单
 
@@ -191,7 +189,7 @@ public class FoodActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(mainSectionedAdapter!=null){
-                    boolean isCode=false;
+                    //根据输入助记码匹配菜品形成新的数据源更新列表
                     List<FoodType> foodTypes=new ArrayList<FoodType>();
                     for(int i=0;i<allfoodTypes.size();i++){
                         FoodType foodType=new FoodType();
@@ -222,6 +220,7 @@ public class FoodActivity extends AppCompatActivity {
     }
 
      public int getFoodNum(){
+         //获得点菜数量
         List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
         int num=0;
         for(Cart cart:carts){
@@ -233,26 +232,19 @@ public class FoodActivity extends AppCompatActivity {
     StrongBottomSheetDialog mBottomSheetDialog;
     CartRecyclerViewAdapter mCartRecyclerViewAdapter;
     private void setListViews(final List<FoodType> foodTypes) {
-
-
-
-        Log.i("gqf","foodTypes"+foodTypes.toString());
-
+        //初始化购物车
         mBottomSheetDialog = new StrongBottomSheetDialog(this);
         View view = LayoutInflater.from(this).inflate(R.layout.content_bottomsheet, null, false);
         mFoodCartRecyclerview= (RecyclerView) view.findViewById(R.id.food_cart_recyclerview);
-
-
         List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
         //购物车数据源
         OrderedRealmCollection<Cart> carts1 = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
         //初始化购物车列表adapter
         mCartRecyclerViewAdapter = new CartRecyclerViewAdapter(this, carts1);
-
         mCartRecyclerViewAdapter.setListItemSizeChangeLinsener(new ListItemSizeChangeLinsener() {
             @Override
             public void getListItemSize(int size) {
-                Log.i("gqf","size"+size);
+                //删除菜品时如果购物车中没有菜品则滑出
                 if(realm.where(Cart.class).equalTo("seatId", seatId).findAll().size()==0){
                     if(mBottomSheetDialog!=null) {
                         if (mBottomSheetDialog.isShowing()) {
@@ -260,23 +252,19 @@ public class FoodActivity extends AppCompatActivity {
                         }
                     }
                 }
-
             }
         });
         mFoodCartRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-
+        //加载购物车列表
         mFoodCartRecyclerview.setAdapter(mCartRecyclerViewAdapter);
-
-
-
-
+        //购物车视图加载
         mBottomSheetDialog.setContentView(view);
         mBottomSheetDialog.setSeatId(seatId);
         mBottomSheetDialog.setmShopCarDelectAllLinsener(new ShopCarDelectAllLinsener() {
             @Override
             public void delectAll() {
+                //购物车删除全部菜品
                 mainSectionedAdapter.update();
-
                 mainSectionedAdapter.setFoodNum(getFoodNum());
                 mBottomSheetDialog.dismiss();
                 mFoodMoney.setText("￥" + 0);
@@ -293,23 +281,21 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
         //setBehaviorCallback();
-
-
-
-
-
+        //初始化底部栏数据显示
         setCartMoney();
         //初始化菜单adapter（菜品，购物车）
         mainSectionedAdapter = new MainSectionedAdapter(this, foodTypes, carts);
 
         mPinnedListView.setAdapter(mainSectionedAdapter);
+        //控制底部状态栏中菜品数量显示
         mainSectionedAdapter.setMfoodNum(mFoodNum);
         mainSectionedAdapter.setFoodNum(getFoodNum());
+        //获取菜品数据源
         allfoodTypes=mainSectionedAdapter.getFoodTypes();
-
+        //初始化左侧菜品类别列表
         leftListAdapter = new LeftListAdapter(this, foodTypes, flagArray);
         mLeftListview.setAdapter(leftListAdapter);
-
+        //菜品类别点击选择监听
         mLeftListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -328,7 +314,7 @@ public class FoodActivity extends AppCompatActivity {
                 mPinnedListView.setSelection(rightSection);
             }
         });
-
+        //菜品列表滑动联动
         mPinnedListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
@@ -339,7 +325,6 @@ public class FoodActivity extends AppCompatActivity {
                         if (mPinnedListView.getLastVisiblePosition() == (mPinnedListView.getCount() - 1)) {
                             mLeftListview.setSelection(ListView.FOCUS_DOWN);
                         }
-
                         // 判断滚动到顶部
                         if (mPinnedListView.getFirstVisiblePosition() == 0) {
                             mLeftListview.setSelection(0);
@@ -348,11 +333,9 @@ public class FoodActivity extends AppCompatActivity {
                         break;
                 }
             }
-
             int y = 0;
             int x = 0;
             int z = 0;
-
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (isScroll) {
@@ -426,6 +409,7 @@ public class FoodActivity extends AppCompatActivity {
                     if(mBottomSheetDialog.isShowing()) {
                         if (mCartRecyclerViewAdapter.getItemCount() <= 3) {
                             if (mCartRecyclerViewAdapter.itemHeight != -1) {
+                                //根据购物车菜品数量动态修改购物车列表高度
                                 mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * (mCartRecyclerViewAdapter.getItemCount() - 1));
                             }
                         }
@@ -446,7 +430,6 @@ public class FoodActivity extends AppCompatActivity {
                 realm.commitTransaction();
             }
         } else {
-
             if (event.getFlag() == 1) {
                 realm.beginTransaction();
                 DishesListBean disesBean = realm.where(DishesListBean.class).equalTo("id", id).findFirst();
@@ -456,12 +439,14 @@ public class FoodActivity extends AppCompatActivity {
                 cartNew.setMoney(disesBean.getOnSalePrice());
                 cartNew.setTime(Calendar.getInstance().getTime().getTime());
                 cartNew.setSeatId(seatId);
-
                 realm.commitTransaction();
             }
         }
+        //更新菜品列表
         mainSectionedAdapter.update();
+        //更新底部购物车中菜品数量显示
         mainSectionedAdapter.setFoodNum(getFoodNum());
+        //更新底部状态栏
         setCartMoney();
     }
 
@@ -470,9 +455,8 @@ public class FoodActivity extends AppCompatActivity {
         BigDecimal bmoney=new BigDecimal(money).setScale(2,BigDecimal.ROUND_HALF_DOWN);
         mFoodMoney.setText("￥" + bmoney);
 
-
-
         if(mBottomSheetDialog.food_money!=null){
+            //更新购物车中状态
             mBottomSheetDialog.food_money.setText("￥" + bmoney);
             int num=0;
             for(Cart c:realm.where(Cart.class).equalTo("seatId", seatId).findAll()){
@@ -497,6 +481,7 @@ public class FoodActivity extends AppCompatActivity {
         });
 
     }
+    //获得所有购物车中菜品价格总和
     private double getMoney() {
         double money = 0;
         List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
@@ -519,16 +504,17 @@ public class FoodActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
         compositeSubscription = new CompositeSubscription();
         realm = Realm.getDefaultInstance();
-
+        //获取酒店id
         hotelId = realm.where(UserInfo.class).findFirst().getHotelId();
 
-
+        //判断点餐还是加菜
         Intent intent = getIntent();
         isAddFood = intent.getBooleanExtra("addFood", false);
         initData(intent);
         //mFoodCartRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-
+        //获取酒店菜品
         getFood();
+        //初始化助记码功能
         initFoodCodeEdi();
 
     }
@@ -547,6 +533,7 @@ public class FoodActivity extends AppCompatActivity {
 
     @DebugLog
     private void getFood() {
+        //获取酒店菜品
         Observable<List<FoodType>> observable = getFoodFromLocal();
         if (observable == null) {
             getFoodFromNet();
@@ -562,7 +549,7 @@ public class FoodActivity extends AppCompatActivity {
 
     @DebugLog
     private Observable<List<FoodType>> getFoodFromLocal() {
-
+        //本地数据库获得酒店菜品
         List<FoodType> foodTypes = realm.where(FoodType.class).findAll();
         if (foodTypes.size() > 0) {
             return Observable.just(foodTypes);
@@ -573,6 +560,7 @@ public class FoodActivity extends AppCompatActivity {
 
     @DebugLog
     private void getFoodFromNet() {
+        //获得酒店菜品从网路
         Subscription subscription = Network.getFoodService().listFoods(hotelId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observerFoodFromNet);
@@ -599,25 +587,24 @@ public class FoodActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.food_cart_bt:
                 //显示购物车
-
                 if(mCartRecyclerViewAdapter.getItemCount()==0){
-
                     Toast.makeText(FoodActivity.this,"您的购物车中没有商品，请添加",Toast.LENGTH_SHORT).show();
                 }
                 else {
                     if (mBottomSheetDialog.isShowing()) {
                         mBottomSheetDialog.dismiss();
                     } else {
-
                         mBottomSheetDialog.show();
                         if(mCartRecyclerViewAdapter.itemHeight==-1){
+                            //第一次点开购物车
                             ViewTreeObserver vto = mFoodCartRecyclerview.getViewTreeObserver();
                             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                                 @Override
                                 public void onGlobalLayout() {
+                                    //获取列表item高度
                                     mFoodCartRecyclerview.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                                     mCartRecyclerViewAdapter.itemHeight=mFoodCartRecyclerview.getHeight()/mCartRecyclerViewAdapter.getItemCount();
-
+                                    //动态赋予购物车高度
                                     if(mCartRecyclerViewAdapter.getItemCount()>=3){
                                         mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight*3);
                                     }else{
@@ -636,8 +623,6 @@ public class FoodActivity extends AppCompatActivity {
                         mBottomSheetDialog.setFoodNum(getFoodNum());
                     }
                 }
-
-
                 break;
             case R.id.food_next:
                 next();
@@ -645,6 +630,7 @@ public class FoodActivity extends AppCompatActivity {
         }
     }
     public void next(){
+        //下一步
         List<Cart> carts = realm.where(Cart.class).equalTo("seatId", seatId).findAll();
         if (carts.size() > 0) {
             Intent intent = new Intent(this, OrderActivity.class);
