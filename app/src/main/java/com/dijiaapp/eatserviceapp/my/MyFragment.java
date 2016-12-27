@@ -28,6 +28,8 @@ public class MyFragment extends Fragment {
     LinearLayout userInfo;
     @BindView(R.id.user_name)
     TextView userName;
+    @BindView(R.id.memoryCode)
+    LinearLayout memoryCode;
     private Realm realm;
 
     public MyFragment() {
@@ -61,5 +63,10 @@ public class MyFragment extends Fragment {
                 startActivity(new Intent(getActivity(), UserInfoActivity.class));
                 break;
         }
+    }
+
+    @OnClick(R.id.memoryCode)
+    public void onClick() {
+        startActivity(new Intent(getActivity(),ZhuJiMaActivity.class));
     }
 }
