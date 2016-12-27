@@ -53,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
     ScrollView mLoginForm;
     @BindView(R.id.login_progress)
     ProgressBar mLoginProgress;
-
     CompositeSubscription compositeSubscription;
     String name;
     String password;
@@ -66,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mLoginBt.setEnabled(false);
+        //如果activity集合size不为0则遍历退出activity
         if (EatServiceApplication.getInstance().getListSize()!=0){
             EatServiceApplication.getInstance().exit();
         }

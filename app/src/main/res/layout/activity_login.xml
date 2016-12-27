@@ -93,7 +93,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/login_bt"
                 android:textColor="@color/colorPrimary"
-                android:background="@drawable/login_btn"
+                android:enabled="true"
+                android:text="登录"
+                android:background="@drawable/login_btn_selector"
                 android:layout_marginTop="16dp"
                 />
         </LinearLayout>

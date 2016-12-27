@@ -23,7 +23,7 @@ public class EatServiceApplication extends Application {
         }
         return instance;
     }
-
+    //获取集合size
     public  int getListSize(){
         return mList.size();
     }

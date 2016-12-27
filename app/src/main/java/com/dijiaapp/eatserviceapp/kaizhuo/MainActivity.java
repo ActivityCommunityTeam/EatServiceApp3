@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             mExitTime = System.currentTimeMillis();
         } else {
 //            MyConfig.clearSharePre(this, "users");
-            EatServiceApplication.getInstance().addActivity(this);
+            EatServiceApplication.getInstance().exit();
         }
     }
 
