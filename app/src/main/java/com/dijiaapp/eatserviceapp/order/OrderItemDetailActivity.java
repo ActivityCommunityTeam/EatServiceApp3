@@ -82,7 +82,6 @@ public class OrderItemDetailActivity extends AppCompatActivity {
 
         long _orderId = getIntent().getLongExtra("_orderId", -1);
         int _seatId = getIntent().getIntExtra("_seatId", -1);
-        Log.i("Daniel", "---_orderId---" + _orderId);
         if (_orderId != -1) {
             getOrderDetail(_orderId);
         } else {
@@ -95,13 +94,15 @@ public class OrderItemDetailActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 菜单
+     * @param dishes
+     */
     private void setFoodListView(List<OrderDishes> dishes) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         orderDetailFoodList.setLayoutManager(linearLayoutManager);
         OrderItemDetailAdapter cartListAdapter = new OrderItemDetailAdapter(this,dishes);
         orderDetailFoodList.setAdapter(cartListAdapter);
-
-
 
 //        for (OrderDishes orderDishes : dishes) {
 //            orderDishes orderDishes1
@@ -141,6 +142,10 @@ public class OrderItemDetailActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 获取订单详情
+     * @param _orderId
+     */
     private void getOrderDetail(long _orderId) {
         subscription = Network.getOrderService().orderDetail(_orderId)
                 .subscribeOn(Schedulers.io())

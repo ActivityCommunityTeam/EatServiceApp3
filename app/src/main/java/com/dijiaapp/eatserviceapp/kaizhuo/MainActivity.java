@@ -152,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 获取座位使用状态
+     * @param seat
+     */
     private void isUsed(final Seat seat) {
         Subscription isusedSup = Network.getSeatService().isOrder(seat.getSeatId() + "")
                 .subscribeOn(Schedulers.io())
@@ -170,11 +174,13 @@ public class MainActivity extends AppCompatActivity {
                     @DebugLog
                     @Override
                     public void onNext(OrderInfo orderInfo) {
+                        //如果座位空闲则进行开桌
                         if (orderInfo != null && orderInfo.getOrderId() == 0) {
                             Intent intent = new Intent(MainActivity.this, SeatEatNumberActivity.class);
                             intent.putExtra("Seat", seat);
                             startActivity(intent);
                         } else {
+                            //座位正在使用，进入座位详情
                             Intent _intent = new Intent(MainActivity.this, SeatActivity.class);
                             _intent.putExtra("orderInfo", orderInfo);
                             startActivity(_intent);
@@ -186,6 +192,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * 翻桌事件接收
+     * @param orderOverEvent
+     */
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void orderOverEvent(OrderOverEvent orderOverEvent) {
@@ -201,6 +211,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 接收加菜事件
+     * @param orderAddFoodEvent
+     */
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void orderAddFoodEvent(OrderAddFoodEvent orderAddFoodEvent) {
@@ -209,9 +223,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * 更新座位状态
+     * @param id
+     */
     @DebugLog
     private void submitOrderOver(String id) {
-        Log.i("gqf", "id+" + id);
         Subscription subscription = Network.getSeatService().updateStatus(id, "01")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -220,13 +237,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onCompleted() {
 
                     }
-
                     @DebugLog
                     @Override
                     public void onError(Throwable e) {
 
                     }
-
                     @DebugLog
                     @Override
                     public void onNext(ResultInfo resultInfo) {
@@ -238,6 +253,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 页面切换
+     * @param contentHome
+     */
     private void setContent(int contentHome) {
         switch (contentHome) {
             case CONTENT_HOME:

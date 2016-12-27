@@ -19,7 +19,7 @@ import butterknife.OnClick;
 import io.realm.Realm;
 
 /**
- * A simple {@link Fragment} subclass.
+ * “我的”页面
  */
 public class MyFragment extends Fragment {
 
@@ -52,10 +52,12 @@ public class MyFragment extends Fragment {
         return view;
     }
 
+
     @OnClick(R.id.userInfo)
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.userInfo:
+                //跳转到用户信息编辑页面
                 startActivity(new Intent(getActivity(), UserInfoActivity.class));
                 break;
         }

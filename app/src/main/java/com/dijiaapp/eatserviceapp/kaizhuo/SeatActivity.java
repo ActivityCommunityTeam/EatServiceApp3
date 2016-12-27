@@ -3,7 +3,6 @@ package com.dijiaapp.eatserviceapp.kaizhuo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -33,11 +32,16 @@ import hugo.weaving.DebugLog;
 import io.realm.Realm;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
+/**
+ * 座位详情
+ */
 public class SeatActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
@@ -66,16 +70,41 @@ public class SeatActivity extends AppCompatActivity {
     private OrderInfo mOrderInfo;
     private Realm realm;
     private long hotelId;
+    private CompositeSubscription mCompositeSubscription;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EatServiceApplication.getInstance().addActivity(this);
+        EatServiceApplication.getInstance().addActivity(this);//添加activity到集合
         setContentView(R.layout.activity_seat);
         mUnbinder = ButterKnife.bind(this);
+        mCompositeSubscription = new CompositeSubscription();
         getData();
         setToolBar();
-        Network.getOrderService().orderDetail(mOrderInfo.getOrderId())
+        getOrderDetail();
+
+        //翻桌点击事件
+        RxView.clicks(orderItemDone)
+                //防止多点击
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        //翻桌事件监听
+                        EventBus.getDefault().post(new OrderOverEvent(mOrderInfo));
+
+                    }
+                });
+
+
+    }
+
+    /**
+     * 订单详情请求
+     */
+    private void getOrderDetail() {
+        Subscription subscription_orderDetail = Network.getOrderService().orderDetail(mOrderInfo.getOrderId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Order>() {
@@ -96,17 +125,7 @@ public class SeatActivity extends AppCompatActivity {
                         setData(order);
                     }
                 });
-
-
-        RxView.clicks(orderItemDone)
-                .throttleFirst(1, TimeUnit.SECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        EventBus.getDefault().post(new OrderOverEvent(mOrderInfo));
-
-                    }
-                });
+        mCompositeSubscription.add(subscription_orderDetail);
 
 
     }
@@ -121,14 +140,16 @@ public class SeatActivity extends AppCompatActivity {
     }
 
     private void getOrders() {
-        Network.getOrderService().listOrder(hotelId)
+        Subscription subscription_listOrder = Network.getOrderService().listOrder(hotelId)
                 .subscribeOn(Schedulers.io())
+                //遍历
                 .flatMap(new Func1<List<OrderInfo>, Observable<OrderInfo>>() {
                     @Override
                     public Observable<OrderInfo> call(List<OrderInfo> orderInfos) {
                         return Observable.from(orderInfos);
                     }
                 })
+                //过滤
                 .filter(new Func1<OrderInfo, Boolean>() {
                     @Override
                     public Boolean call(OrderInfo orderInfo) {
@@ -150,25 +171,18 @@ public class SeatActivity extends AppCompatActivity {
                     @Override
                     public void onNext(OrderInfo orderInfo) {
                         mOrderInfo = orderInfo;
-                        Log.i("Daniel", "---" + mOrderInfo.getSeatName());
-                        Log.i("Daniel", "---" + mOrderInfo.getOrderId());
-                        Log.i("Daniel", "---" + mOrderInfo.getWaiterName());
-                        Log.i("Daniel", "---" + mOrderInfo.getStatusId());
-                        Log.i("Daniel", "---" + mOrderInfo.getOrderHeaderNo());
-
 
                     }
                 });
+        mCompositeSubscription.add(subscription_listOrder);
     }
 
     @DebugLog
     private void setData(Order order) {
-        Seat _seat = SeatFragment.getSeat_order(order.getSeatName());
+        Seat _seat = SeatFragment.getSeat_order(order.getSeatName());//通过桌位名获取Seat对象
         orderDetailSeatNameTv.setText(order.getSeatName());
-        orderDetailDinnerNumTv.setText("就餐人数："+order.getDinnerNum());
-        Log.i("Daniel","---_seat.getContainNum()---"+_seat.getContainNum());
-
-        orderDetailSeatNumTv.setText(""+_seat.getContainNum());
+        orderDetailDinnerNumTv.setText("就餐人数：" + order.getDinnerNum());
+        orderDetailSeatNumTv.setText("" + _seat.getContainNum());
         seatOrderNumber.setText("订单号：" + order.getOrderHeaderNo());
         seatWaiter.setText("操作员：" + order.getWaiterName());
         seatTime.setText("开台时间：" + order.getOrderTime());
@@ -183,6 +197,7 @@ public class SeatActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.barcode__back_arrow);
         toolbar.setTitle("座位详情");
         setSupportActionBar(toolbar);
+        //返回按钮监听事件
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,18 +208,16 @@ public class SeatActivity extends AppCompatActivity {
     }
 
     private void getData() {
+        //接收包裹化对象
         mOrderInfo = getIntent().getParcelableExtra("orderInfo");
-        Log.i("Daniel", "---" + mOrderInfo.getSeatName());
-        Log.i("Daniel", "---" + mOrderInfo.getOrderId());
-        Log.i("Daniel", "---" + mOrderInfo.getWaiterName());
-        Log.i("Daniel", "---" + mOrderInfo.getStatusId());
-        Log.i("Daniel", "---" + mOrderInfo.getOrderHeaderNo());
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mUnbinder.unbind();
+        mCompositeSubscription.unsubscribe();
     }
 
 
@@ -212,6 +225,7 @@ public class SeatActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.order_item_jiacan:
+                //加菜事件监听
                 EventBus.getDefault().post(new OrderAddFoodEvent(mOrderInfo));
                 break;
             case R.id.order_item_done:

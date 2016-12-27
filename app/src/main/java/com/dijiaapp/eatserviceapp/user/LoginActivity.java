@@ -213,8 +213,10 @@ public class LoginActivity extends AppCompatActivity {
         SettingsUtils.setPrefRememberPassword(getApplicationContext(),false);
     }
 
+    /**
+     * 对输入框是否为null进行控制
+     */
     private void initLogin() {
-
 
         Observable<CharSequence> usernameOs = RxTextView.textChanges(mLoginNameEt).skip(1);
         final Observable<CharSequence> passwordOs = RxTextView.textChanges(mLoginPasswordEt).skip(1);

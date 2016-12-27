@@ -140,12 +140,16 @@ public class OrderItemFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order_item, container, false);
         unbinder = ButterKnife.bind(this, view);
+
         ordersItemAdapter = new OrdersItemAdapter();
         LinearLayoutManager layoutManager  = new LinearLayoutManager(getActivity());
+        //倒序排列
         layoutManager.setReverseLayout(true);
+        //从列表最后一行显示
         layoutManager.setStackFromEnd(true);
         mOrderitemRecyclerview.setLayoutManager(layoutManager);
         mOrderitemRecyclerview.setAdapter(ordersItemAdapter);
+        //列表item点击监听
         ordersItemAdapter.setOnItemClickListener(new OrdersItemAdapter.MyItemClickListener() {
             @Override
             public void onItemClick(View view, int postion) {

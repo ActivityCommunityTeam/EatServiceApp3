@@ -19,6 +19,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
+/**
+ * 用户信息编辑页面
+ */
 public class UserInfoActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
@@ -32,7 +35,7 @@ public class UserInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EatServiceApplication.getInstance().addActivity(this);
+        EatServiceApplication.getInstance().addActivity(this); //添加activity到集合中
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
         setToolBar();
@@ -54,17 +57,21 @@ public class UserInfoActivity extends AppCompatActivity {
         });
     }
 
+
     @OnClick(R.id.logout)
     public void onClick() {
+        //退出账户是删除此用户
         realm.beginTransaction();
         UserInfo userInfo = realm.where(UserInfo.class).findFirst();
         if (userInfo != null) {
             userInfo.deleteFromRealm();
         }
         realm.commitTransaction();
+        //取消“记住密码，自动登录”
         SettingsUtils.setPrefAutoLogin(getApplicationContext(),false);
         SettingsUtils.setPrefRememberPassword(getApplicationContext(),false);
-        startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
+
+        startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));//跳转到登录页面
 
 //        onBackPressed();
     }

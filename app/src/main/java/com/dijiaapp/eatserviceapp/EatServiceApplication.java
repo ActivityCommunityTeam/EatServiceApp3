@@ -28,11 +28,17 @@ public class EatServiceApplication extends Application {
         return mList.size();
     }
 
-    // add Activity
+    /**
+     * add Activity
+     * @param activity
+     */
     public void addActivity(Activity activity) {
         mList.add(activity);
     }
 
+    /**
+     * 遍历退出activity
+     */
     public void exit() {
         try {
             for (Activity activity : mList) {
@@ -46,13 +52,18 @@ public class EatServiceApplication extends Application {
         }
     }
 
+    /**
+     * OnLowMemory是Android提供的API，在系统内存不足，
+     * 所有后台程序（优先级为background的进程，不是指后台运行的进程）都被杀死时，系统会调用OnLowMemory
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+        //垃圾回收
         System.gc();
     }
 
-//七星x渊渊弘x玄太阿x尊太阿x尊太阿
+//Realm初始化
     public static String username;
     @Override
     public void onCreate() {
