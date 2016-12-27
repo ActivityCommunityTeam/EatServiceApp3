@@ -1,6 +1,5 @@
 package com.dijiaapp.eatserviceapp.diancan;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,14 +24,12 @@ public class CartListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context mContext;
     private List<Cart> mDatas;
-    private FragmentManager fragmentManager;
     private final LayoutInflater mLayoutInflater;
     private MyItemClickListener mItemClickListener;
 
     public CartListAdapter(Context mContext, List<Cart> mDatas) {
         this.mContext = mContext;
         this.mDatas = mDatas;
-        this.fragmentManager = fragmentManager;
         mLayoutInflater = LayoutInflater.from(mContext);
     }
 

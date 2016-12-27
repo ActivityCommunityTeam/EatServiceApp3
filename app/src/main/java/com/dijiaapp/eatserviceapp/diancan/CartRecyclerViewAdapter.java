@@ -22,6 +22,9 @@ import static com.dijiaapp.eatserviceapp.R.id.amountTv;
 
 /**
  * Created by wjy on 16/10/8.
+ *
+ *
+ * 点菜界面购物车列表适配器
  */
 
 public class CartRecyclerViewAdapter extends RealmRecyclerViewAdapter<Cart, CartRecyclerViewAdapter.MyViewHolder> {

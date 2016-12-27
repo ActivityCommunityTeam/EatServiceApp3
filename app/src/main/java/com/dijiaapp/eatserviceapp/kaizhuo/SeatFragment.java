@@ -74,10 +74,9 @@ public class SeatFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             type = getArguments().getInt(ARG_TYPE);
-
-
         }
     }
+    //根据订单中桌位id获得桌位信息
     public static Seat getSeat(int seatId){
         for (int i = 0; i < mSeats.size(); i++) {
             if (mSeats.get(i).getSeatId()==seatId){
@@ -86,7 +85,7 @@ public class SeatFragment extends Fragment {
         }
         return null;
     }
-
+    //根据订单中桌位名字获得桌位信息
     public static Seat getSeat_order(String seatName){
         for (int i = 0; i < mSeats.size(); i++) {
             if (mSeats.get(i).getSeatName().equals(seatName)){
@@ -105,10 +104,10 @@ public class SeatFragment extends Fragment {
         Log.i("Daniel","-----------onStart");
         setList();
     }
-
     private void setList() {
         SeatsRemoteDataSource seatsRemoteDataSource = new SeatsRemoteDataSource();
         subscription = seatsRemoteDataSource.getSeats(hotelId).subscribeOn(Schedulers.io())
+                //列表类型转化
                 .flatMap(new Func1<List<Seat>, Observable<Seat>>() {
                     @Override
                     public Observable<Seat> call(List<Seat> seats) {
@@ -116,6 +115,7 @@ public class SeatFragment extends Fragment {
                         return Observable.from(seats);
                     }
                 })
+                //过滤
                 .filter(new Func1<Seat, Boolean>() {
                     @Override
                     public Boolean call(Seat seat) {
@@ -144,7 +144,6 @@ public class SeatFragment extends Fragment {
                     @DebugLog
                     @Override
                     public void onNext(List<Seat> seats) {
-                        Log.i("Daniel","-----------onNext");
                         if(mSeats==null){
                             mSeats= seats;
                         }
@@ -159,6 +158,7 @@ public class SeatFragment extends Fragment {
         // Inflate the food_listitem for this fragment
         View view = inflater.inflate(R.layout.fragment_seat, container, false);
         unbinder = ButterKnife.bind(this, view);
+        //初始化酒店全部桌位
         seatRecyclerviewAdapter = new SeatRecyclerviewAdapter(getContext());
         mSeatRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         mSeatRecyclerview.setAdapter(seatRecyclerviewAdapter);
