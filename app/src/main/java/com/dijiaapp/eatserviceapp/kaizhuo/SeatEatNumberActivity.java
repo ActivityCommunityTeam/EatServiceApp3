@@ -111,6 +111,7 @@ public class SeatEatNumberActivity extends AppCompatActivity {
     public void onClick() {
         if(usernum>=1) {
             enterFoodActivity();
+            finish();
         }else{
             Toast.makeText(this,"请选择用户人数",Toast.LENGTH_SHORT).show();
         }

@@ -21,6 +21,7 @@ public interface SeatSevice {
     @GET("dining/getDiningTables/{seatId}")
     Observable<List<Seat>> listSeats(@Path("seatId") long id);
 
+    
     @FormUrlEncoded
     @POST("dining/updateStatus")
     Observable<ResultInfo> updateStatus(@Field("seatId") String id, @Field("useStatus") String status);

@@ -32,6 +32,7 @@ import com.dijiaapp.eatserviceapp.data.Cart;
 import com.dijiaapp.eatserviceapp.data.DishesListBean;
 import com.dijiaapp.eatserviceapp.data.FoodType;
 import com.dijiaapp.eatserviceapp.data.OrderInfo;
+import com.dijiaapp.eatserviceapp.data.ResultInfo;
 import com.dijiaapp.eatserviceapp.data.Seat;
 import com.dijiaapp.eatserviceapp.data.UserInfo;
 import com.dijiaapp.eatserviceapp.network.Network;
@@ -60,6 +61,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.dijiaapp.eatserviceapp.R.id.pinnedListView;
+import static com.dijiaapp.eatserviceapp.network.Network.getSeatService;
 
 public class FoodActivity extends AppCompatActivity {
     int eatNumber;
@@ -510,6 +512,7 @@ public class FoodActivity extends AppCompatActivity {
         //判断点餐还是加菜
         Intent intent = getIntent();
         isAddFood = intent.getBooleanExtra("addFood", false);
+
         initData(intent);
         //mFoodCartRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         //获取酒店菜品
@@ -518,7 +521,14 @@ public class FoodActivity extends AppCompatActivity {
         initFoodCodeEdi();
 
     }
+    private void updateSeat(String seatname) {
 
+        Subscription subscription = getSeatService().updateStatus(seatname, "02")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+        compositeSubscription.add(subscription);
+    }
     @DebugLog
     private void initData(Intent intent) {
         if (isAddFood) {
@@ -528,6 +538,8 @@ public class FoodActivity extends AppCompatActivity {
             eatNumber = Integer.parseInt(intent.getStringExtra("number"));
             seat = intent.getParcelableExtra("seat");
             seatId = seat.getSeatId();
+            updateSeat(seat.getSeatId()+"");
+
         }
     }
 
@@ -572,7 +584,22 @@ public class FoodActivity extends AppCompatActivity {
         super.onBackPressed();
 
     }
+    Observer<ResultInfo> observer = new Observer<ResultInfo>() {
+        @Override
+        public void onCompleted() {
+            Log.i("gqf1","onCompleted");
+        }
 
+        @Override
+        public void onError(Throwable e) {
+            Log.i("gqf1","onError"+e.getMessage());
+        }
+
+        @Override
+        public void onNext(ResultInfo resultInfo) {
+            Log.i("gqf1","resultInfo"+resultInfo.getMsg());
+        }
+    };
     @Override
     protected void onDestroy() {
         super.onDestroy();

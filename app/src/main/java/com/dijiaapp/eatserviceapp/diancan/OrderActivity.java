@@ -63,7 +63,6 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.dijiaapp.eatserviceapp.network.Network.getOrderService;
-import static com.dijiaapp.eatserviceapp.network.Network.getSeatService;
 
 public class OrderActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
@@ -342,7 +341,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
             order.setRemark(remark);
             Log.i("Daniel","---order.getRemark()---"+order.getRemark());
             saveOrder();
-            updateSeat();
+            //updateSeat();
             showDialog();
         }
     }
@@ -394,14 +393,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
         compositeSubscription.add(subscription);
     }
 
-    private void updateSeat() {
 
-        Subscription subscription = getSeatService().updateStatus(order.getSeatName(), "02")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
-        compositeSubscription.add(subscription);
-    }
 
     Observer<ResultInfo> observer = new Observer<ResultInfo>() {
         @Override
