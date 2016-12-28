@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.dijiaapp.eatserviceapp.Impl.CartRecyclerAdapter;
 import com.dijiaapp.eatserviceapp.Impl.ListItemSizeChangeLinsener;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Cart;
@@ -26,10 +27,18 @@ import static com.dijiaapp.eatserviceapp.R.id.amountTv;
  * 订单列表购物车列表适配器
  */
 
-public class CartRecyclerViewOnOrderAdapter extends RealmRecyclerViewAdapter<Cart, CartRecyclerViewOnOrderAdapter.MyViewHolder> {
+public class CartRecyclerViewOnOrderAdapter extends RealmRecyclerViewAdapter<Cart, CartRecyclerViewOnOrderAdapter.MyViewHolder> implements CartRecyclerAdapter {
     private final OrderActivity foodActivity;
 
     int itemHeight=-1;
+
+    public int getItemHeight() {
+        return itemHeight;
+    }
+
+    public void setItemHeight(int itemHeight) {
+        this.itemHeight = itemHeight;
+    }
 
     private ListItemSizeChangeLinsener listItemSizeChangeLinsener;
 

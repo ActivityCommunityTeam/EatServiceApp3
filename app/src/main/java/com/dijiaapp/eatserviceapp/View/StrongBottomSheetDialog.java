@@ -10,12 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dijiaapp.eatserviceapp.Impl.CartRecyclerAdapter;
+import com.dijiaapp.eatserviceapp.Impl.RecyclerViewItemHeightlinsener;
 import com.dijiaapp.eatserviceapp.Impl.ShopCarDelectAllLinsener;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Cart;
@@ -253,6 +256,57 @@ public class StrongBottomSheetDialog extends BottomSheetDialog {
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
         }
     };
+
+    public void showAndSet(CartRecyclerAdapter mCartRecyclerViewAdapter){
+        if(mCartRecyclerViewAdapter.getItemHeight()==-1){
+
+            //第一次点开购物车
+            ViewTreeObserver vto = mFoodCartRecyclerview.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    //获取列表item高度
+                    mFoodCartRecyclerview.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+
+                    if(mRecyclerViewItemHeightlinsener!=null){
+                        mRecyclerViewItemHeightlinsener.getItemHeight(mFoodCartRecyclerview.getHeight());
+                    }
+
+                }
+            });
+        }else {
+            if (mCartRecyclerViewAdapter.getItemCount() >= 3) {
+                this.setRecyclerviewHeight(mCartRecyclerViewAdapter.getItemHeight() * 3);
+            }else{
+                this.setRecyclerviewHeight(mCartRecyclerViewAdapter.getItemHeight()*mCartRecyclerViewAdapter.getItemCount());
+
+            }
+        }
+    }
+
+
+    RecyclerViewItemHeightlinsener mRecyclerViewItemHeightlinsener=null;/*=new RecyclerViewItemHeightlinsener() {
+        @Override
+        public void getItemHeight(int height) {
+            mCartRecyclerViewAdapter.setItemHeight(mFoodCartRecyclerview.getHeight()/mCartRecyclerViewAdapter.getItemCount());
+            //动态赋予购物车高度
+            if(mCartRecyclerViewAdapter.getItemCount()>=3){
+                mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.getItemHeight()*3);
+            }else{
+                mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight*mCartRecyclerViewAdapter.getItemCount());
+            }
+        }
+    };*/
+
+    public RecyclerViewItemHeightlinsener getmRecyclerViewItemHeightlinsener() {
+        return mRecyclerViewItemHeightlinsener;
+    }
+
+    public void setmRecyclerViewItemHeightlinsener(RecyclerViewItemHeightlinsener mRecyclerViewItemHeightlinsener) {
+        this.mRecyclerViewItemHeightlinsener = mRecyclerViewItemHeightlinsener;
+    }
+
+
 
     public int getSeatId() {
         return seatId;

@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.Impl.ListItemSizeChangeLinsener;
+import com.dijiaapp.eatserviceapp.Impl.RecyclerViewItemHeightlinsener;
 import com.dijiaapp.eatserviceapp.Impl.ShopCarDelectAllLinsener;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.View.StrongBottomSheetDialog;
@@ -305,31 +305,22 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
                     if (mBottomSheetDialog.isShowing()) {
                         mBottomSheetDialog.dismiss();
                     } else {
-
                         mBottomSheetDialog.show();
-                        if (mCartRecyclerViewAdapter.itemHeight == -1) {
-                            ViewTreeObserver vto = mFoodCartRecyclerview.getViewTreeObserver();
-                            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        if(mBottomSheetDialog.getmRecyclerViewItemHeightlinsener()==null){
+                            mBottomSheetDialog.setmRecyclerViewItemHeightlinsener(new RecyclerViewItemHeightlinsener() {
                                 @Override
-                                public void onGlobalLayout() {
-                                    mFoodCartRecyclerview.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                                    mCartRecyclerViewAdapter.itemHeight = mFoodCartRecyclerview.getHeight() / mCartRecyclerViewAdapter.getItemCount();
-
-                                    if (mCartRecyclerViewAdapter.getItemCount() >= 3) {
-                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * 3);
-                                    } else {
-                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * mCartRecyclerViewAdapter.getItemCount());
+                                public void getItemHeight(int height) {
+                                    mCartRecyclerViewAdapter.setItemHeight(height/mCartRecyclerViewAdapter.getItemCount());
+                                    //动态赋予购物车高度
+                                    if(mCartRecyclerViewAdapter.getItemCount()>=3){
+                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.getItemHeight()*3);
+                                    }else{
+                                        mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight*mCartRecyclerViewAdapter.getItemCount());
                                     }
                                 }
                             });
-                        } else {
-                            if (mCartRecyclerViewAdapter.getItemCount() >= 3) {
-                                mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * 3);
-                            } else {
-                                mBottomSheetDialog.setRecyclerviewHeight(mCartRecyclerViewAdapter.itemHeight * mCartRecyclerViewAdapter.getItemCount());
-
-                            }
                         }
+                        mBottomSheetDialog.showAndSet(mCartRecyclerViewAdapter);
                         mBottomSheetDialog.setFoodNum(getFoodNum());
                     }
                 }
