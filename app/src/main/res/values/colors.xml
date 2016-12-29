@@ -11,6 +11,8 @@
     <color name="whitesmoke">#efefef</color> <!-- 烟白色 -->
     <color name="gary">#cecece</color> <!-- 灰色 -->
     <color name="gary_dark">#979797</color> <!-- 深灰色 -->
+    <color name="frame_gary">#848484</color> <!-- 边框 -->
+
 <!--
     <color name="usedgary">#9c9c9c</color> &lt;!&ndash; 桌位使用中灰色&ndash;&gt;
     <color name="freegreen">#00da12</color> &lt;!&ndash; 桌位空闲中绿色 &ndash;&gt;

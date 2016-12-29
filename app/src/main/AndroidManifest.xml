@@ -57,6 +57,8 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity android:name=".kaizhuo.SeatActivity">
         </activity>
+        <activity android:name=".kaizhuo.UnAddOrderSeatActivity">
+        </activity>
         <activity android:name=".my.UserInfoActivity">
         </activity>
         <activity android:name=".my.ZhuJiMaActivity">

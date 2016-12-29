@@ -27,6 +27,9 @@ public interface SeatSevice {
     Observable<ResultInfo> updateStatus(@Field("seatId") String id, @Field("useStatus") String status);
 
     @GET("dining/isOrder/{seatId}")
-    Observable<OrderInfo> isOrder(@Path("seatId") String seatId);
+    Observable<OrderInfo> getOrderInfo(@Path("seatId") String seatId);
+
+    @GET("dining/isOrder/{seatId}")
+    Observable<Boolean> isOrder(@Path("seatId") String seatId);
     
 }
