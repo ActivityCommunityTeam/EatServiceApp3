@@ -5,6 +5,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:fitsSystemWindows="true"
+                                                 android:background="@color/white"
                                                  tools:context="com.dijiaapp.eatserviceapp.diancan.OrderActivity">
 <LinearLayout
     android:layout_width="match_parent"
@@ -30,7 +31,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             >
             <!--座位名-->
             <LinearLayout
@@ -75,6 +75,7 @@
             </LinearLayout>
             <!--座位信息-->
             <LinearLayout
+                android:id="@+id/seatInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -85,26 +86,48 @@
                     android:id="@+id/seat_stause"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:id="@+id/seat_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="5dp"
                     />
                 <TextView
                     android:id="@+id/seat_orderNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="5dp"
                     />
                 <TextView
                     android:id="@+id/seat_waiter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="5dp"
                     />
             </LinearLayout>
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/whitesmoke"
+                android:layout_below="@id/seatInfo"
+                />
+            <!--菜单-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/order_detail_food_list"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:layout_marginLeft="16dp"
+                android:layout_below="@id/line"
+                >
+            </android.support.v7.widget.RecyclerView>
             <!--加餐，翻桌-->
             <LinearLayout
                 android:layout_width="match_parent"
