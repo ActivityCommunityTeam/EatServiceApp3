@@ -1,10 +1,12 @@
 package com.dijiaapp.eatserviceapp.kaizhuo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -65,14 +67,13 @@ public class MainActivity extends AppCompatActivity {
     BottomBar mBottomBar;
     private static final int CONTENT_HOME = 1;
     private CompositeSubscription mcompositeSubscription;
-    private Realm realm;
     private UserInfo mUser;
     /**
      * 设置toolbar
      */
-    private void setToolbar() {
+    private void setToolbar(String toolstr) {
 
-        mToolbar.setTitle("服务员app");
+        mToolbar.setTitle(toolstr);
         setSupportActionBar(mToolbar);
         /*toolbar.setNavigationIcon(R.drawable.back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
