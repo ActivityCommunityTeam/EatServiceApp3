@@ -29,9 +29,9 @@ public class DownloadAPI {
     private static final int DEFAULT_TIMEOUT = 15;
     public Retrofit retrofit;
 
-
+    //下载
     public DownloadAPI(String url, DownloadProgressListener listener) {
-
+        //进度拦截器
         DownloadProgressInterceptor interceptor = new DownloadProgressInterceptor(listener);
 
         OkHttpClient client = new OkHttpClient.Builder()

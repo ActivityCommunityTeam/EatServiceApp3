@@ -16,8 +16,8 @@ import okio.Source;
 
 public class DownloadProgressResponseBody extends ResponseBody {
 
-    private ResponseBody responseBody;
-    private DownloadProgressListener progressListener;
+    private ResponseBody responseBody;//响应体
+    private DownloadProgressListener progressListener;//进度监听
     private BufferedSource bufferedSource;
 
     public DownloadProgressResponseBody(ResponseBody responseBody,
@@ -55,6 +55,7 @@ public class DownloadProgressResponseBody extends ResponseBody {
                 totalBytesRead += bytesRead != -1 ? bytesRead : 0;
 
                 if (null != progressListener) {
+                    //进度更新
                     progressListener.update(totalBytesRead, responseBody.contentLength(), bytesRead == -1);
                 }
                 return bytesRead;

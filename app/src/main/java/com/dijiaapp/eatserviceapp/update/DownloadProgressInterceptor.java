@@ -11,6 +11,7 @@ import okhttp3.Response;
 
 public class DownloadProgressInterceptor implements Interceptor {
 
+    //下载监听
     private DownloadProgressListener listener;
 
     public DownloadProgressInterceptor(DownloadProgressListener listener) {

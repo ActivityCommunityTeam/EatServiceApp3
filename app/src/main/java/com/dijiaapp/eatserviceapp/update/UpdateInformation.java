@@ -2,6 +2,7 @@ package com.dijiaapp.eatserviceapp.update;
 
 /**
  * Created by johe on 2016/12/29.
+ * 版本信息类
  */
 
 public class UpdateInformation {

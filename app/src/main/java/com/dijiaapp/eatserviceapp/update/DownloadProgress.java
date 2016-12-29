@@ -7,11 +7,11 @@ import android.os.Parcelable;
  * Created by johe on 2016/12/29.
  */
 
-public class DownloadProgress implements Parcelable {
+public class DownloadProgress implements Parcelable {//序列化
 
-    private int progress;
-    private long currentFileSize;
-    private long totalFileSize;
+    private int progress;//下载进度
+    private long currentFileSize;//已下载大小
+    private long totalFileSize;//总大小
 
     public int getProgress() {
         return progress;

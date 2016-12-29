@@ -57,7 +57,6 @@ public class UpdateService extends Service {
         //获取传值
         //titleId = intent.getIntExtra("titleId",0);
         String client_version=intent.getStringExtra("client_version");
-
         String download_url=intent.getStringExtra("download_url");
         String update_log=intent.getStringExtra("update_log");
         String update_install=intent.getStringExtra("update_install");
@@ -70,24 +69,19 @@ public class UpdateService extends Service {
 
         }
 
-
-
         //设置下载过程中，点击通知栏，回到主界面
         updateIntent = new Intent(this, MainActivity.class);
         updatePendingIntent = PendingIntent.getActivity(this,0,updateIntent,0);
-        //设置通知栏显示内容
-
-        //发出通知
 
 
-
-
+        //下载通知
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_bottom_mine)
                 .setContentTitle(this.getResources().getString(R.string.app_name)+"正在更新")
                 .setContentText(updateMsg.getUpdate_log())
+                .setContentIntent(updatePendingIntent)
                 .setAutoCancel(true);
 
         notificationManager.notify(0, notificationBuilder.build());
@@ -122,10 +116,11 @@ public class UpdateService extends Service {
         notificationBuilder.setContentText(
                 StringUtils.getDataSize(download.getCurrentFileSize()) + "/" +
                         StringUtils.getDataSize(download.getTotalFileSize()));
+        notificationBuilder.setContentIntent(updatePendingIntent);
         notificationManager.notify(0, notificationBuilder.build());
     }
     private void sendIntent(DownloadProgress download) {
-
+        //通知下载进度
         Intent intent = new Intent("message_progress");
         intent.putExtra("download", download);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -134,6 +129,7 @@ public class UpdateService extends Service {
     int downloadCount = 0;
     //下载
     private void download() {
+        //下载进度监听
         DownloadProgressListener listener = new DownloadProgressListener() {
             @Override
             public void update(long bytesRead, long contentLength, boolean done) {
@@ -159,7 +155,7 @@ public class UpdateService extends Service {
 
 
         String baseUrl = StringUtils.getHostName(updateMsg.getDownload_url());
-
+        //开起下载
         new DownloadAPI(baseUrl, listener).downloadAPK(updateMsg.getDownload_url(), outputFile, new Subscriber() {
             @Override
             public void onCompleted() {
@@ -180,22 +176,24 @@ public class UpdateService extends Service {
         });
 
     }
-
+    //下载完成
     private void downloadCompleted() {
         DownloadProgress download = new DownloadProgress();
         download.setProgress(100);
+        //完成下载
         sendIntent(download);
 
         notificationManager.cancel(0);
         notificationBuilder.setProgress(0, 0, false);
         notificationBuilder.setContentText(this.getResources().getString(R.string.app_name)+"更新完成");
 
-        //安装apk
+        //完成后直接跳转安装界面，安装apk
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         intent.setDataAndType(Uri.fromFile(outputFile), "application/vnd.android.package-archive");
         startActivity(intent);
 
+        //也可通过点击通知跳转安装界面
         notificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
         notificationManager.notify(0, notificationBuilder.build());
 
