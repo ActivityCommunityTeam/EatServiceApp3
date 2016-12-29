@@ -1,9 +1,9 @@
 package com.dijiaapp.eatserviceapp.network;
 
-import com.dijiaapp.eatserviceapp.data.UserInfo;
 import com.dijiaapp.eatserviceapp.network.api.FoodService;
 import com.dijiaapp.eatserviceapp.network.api.OrderService;
 import com.dijiaapp.eatserviceapp.network.api.SeatSevice;
+import com.dijiaapp.eatserviceapp.network.api.UpdateService;
 import com.dijiaapp.eatserviceapp.network.api.UserService;
 
 import retrofit2.CallAdapter;
@@ -20,6 +20,7 @@ public class Network {
     private static UserService userService;
     private static FoodService foodService;
     private static OrderService orderService;
+    private  static UpdateService updateService;
 
     public static OrderService getOrderService() {
         if (orderService == null) {
@@ -28,7 +29,13 @@ public class Network {
         }
         return orderService;
     }
-
+    public static UpdateService getUpdateService() {
+        if (updateService == null) {
+            Retrofit retrofit = getRetrofit();
+            updateService = retrofit.create(UpdateService.class);
+        }
+        return updateService;
+    }
     public static FoodService getFoodService() {
         if (foodService == null) {
             Retrofit retrofit = getRetrofit();

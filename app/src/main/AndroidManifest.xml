@@ -61,6 +61,7 @@
         </activity>
         <activity android:name=".my.ZhuJiMaActivity">
         </activity>
+        <service android:name=".update.UpdateService"/>
     </application>
 
 </manifest>

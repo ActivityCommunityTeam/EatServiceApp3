@@ -1,10 +1,12 @@
 package com.dijiaapp.eatserviceapp.kaizhuo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,6 +27,8 @@ import com.dijiaapp.eatserviceapp.order.OrderAddFoodEvent;
 import com.dijiaapp.eatserviceapp.order.OrderDetailActivity;
 import com.dijiaapp.eatserviceapp.order.OrderOverEvent;
 import com.dijiaapp.eatserviceapp.order.OrdersFragment;
+import com.dijiaapp.eatserviceapp.update.UpdateMsg;
+import com.dijiaapp.eatserviceapp.update.UpdateService;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -35,13 +39,16 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
+import io.realm.Realm;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
+import static com.dijiaapp.eatserviceapp.EatServiceApplication.isUpdateForVersion;
 import static com.dijiaapp.eatserviceapp.R.id.toolbar;
+import static com.dijiaapp.eatserviceapp.network.Network.getUpdateService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,7 +81,70 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+
     }
+    Observer<UpdateMsg> observer=new Observer<UpdateMsg>() {
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+
+        }
+
+        @Override
+        public void onNext(final UpdateMsg updateMsg) {
+            //与本地版本号对比
+            if(isUpdateForVersion(updateMsg.getClient_version(), EatServiceApplication.getCurrentVersion(getApplicationContext()))) {
+                Log.i("gqf","updateMsg"+updateMsg.toString());
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle("软件升级")
+                        .setMessage(updateMsg.getUpdate_log())
+                        .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //开启更新服务UpdateService
+                                //这里为了把update更好模块化，可以传一些updateService依赖的值
+                                //如布局ID，资源ID，动态获取的标题,这里以app_name为例
+                                Intent updateIntent =new Intent(MainActivity.this, UpdateService.class);
+                                updateIntent.putExtra("client_version",updateMsg.getClient_version());
+                                updateIntent.putExtra("download_url",updateMsg.getDownload_url());
+                                updateIntent.putExtra("update_log",updateMsg.getUpdate_log());
+                                updateIntent.putExtra("update_install",updateMsg.getUpdate_install());
+                                startService(updateIntent);
+                            }
+                        })
+                        .setNegativeButton("取消",new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                if(updateMsg.getUpdate_install().equals("1")){
+                                    //强制安装，询问后不安装退出程序
+                                    EatServiceApplication.getInstance().exit();
+
+                                }
+                            }
+                        });
+                //alert.create().show();
+
+
+            }
+        }
+    };
+    //检测更新
+    public void updateApp(){
+
+        //判断本地数据库是否有版本号
+
+        Subscription subscription = getUpdateService().getAppVersion(16)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+        mcompositeSubscription.add(subscription);
+
+    }
+    Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,9 +153,9 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         setToolbar();
-
+        realm = Realm.getDefaultInstance();
         mcompositeSubscription = new CompositeSubscription();
-
+        updateApp();
 
         mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -301,6 +371,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        realm.close();
+
         KeyboardUtils.hideSoftInput(this);
         if (mcompositeSubscription != null && !mcompositeSubscription.isUnsubscribed()) {
             mcompositeSubscription.unsubscribe();
