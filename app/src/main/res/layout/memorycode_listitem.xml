@@ -1,35 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-              android:layout_marginTop="8dp"
-    >
-    <TextView
-        android:text="TextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/memoryCode"
-        android:layout_weight="1"
-        android:gravity="center"
-       />
+    android:orientation="vertical">
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dishesName"
-        android:gravity="center"
-        android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        >
+
+        <TextView
+            android:id="@+id/memoryCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            />
+
+
+        <TextView
+            android:id="@+id/dishesName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            />
+
+        <TextView
+            android:id="@+id/dishesUnit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:background="@color/frame_gary"
         />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/dishesUnit"
-        android:gravity="center"
-        android:layout_weight="1"
-       />
-
 
 </LinearLayout>

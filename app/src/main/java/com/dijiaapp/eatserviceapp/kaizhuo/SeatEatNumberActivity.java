@@ -38,10 +38,16 @@ public class SeatEatNumberActivity extends AppCompatActivity {
     private Seat seat;
 
     String [] user_num;
-    int usernum=-1;
+    public static int usernum=-1;
+
+    public static int getUsernum() {
+        return usernum;
+    }
+
     /**
      * 设置toolbar
      */
+
     private void setToolbar(String seatname) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("开桌");

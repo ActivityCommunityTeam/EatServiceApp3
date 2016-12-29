@@ -1,12 +1,10 @@
 package com.dijiaapp.eatserviceapp.kaizhuo;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,6 +18,7 @@ import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.OrderInfo;
 import com.dijiaapp.eatserviceapp.data.ResultInfo;
 import com.dijiaapp.eatserviceapp.data.Seat;
+import com.dijiaapp.eatserviceapp.data.UserInfo;
 import com.dijiaapp.eatserviceapp.diancan.FoodActivity;
 import com.dijiaapp.eatserviceapp.my.MyFragment;
 import com.dijiaapp.eatserviceapp.network.Network;
@@ -66,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     BottomBar mBottomBar;
     private static final int CONTENT_HOME = 1;
     private CompositeSubscription mcompositeSubscription;
+    private Realm realm;
+    private UserInfo mUser;
     /**
      * 设置toolbar
      */
@@ -80,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });*/
-
 
     }
     Observer<UpdateMsg> observer=new Observer<UpdateMsg>() {
@@ -151,11 +151,14 @@ public class MainActivity extends AppCompatActivity {
         EatServiceApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
-        ButterKnife.bind(this);
-        setToolbar();
         realm = Realm.getDefaultInstance();
+        mUser = realm.where(UserInfo.class).findFirst();
+        ButterKnife.bind(this);
+        String _str = getResources().getString(R.string.firstPage);
+        setToolbar(_str);
+
         mcompositeSubscription = new CompositeSubscription();
-        updateApp();
+
 
         mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -227,7 +230,41 @@ public class MainActivity extends AppCompatActivity {
      * @param seat
      */
     private void isUsed(final Seat seat) {
-        Subscription isusedSup = Network.getSeatService().isOrder(seat.getSeatId() + "")
+        getOrderInfo(seat);
+        isOrder(seat);
+    }
+
+    private void isOrder(final Seat seat) {
+        Network.getSeatService().isOrder(seat.getSeatId() + "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        Log.i("Daniel", "---aBoolean---" +aBoolean);
+                        if (!aBoolean){
+                            //座位正在使用，进入座位详情
+                            Intent _intent = new Intent(MainActivity.this, UnAddOrderSeatActivity.class);
+                            _intent.putExtra("seat", seat);
+                            startActivity(_intent);
+                        }
+                    }
+                });
+
+    }
+
+    private void getOrderInfo(final Seat seat) {
+        Subscription isusedSup = Network.getSeatService().getOrderInfo(seat.getSeatId() + "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<OrderInfo>() {
@@ -256,6 +293,12 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(_intent);
 //                            Toast.makeText(MainActivity.this, "1111", Toast.LENGTH_SHORT).show();
                         }
+//                        if (orderInfo==null){
+//                            //座位正在使用，进入座位详情
+//                            Intent _intent = new Intent(MainActivity.this, UnAddOrderSeatActivity.class);
+//                            _intent.putExtra("seat", seat);
+//                            startActivity(_intent);
+//                        }
                     }
                 });
         mcompositeSubscription.add(isusedSup);
@@ -289,7 +332,15 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void orderAddFoodEvent(OrderAddFoodEvent orderAddFoodEvent) {
         OrderInfo orderInfo = orderAddFoodEvent.getOrderInfo();
-        FoodActivity.startFoodActivity(this, orderInfo);
+        String _getWaiterNameFromOrderInfo = orderInfo.getWaiterName();
+        String _getWaiterNameFromUser = mUser.getWaiterName();
+        Log.i("Daniel","---_getWaiterNameFromOrderInfo----"+_getWaiterNameFromOrderInfo);
+        Log.i("Daniel","---mUser.getWaiterName()----"+_getWaiterNameFromUser);
+        if (_getWaiterNameFromOrderInfo.equals(_getWaiterNameFromUser)){
+            FoodActivity.startFoodActivity(this, orderInfo);
+        }else {
+            Toast.makeText(this, "不能加餐！", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -330,6 +381,8 @@ public class MainActivity extends AppCompatActivity {
     private void setContent(int contentHome) {
         switch (contentHome) {
             case CONTENT_HOME:
+                String home_str = getResources().getString(R.string.firstPage);
+                setToolbar(home_str);
                 HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HOME_TAG);
                 if (homeFragment == null) {
                     homeFragment = HomeFragment.newInstance("1", "2");
@@ -337,6 +390,8 @@ public class MainActivity extends AppCompatActivity {
                 setFragment(homeFragment, HOME_TAG);
                 break;
             case CONTENT_ORDERS:
+                String orders_str = getResources().getString(R.string.foodOrder);
+                setToolbar(orders_str);
                 OrdersFragment orderFragment = (OrdersFragment) getSupportFragmentManager().findFragmentByTag(ORDERS_TAG);
                 if (orderFragment == null) {
                     orderFragment = OrdersFragment.newInstance();
@@ -344,6 +399,8 @@ public class MainActivity extends AppCompatActivity {
                 setFragment(orderFragment, ORDERS_TAG);
                 break;
             case CONTENT_MY:
+                String my_str = getResources().getString(R.string.my);
+                setToolbar(my_str);
                 MyFragment myFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag(MY_TAG);
                 if (myFragment == null) {
                     myFragment = MyFragment.newInstance();

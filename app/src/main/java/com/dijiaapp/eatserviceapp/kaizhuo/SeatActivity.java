@@ -2,7 +2,10 @@ package com.dijiaapp.eatserviceapp.kaizhuo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.Order;
+import com.dijiaapp.eatserviceapp.data.OrderDishes;
 import com.dijiaapp.eatserviceapp.data.OrderInfo;
 import com.dijiaapp.eatserviceapp.data.Seat;
 import com.dijiaapp.eatserviceapp.data.UserInfo;
@@ -66,10 +70,13 @@ public class SeatActivity extends AppCompatActivity {
     TextView orderDetailSeatNumTv;
     @BindView(R.id.order_detail_dinnerNum_tv)
     TextView orderDetailDinnerNumTv;
+    @BindView(R.id.order_detail_food_list)
+    RecyclerView orderDetailFoodList;
     private Unbinder mUnbinder;
     private OrderInfo mOrderInfo;
     private Realm realm;
     private long hotelId;
+    private List<OrderDishes> dishes;
     private CompositeSubscription mCompositeSubscription;
 
 
@@ -127,6 +134,13 @@ public class SeatActivity extends AppCompatActivity {
                 });
         mCompositeSubscription.add(subscription_orderDetail);
 
+
+    }
+
+    private void setFoodListView(List<OrderDishes> dishes) {
+        orderDetailFoodList.setLayoutManager(new LinearLayoutManager(this));
+        SeatDetailAdapter seatDetailAdapter = new SeatDetailAdapter(SeatActivity.this,dishes);
+        orderDetailFoodList.setAdapter(seatDetailAdapter);
 
     }
 
@@ -191,6 +205,9 @@ public class SeatActivity extends AppCompatActivity {
         } else {
             seatStause.setText("状态：可用");
         }
+        dishes = order.getDishes();
+        Log.i("Daniel", "---dishes.size()---" + dishes.size());
+        setFoodListView(dishes);
     }
 
     private void setToolBar() {

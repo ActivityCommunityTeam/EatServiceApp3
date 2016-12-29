@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EatServiceApp</string>
+    <string name="app_name">艾特点餐宝</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="username">用户名</string>
@@ -25,5 +25,12 @@
 
     <!--提交订单-->
     <string name="submitOrder">提交订单</string>
+    <!--首页-->
+    <string name="firstPage">点餐宝</string>
+    <!--餐单-->
+    <string name="foodOrder">点餐中心</string>
+    <!--我的-->
+    <string name="my">个人中心</string>
+
 
 </resources>
