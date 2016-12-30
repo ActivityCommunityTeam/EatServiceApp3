@@ -19,6 +19,7 @@ import android.util.Log;
 
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.kaizhuo.MainActivity;
+import com.dijiaapp.eatserviceapp.network.DownloadAPI;
 import com.dijiaapp.eatserviceapp.util.StringUtils;
 
 import java.io.File;

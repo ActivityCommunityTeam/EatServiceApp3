@@ -127,18 +127,18 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                //alert.create().show();
+                alert.create().show();
 
 
             }
         }
     };
     //检测更新
-    public void updateApp(){
+    public void updateApp(long hotelId){
 
         //判断本地数据库是否有版本号
 
-        Subscription subscription = getUpdateService().getAppVersion(16)
+        Subscription subscription = getUpdateService().getAppVersion(hotelId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         String _str = getResources().getString(R.string.firstPage);
         setToolbar(_str);
-
+        updateApp(mUser.getHotelId());
         mcompositeSubscription = new CompositeSubscription();
 
 

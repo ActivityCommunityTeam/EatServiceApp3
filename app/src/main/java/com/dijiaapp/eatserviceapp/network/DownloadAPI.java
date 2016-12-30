@@ -1,9 +1,11 @@
-package com.dijiaapp.eatserviceapp.update;
+package com.dijiaapp.eatserviceapp.network;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.dijiaapp.eatserviceapp.network.exception.CustomizeException;
+import com.dijiaapp.eatserviceapp.update.DownloadProgressInterceptor;
+import com.dijiaapp.eatserviceapp.update.DownloadProgressListener;
 import com.dijiaapp.eatserviceapp.util.FileUtils;
 
 import java.io.File;
@@ -23,6 +25,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by JokAr on 16/7/5.
+ * 处理下载任务
  */
 public class DownloadAPI {
     private static final String TAG = "DownloadAPI";
