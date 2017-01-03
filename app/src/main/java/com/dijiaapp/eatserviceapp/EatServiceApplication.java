@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -19,14 +18,14 @@ import io.realm.RealmConfiguration;
  */
 public class EatServiceApplication extends Application {
     private static  List<Activity> mList ;
-    private static EatServiceApplication instance;
-    public synchronized static EatServiceApplication getInstance() {
-        if (null == instance) {
-            mList = new LinkedList<Activity>();
-            instance = new EatServiceApplication();
-        }
-        return instance;
+   /* public static class Instance{
+        public static EatServiceApplication instance=new EatServiceApplication();
     }
+
+    public static EatServiceApplication getInstance() {
+        return Instance.instance;
+    }*/
+
     //获取集合size
     public  int getListSize(){
         return mList.size();
@@ -43,7 +42,7 @@ public class EatServiceApplication extends Application {
     /**
      * 遍历退出activity
      */
-    public  void exit() {
+    public void exit() {
         try {
             for (Activity activity : mList) {
                 if (activity != null)

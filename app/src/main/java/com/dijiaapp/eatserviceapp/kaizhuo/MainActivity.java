@@ -1,11 +1,16 @@
 package com.dijiaapp.eatserviceapp.kaizhuo;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -59,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String FOUND_TAG = "found_flag";
     private static final int CONTENT_FOUND = 3;
 
+    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE=1234;
+
     private static final int CONTENT_ORDERS = 2;
     private static final int CONTENT_MY = 4;
     @BindView(toolbar)
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int CONTENT_HOME = 1;
     private CompositeSubscription mcompositeSubscription;
     private UserInfo mUser;
+    private UpdateMsg mUpdateMsg;
     /**
      * 设置toolbar
      */
@@ -96,11 +104,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onNext(final UpdateMsg updateMsg) {
+        public void onNext(UpdateMsg updateMsg) {
             //与本地版本号对比
             if(isUpdateForVersion(updateMsg.getClient_version(), EatServiceApplication.getCurrentVersion(getApplicationContext()))) {
                 Log.i("gqf","updateMsg"+updateMsg.toString());
-
+                mUpdateMsg=updateMsg;
                 AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
                 alert.setTitle("软件升级")
                         .setMessage(updateMsg.getUpdate_log())
@@ -109,21 +117,22 @@ public class MainActivity extends AppCompatActivity {
                                 //开启更新服务UpdateService
                                 //这里为了把update更好模块化，可以传一些updateService依赖的值
                                 //如布局ID，资源ID，动态获取的标题,这里以app_name为例
-                                Intent updateIntent =new Intent(MainActivity.this, UpdateService.class);
-                                updateIntent.putExtra("client_version",updateMsg.getClient_version());
-                                updateIntent.putExtra("download_url",updateMsg.getDownload_url());
-                                updateIntent.putExtra("update_log",updateMsg.getUpdate_log());
-                                updateIntent.putExtra("update_install",updateMsg.getUpdate_install());
-                                startService(updateIntent);
+                                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                        != PackageManager.PERMISSION_GRANTED) {
+                                    //申请WRITE_EXTERNAL_STORAGE权限
+                                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                            WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+                                }else{
+                                    startUpdateService(mUpdateMsg);
+                                }
                             }
                         })
                         .setNegativeButton("取消",new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                if(updateMsg.getUpdate_install().equals("1")){
+                                if(mUpdateMsg.getUpdate_install().equals("1")){
                                     //强制安装，询问后不安装退出程序
-                                    EatServiceApplication.getInstance().exit();
-
+                                    ((EatServiceApplication)getApplication()).exit();
                                 }
                             }
                         });
@@ -133,6 +142,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    public void startUpdateService(UpdateMsg updateMsg){
+        Intent updateIntent =new Intent(MainActivity.this, UpdateService.class);
+        updateIntent.putExtra("client_version",updateMsg.getClient_version());
+        updateIntent.putExtra("download_url",updateMsg.getDownload_url());
+        updateIntent.putExtra("update_log",updateMsg.getUpdate_log());
+        updateIntent.putExtra("update_install",updateMsg.getUpdate_install());
+        startService(updateIntent);
+    }
+
     //检测更新
     public void updateApp(long hotelId){
 
@@ -149,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EatServiceApplication.getInstance().addActivity(this);
+        ((EatServiceApplication)getApplication()).addActivity(this);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
         realm = Realm.getDefaultInstance();
@@ -157,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         String _str = getResources().getString(R.string.firstPage);
         setToolbar(_str);
-        updateApp(mUser.getHotelId());
-        mcompositeSubscription = new CompositeSubscription();
 
+        mcompositeSubscription = new CompositeSubscription();
+        updateApp(mUser.getHotelId());
 
         mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -179,6 +198,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //获取权限后调用
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted
+                startUpdateService(mUpdateMsg);
+            } else {
+                // Permission Denied
+                if(mUpdateMsg.getUpdate_install().equals("1")){
+                    EatServiceApplication.getInstance().exit();
+                }else{
+                    Toast.makeText(getApplicationContext(),"无法更新请开起下载权限",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+    }
+
     //退出时的时间
     private long mExitTime;
     //对返回键进行监听

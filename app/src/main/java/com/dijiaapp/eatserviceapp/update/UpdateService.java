@@ -26,7 +26,6 @@ import java.io.File;
 
 import rx.Subscriber;
 
-import static android.content.ContentValues.TAG;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
@@ -52,6 +51,8 @@ public class UpdateService extends Service {
         super.onStart(intent, startId);
     }
 
+
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -63,13 +64,19 @@ public class UpdateService extends Service {
         String update_install=intent.getStringExtra("update_install");
         updateMsg=new UpdateMsg(client_version,download_url,update_log,update_install);
 
+
+
         //创建文件
         if(android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())){
-            //文件路径
+            //文件夹路径
             updateDir = new File(Environment.getExternalStorageDirectory(),UpdateInformation.downloadDir);
 
         }
-
+        Log.i("gqf",getApplicationContext().getExternalCacheDir().getAbsolutePath());
+        //没有则创建文件夹
+        if (!updateDir.exists()) {
+            updateDir.mkdir();
+        }
         //设置下载过程中，点击通知栏，回到主界面
         updateIntent = new Intent(this, MainActivity.class);
         updatePendingIntent = PendingIntent.getActivity(this,0,updateIntent,0);
@@ -148,12 +155,13 @@ public class UpdateService extends Service {
         };
         //下载文件名，地址
 
-        outputFile = new File(updateDir.getPath(),getResources().getString(R.string.app_name)+".apk");
-
+        outputFile = new File(updateDir.getAbsolutePath(),getResources().getString(R.string.app_name)+".apk");
+        //删除已有
         if (outputFile.exists()) {
             outputFile.delete();
         }
 
+        Log.i("gqf",outputFile.getAbsolutePath());
 
         String baseUrl = StringUtils.getHostName(updateMsg.getDownload_url());
         //开起下载
@@ -161,18 +169,19 @@ public class UpdateService extends Service {
             @Override
             public void onCompleted() {
                 downloadCompleted();
+                Log.e("gqf", "onCompleted: ");
             }
 
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
-                downloadCompleted();
-                Log.e(TAG, "onError: " + e.getMessage());
+                //downloadCompleted();
+                Log.e("gqf", "onError: " + e.getMessage());
             }
 
             @Override
             public void onNext(Object o) {
-
+                Log.e("gqf", "onNext: " );
             }
         });
 
