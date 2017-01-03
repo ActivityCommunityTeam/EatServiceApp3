@@ -35,7 +35,7 @@ public class UserInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EatServiceApplication.getInstance().addActivity(this); //添加activity到集合中
+        ((EatServiceApplication)getApplication()).addActivity(this); //添加activity到集合中
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
         setToolBar();

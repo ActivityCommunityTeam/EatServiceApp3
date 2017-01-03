@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -72,6 +73,7 @@ public class EatServiceApplication extends Application {
     public void onCreate() {
         super.onCreate();
 //        LeakCanary.install(this);
+        mList = new ArrayList<>();
         RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).schemaVersion(2).deleteRealmIfMigrationNeeded().build();
         Realm.setDefaultConfiguration(realmConfig);
 

@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.utils.ScreenUtils;
 import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.data.UserInfo;
@@ -62,12 +63,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        EatServiceApplication.getInstance().addActivity(this);
+        ScreenUtils.hideStatusBar(this);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mLoginBt.setEnabled(false);
         //如果activity集合size不为0则遍历退出activity
-        if (EatServiceApplication.getInstance().getListSize()!=0){
-            EatServiceApplication.getInstance().exit();
+        if (((EatServiceApplication)getApplication()).getListSize()!=0){
+            ((EatServiceApplication)getApplication()).exit();
         }
 
         compositeSubscription = new CompositeSubscription();

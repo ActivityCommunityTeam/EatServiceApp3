@@ -73,7 +73,7 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EatServiceApplication.getInstance().addActivity(this);//添加activity到集合
+        ((EatServiceApplication)getApplication()).addActivity(this);//添加activity到集合
         setContentView(R.layout.activity_seat_unaddorder);
         mUnbinder = ButterKnife.bind(this);
         mCompositeSubscription = new CompositeSubscription();

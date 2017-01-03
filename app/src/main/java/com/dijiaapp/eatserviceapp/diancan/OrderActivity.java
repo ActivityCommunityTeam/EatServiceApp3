@@ -112,7 +112,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EatServiceApplication.getInstance().addActivity(this);
+        ((EatServiceApplication)getApplication()).addActivity(this);
         setContentView(R.layout.activity_order);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);

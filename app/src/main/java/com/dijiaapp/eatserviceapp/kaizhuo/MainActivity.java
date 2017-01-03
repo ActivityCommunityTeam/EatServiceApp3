@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.dismiss();
                                 if(mUpdateMsg.getUpdate_install().equals("1")){
                                     //强制安装，询问后不安装退出程序
-                                    ((EatServiceApplication)getApplication()).exit();
+//                                    ((EatServiceApplication)getApplication()).exit();
                                 }
                             }
                         });
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 // Permission Denied
                 if(mUpdateMsg.getUpdate_install().equals("1")){
-                    EatServiceApplication.getInstance().exit();
+                    ((EatServiceApplication)getApplication()).exit();
                 }else{
                     Toast.makeText(getApplicationContext(),"无法更新请开起下载权限",Toast.LENGTH_SHORT).show();
                 }
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
             mExitTime = System.currentTimeMillis();
         } else {
 //            MyConfig.clearSharePre(this, "users");
-            EatServiceApplication.getInstance().exit();
+            ((EatServiceApplication)getApplication()).exit();
         }
     }
 

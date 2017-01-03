@@ -24,7 +24,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EatServiceApplication.getInstance().addActivity(this);
+        ((EatServiceApplication)getApplication()).addActivity(this);
         setContentView(R.layout.activity_order_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -498,7 +498,7 @@ public class FoodActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EatServiceApplication.getInstance().addActivity(this);
+        ((EatServiceApplication)getApplication()).addActivity(this);
         setContentView(R.layout.activity_food);
         ButterKnife.bind(this);
         mFoodNum.setVisibility(View.INVISIBLE);

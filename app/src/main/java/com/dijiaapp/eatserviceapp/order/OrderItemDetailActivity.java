@@ -74,7 +74,7 @@ public class OrderItemDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EatServiceApplication.getInstance().addActivity(this);
+        ((EatServiceApplication)getApplication()).addActivity(this);
         setContentView(R.layout.activity_orderitem_detail);
         mUnbinder = ButterKnife.bind(this);
         mCompositeSubscription = new CompositeSubscription();
