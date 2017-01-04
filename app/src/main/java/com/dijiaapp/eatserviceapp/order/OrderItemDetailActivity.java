@@ -58,8 +58,8 @@ public class OrderItemDetailActivity extends AppCompatActivity {
     TextView orderDetailSeatNameTv;
     @BindView(R.id.order_detail_dinnerNum_tv)
     TextView orderDetailDinnerNumTv;
-    @BindView(R.id.order_detail_seatNum_tv)
-    TextView orderDetailSeatNumTv;
+//    @BindView(R.id.order_detail_seatNum_tv)
+//    TextView orderDetailSeatNumTv;
     @BindView(R.id.order_detail_food_list)
     RecyclerView orderDetailFoodList;
     private List<OrderDishes> dishes;
@@ -183,7 +183,7 @@ public class OrderItemDetailActivity extends AppCompatActivity {
         orderDetailDinnerNumTv.setText("就餐人数：" + order.getDinnerNum());
         //通过座位名找到Seat对应的model
         Seat _seat = SeatFragment.getSeat_order(order.getSeatName());
-        orderDetailSeatNumTv.setText("" + _seat.getContainNum());
+//        orderDetailSeatNumTv.setText("" + _seat.getContainNum());
         orderDetailMarkTv.setText(order.getRemark());
         Log.i("Daniel", "------");
         dishes = order.getDishes();

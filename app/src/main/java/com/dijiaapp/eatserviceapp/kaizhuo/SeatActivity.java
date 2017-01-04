@@ -66,8 +66,8 @@ public class SeatActivity extends AppCompatActivity {
     Button orderItemDone;
     @BindView(R.id.seatName)
     LinearLayout seatName;
-    @BindView(R.id.order_detail_seatNum_tv)
-    TextView orderDetailSeatNumTv;
+//    @BindView(R.id.order_detail_seatNum_tv)
+//    TextView orderDetailSeatNumTv;
     @BindView(R.id.order_detail_dinnerNum_tv)
     TextView orderDetailDinnerNumTv;
     @BindView(R.id.order_detail_food_list)
@@ -196,7 +196,7 @@ public class SeatActivity extends AppCompatActivity {
         Seat _seat = SeatFragment.getSeat_order(order.getSeatName());//通过桌位名获取Seat对象
         orderDetailSeatNameTv.setText(order.getSeatName());
         orderDetailDinnerNumTv.setText("就餐人数：" + order.getDinnerNum());
-        orderDetailSeatNumTv.setText("" + _seat.getContainNum());
+//        orderDetailSeatNumTv.setText("" + _seat.getContainNum());
         seatOrderNumber.setText("订单号：" + order.getOrderHeaderNo());
         seatWaiter.setText("操作员：" + order.getWaiterName());
         seatTime.setText("开台时间：" + order.getOrderTime());

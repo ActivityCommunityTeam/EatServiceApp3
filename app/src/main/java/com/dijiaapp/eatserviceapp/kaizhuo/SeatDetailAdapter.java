@@ -59,7 +59,7 @@ public class SeatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         MyViewHoder myViewHoder = (MyViewHoder) holder;
         OrderDishes _OrderDishes = mDatas.get(position);
         myViewHoder.foodName.setText(_OrderDishes.getDishesName());
-        myViewHoder.number.setText(""+_OrderDishes.getDishesUnit());
+        myViewHoder.number.setText(""+_OrderDishes.getOrderNum());
         myViewHoder.moneyTv.setText("￥"+_OrderDishes.getTotalPrice());
 
 
