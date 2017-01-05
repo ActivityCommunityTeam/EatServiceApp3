@@ -46,6 +46,7 @@ public class OrderItemFragment extends Fragment {
 
     Realm realm;
     long hotelId;
+    private String mWaiterName;
     private Subscription subscription;
     private OrdersItemAdapter ordersItemAdapter;
 
@@ -67,6 +68,7 @@ public class OrderItemFragment extends Fragment {
         realm = Realm.getDefaultInstance();
         UserInfo userInfo = realm.where(UserInfo.class).findFirst();
         hotelId = userInfo.getHotelId();
+        mWaiterName=userInfo.getWaiterName();
 
         getOrders();
 
@@ -98,6 +100,13 @@ public class OrderItemFragment extends Fragment {
                             return orderInfo.getStatusId().equals("01") || orderInfo.getStatusId().equals("02");
                         else
                             return orderInfo.getStatusId().equals("03");
+                    }
+                })
+                .filter(new Func1<OrderInfo, Boolean>() {
+                    @Override
+                    public Boolean call(OrderInfo orderInfo) {
+                        String _str = orderInfo.getWaiterName();
+                        return mWaiterName.equals(_str);
                     }
                 })
                 .toList()

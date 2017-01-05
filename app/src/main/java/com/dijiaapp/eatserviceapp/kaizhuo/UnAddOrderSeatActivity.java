@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
+import com.dijiaapp.eatserviceapp.data.OrderInfo;
 import com.dijiaapp.eatserviceapp.data.ResultInfo;
 import com.dijiaapp.eatserviceapp.data.Seat;
 import com.dijiaapp.eatserviceapp.data.UserInfo;
@@ -19,6 +20,7 @@ import com.dijiaapp.eatserviceapp.diancan.FoodActivity;
 import com.dijiaapp.eatserviceapp.network.Network;
 import com.jakewharton.rxbinding.view.RxView;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -27,10 +29,12 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import hugo.weaving.DebugLog;
 import io.realm.Realm;
+import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -45,7 +49,7 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
     TextView orderDetailSeatNameTv;
     @BindView(R.id.seat_stause)
     TextView seatStause;
-//    @BindView(R.id.seat_time)
+    //    @BindView(R.id.seat_time)
 //    TextView seatTime;
 //    @BindView(R.id.seat_orderNumber)
 //    TextView seatOrderNumber;
@@ -57,8 +61,8 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
     Button orderItemDone;
     @BindView(R.id.seatName)
     LinearLayout seatName;
-    @BindView(R.id.order_detail_seatNum_tv)
-    TextView orderDetailSeatNumTv;
+    //    @BindView(R.id.order_detail_seatNum_tv)
+//    TextView orderDetailSeatNumTv;
     @BindView(R.id.order_detail_dinnerNum_tv)
     TextView orderDetailDinnerNumTv;
     private Unbinder mUnbinder;
@@ -66,14 +70,15 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
     private Realm realm;
     private long hotelId;
     private Seat seat;
-    int usernum=-1;
+    int usernum = -1;
+    private OrderInfo mOrderInfo;
     private CompositeSubscription mCompositeSubscription;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((EatServiceApplication)getApplication()).addActivity(this);//添加activity到集合
+        ((EatServiceApplication) getApplication()).addActivity(this);//添加activity到集合
         setContentView(R.layout.activity_seat_unaddorder);
         mUnbinder = ButterKnife.bind(this);
         mCompositeSubscription = new CompositeSubscription();
@@ -89,7 +94,7 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
                     @Override
                     public void call(Void aVoid) {
                         //翻桌事件监听
-                        submitOrderOver(""+mSeat.getSeatId());
+                        submitOrderOver("" + mSeat.getSeatId());
 
                     }
                 });
@@ -99,6 +104,7 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
 
     /**
      * 更新座位状态
+     *
      * @param id
      */
     @DebugLog
@@ -111,11 +117,13 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
                     public void onCompleted() {
 
                     }
+
                     @DebugLog
                     @Override
                     public void onError(Throwable e) {
 
                     }
+
                     @DebugLog
                     @Override
                     public void onNext(ResultInfo resultInfo) {
@@ -156,61 +164,70 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
 //
 //
 //    }
-
     @Override
     protected void onStart() {
         super.onStart();
         realm = Realm.getDefaultInstance();
         UserInfo userInfo = realm.where(UserInfo.class).findFirst();
         hotelId = userInfo.getHotelId();
+//        //接收包裹化对象
+//        mSeat = getIntent().getParcelableExtra("seat");
+        Log.i("Daniel", "---mSeat---" + mSeat);
 //        getOrders();
+
     }
 
-//    private void getOrders() {
-//        Subscription subscription_listOrder = Network.getOrderService().listOrder(hotelId)
-//                .subscribeOn(Schedulers.io())
-//                //遍历
-//                .flatMap(new Func1<List<OrderInfo>, Observable<OrderInfo>>() {
-//                    @Override
-//                    public Observable<OrderInfo> call(List<OrderInfo> orderInfos) {
-//                        return Observable.from(orderInfos);
-//                    }
-//                })
-//                //过滤
-//                .filter(new Func1<OrderInfo, Boolean>() {
-//                    @Override
-//                    public Boolean call(OrderInfo orderInfo) {
-//                        return orderInfo.getOrderId() == mOrderInfo.getOrderId();
-//                    }
-//                })
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Observer<OrderInfo>() {
-//                    @Override
-//                    public void onCompleted() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(OrderInfo orderInfo) {
+    private void getOrders() {
+        Subscription subscription_listOrder = Network.getOrderService().listOrder(hotelId)
+                .subscribeOn(Schedulers.io())
+                //遍历
+                .flatMap(new Func1<List<OrderInfo>, Observable<OrderInfo>>() {
+                    @Override
+                    public Observable<OrderInfo> call(List<OrderInfo> orderInfos) {
+//                        Log.i("Daniel","---orderInfos.size()---"+orderInfos.size());
+                        return Observable.from(orderInfos);
+                    }
+                })
+                //过滤
+                .filter(new Func1<OrderInfo, Boolean>() {
+                    @Override
+                    public Boolean call(OrderInfo orderInfo) {
+                        int _seatId = Integer.parseInt(orderInfo.getSeatName());
+                        Log.i("Daniel", "---_seatId---" + _seatId);
+                        Log.i("Daniel", "---mSeat.getSeatId()---" + mSeat.getSeatId());
+                        return _seatId == mSeat.getSeatId();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<OrderInfo>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(OrderInfo orderInfo) {
 //                        mOrderInfo = orderInfo;
-//
-//                    }
-//                });
-//        mCompositeSubscription.add(subscription_listOrder);
-//    }
+                        Log.i("Daniel", "---_seatId---" + orderInfo.getUserId());
+//                        getData(orderInfo);
+
+                    }
+                });
+        mCompositeSubscription.add(subscription_listOrder);
+    }
 
     @DebugLog
     private void setData(Seat _seat) {
 //        Seat _seat = SeatFragment.getSeat_order(order.getSeatName());//通过桌位名获取Seat对象
 //        orderDetailSeatNameTv.setText(order.getSeatName());
-//        orderDetailDinnerNumTv.setText("就餐人数：" + order.getDinnerNum());
-        orderDetailSeatNumTv.setText("" + _seat.getContainNum());
-        orderDetailSeatNameTv.setText(""+_seat.getSeatName());
+//        orderDetailDinnerNumTv.setText("就餐人数：" +orderInfo.getDinnerNum());
+//        orderDetailSeatNumTv.setText("" + _seat.getContainNum());
+        orderDetailSeatNameTv.setText("" + _seat.getSeatName());
 //        seatOrderNumber.setText("订单号：" + order.getOrderHeaderNo());
 //        seatWaiter.setText("操作员：" + order.getWaiterName());
 //        seatTime.setText("开台时间：" + order.getOrderTime());
@@ -251,9 +268,9 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
 
     private void enterFoodActivity() {
         int _usernum = SeatEatNumberActivity.getUsernum();
-        Log.i("Daniel","---_usernum---"+_usernum);
+        Log.i("Daniel", "---_usernum---" + _usernum);
 
-        FoodActivity.startFoodActivity(this,_usernum+"",mSeat);
+        FoodActivity.startFoodActivity(this, _usernum + "", mSeat);
     }
 
 
