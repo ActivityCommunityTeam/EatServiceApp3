@@ -68,8 +68,8 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mLoginBt.setEnabled(false);
         //如果activity集合size不为0则遍历退出activity
-        if (((EatServiceApplication)getApplication()).getListSize()!=0){
-            ((EatServiceApplication)getApplication()).exit();
+        if (((EatServiceApplication) getApplication()).getListSize() != 0) {
+            ((EatServiceApplication) getApplication()).exit();
         }
 
         compositeSubscription = new CompositeSubscription();
@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //退出时的时间
     private long mExitTime;
+
     //对返回键进行监听
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -127,10 +128,11 @@ public class LoginActivity extends AppCompatActivity {
                         SettingsUtils.setPrefAutoLogin(getApplicationContext(), aBoolean);
                     }
                 });
+
         if (SettingsUtils.isRememberPassword(getApplicationContext())) {
             UserInfo userInfo = realm.where(UserInfo.class).findFirst();
             name = userInfo.getUsername();
-            EatServiceApplication.username=name;
+            EatServiceApplication.username = name;
             password = userInfo.getPassword();
             mLoginNameEt.setText(name);
             mLoginPasswordEt.setText(password);
@@ -151,11 +153,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
 
+                    @DebugLog
                     @Override
                     public void onError(Throwable e) {
 
                     }
 
+                    @DebugLog
                     @Override
                     public void onNext(Void aVoid) {
                         doLogin();
@@ -164,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
         compositeSubscription.add(loginBt);
     }
 
+    @DebugLog
     private void doLogin() {
         Subscription logSc = Network.getUserService().login(name, password)
                 .subscribeOn(Schedulers.io())
@@ -188,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                             deletUser();
                         } else {
-                            EatServiceApplication.username=name;
+                            EatServiceApplication.username = name;
                             realm.beginTransaction();
                             userInfo.setPassword(password);
                             userInfo.setUsername(name);
@@ -211,8 +216,8 @@ public class LoginActivity extends AppCompatActivity {
             userInfo.deleteFromRealm();
         }
         realm.commitTransaction();
-        SettingsUtils.setPrefAutoLogin(getApplicationContext(),false);
-        SettingsUtils.setPrefRememberPassword(getApplicationContext(),false);
+        SettingsUtils.setPrefAutoLogin(getApplicationContext(), false);
+        SettingsUtils.setPrefRememberPassword(getApplicationContext(), false);
     }
 
     /**

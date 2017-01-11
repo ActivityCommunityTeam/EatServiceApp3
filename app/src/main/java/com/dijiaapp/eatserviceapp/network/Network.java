@@ -66,7 +66,8 @@ public class Network {
 
     private static Retrofit getRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl("http://211.149.235.17:8080/dcb/")
+//                .baseUrl("http://211.149.235.17:8080/dcb/")//测试库
+                .baseUrl("http://120.55.163.4:8080/dcb/")//正式库
                 .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(rxJavaCallAdapterFactory)
                 .build();
