@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.dijiaapp.eatserviceapp.R;
 import com.dijiaapp.eatserviceapp.kaizhuo.MainActivity;
@@ -35,8 +36,6 @@ public class UpdateService extends Service {
 
     private UpdateMsg updateMsg;
 
-
-
     //文件存储
     private File updateDir = null;
 
@@ -50,29 +49,21 @@ public class UpdateService extends Service {
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
     }
-
-
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         //获取传值
-        //titleId = intent.getIntExtra("titleId",0);
         String client_version=intent.getStringExtra("client_version");
         String download_url=intent.getStringExtra("download_url");
         String update_log=intent.getStringExtra("update_log");
         String update_install=intent.getStringExtra("update_install");
         updateMsg=new UpdateMsg(client_version,download_url,update_log,update_install);
 
-
-
         //创建文件
         if(android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())){
             //文件夹路径
             updateDir = new File(Environment.getExternalStorageDirectory(),UpdateInformation.downloadDir);
-
         }
-        Log.i("gqf",getApplicationContext().getExternalCacheDir().getAbsolutePath());
         //没有则创建文件夹
         if (!updateDir.exists()) {
             updateDir.mkdir();
@@ -81,12 +72,11 @@ public class UpdateService extends Service {
         updateIntent = new Intent(this, MainActivity.class);
         updatePendingIntent = PendingIntent.getActivity(this,0,updateIntent,0);
 
-
         //下载通知
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_bottom_mine)
+                .setSmallIcon(R.drawable.download_icon)
                 .setContentTitle(this.getResources().getString(R.string.app_name)+"正在更新")
                 .setContentText(updateMsg.getUpdate_log())
                 .setContentIntent(updatePendingIntent)
@@ -95,7 +85,6 @@ public class UpdateService extends Service {
         notificationManager.notify(0, notificationBuilder.build());
 
         //开启一个新的线程下载，如果使用Service同步下载，会导致ANR问题，Service本身也会阻塞
-       // new Thread(new updateRunnable()).start();//这个是下载的重点，是下载的过程
         Log.i("gqf","开始下载");
         download();
         return super.onStartCommand(intent, flags, startId);
@@ -105,8 +94,6 @@ public class UpdateService extends Service {
     public boolean onUnbind(Intent intent) {
         return super.onUnbind(intent);
     }
-
-
 
     @Nullable
     @Override
@@ -153,6 +140,7 @@ public class UpdateService extends Service {
                 }
             }
         };
+
         //下载文件名，地址
 
         outputFile = new File(updateDir.getAbsolutePath(),getResources().getString(R.string.app_name)+".apk");
@@ -161,27 +149,24 @@ public class UpdateService extends Service {
             outputFile.delete();
         }
 
-        Log.i("gqf",outputFile.getAbsolutePath());
-
         String baseUrl = StringUtils.getHostName(updateMsg.getDownload_url());
         //开起下载
-        new DownloadAPI(baseUrl, listener).downloadAPK(updateMsg.getDownload_url(), outputFile, new Subscriber() {
+        new DownloadAPI(baseUrl, listener)
+                .downloadAPK(updateMsg.getDownload_url(), outputFile, new Subscriber() {
             @Override
             public void onCompleted() {
                 downloadCompleted();
-                Log.e("gqf", "onCompleted: ");
             }
 
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
-                //downloadCompleted();
-                Log.e("gqf", "onError: " + e.getMessage());
+                //downloadCompleted);
+                Toast.makeText(getApplicationContext(),"下载失败",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNext(Object o) {
-                Log.e("gqf", "onNext: " );
             }
         });
 
@@ -206,9 +191,6 @@ public class UpdateService extends Service {
         //也可通过点击通知跳转安装界面
         notificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
         notificationManager.notify(0, notificationBuilder.build());
-
-
-
 
     }
 }

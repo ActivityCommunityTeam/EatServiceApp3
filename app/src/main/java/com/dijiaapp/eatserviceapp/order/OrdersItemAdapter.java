@@ -65,6 +65,8 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
             holder.mOrderItemDone.setVisibility(View.GONE);
             holder.mOrderItemDeliver.setVisibility(View.GONE);
             holder.mOrderItemJiacan.setVisibility(View.GONE);
+            holder.mOrderItemStatus.setText("已完成");
+            holder.order_item_lin.setVisibility(View.GONE);
         } else {
             holder.mOrderItemStatus.setText("已点餐");
         }
@@ -135,6 +137,10 @@ public class OrdersItemAdapter extends RecyclerView.Adapter<OrdersItemAdapter.Vi
         TextView seatListitemName;
         @BindView(R.id.seat_listitem_number)
         TextView seatListitemNumber;
+        @BindView(R.id.order_item_lin)
+        LinearLayout order_item_lin;
+
+
 //        @BindView(R.id.seat_listitem_status)
 //        TextView seatListitemStatus;
 
