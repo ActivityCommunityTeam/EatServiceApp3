@@ -83,13 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar.setTitle(toolstr);
         setSupportActionBar(mToolbar);
-        /*toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });*/
 
     }
     Observer<UpdateMsg> observer=new Observer<UpdateMsg>() {
@@ -362,6 +355,7 @@ public class MainActivity extends AppCompatActivity {
             String id = orderInfo.getSeatName();
 
             submitOrderOver(id);
+            setContent(CONTENT_HOME);
         }
     }
 
