@@ -386,7 +386,9 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
     }
 
     private void saveOrder() {
-        Subscription subscription = getOrderService().saveOrder(order.getHotelId(), order.getUserId(), order.getOrdreTotal(), order.getDinnerNum(), order.getSeatName(),order.getRemark(), new Gson().toJson(order.getDishes()))
+        Subscription subscription = getOrderService().saveOrder(order.getHotelId(),
+                order.getUserId(), order.getOrdreTotal(), order.getDinnerNum(),
+                order.getSeatName(),order.getRemark(), new Gson().toJson(order.getDishes()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
