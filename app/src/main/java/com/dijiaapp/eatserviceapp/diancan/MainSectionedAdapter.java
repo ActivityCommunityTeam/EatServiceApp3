@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.dijiaapp.eatserviceapp.View.SectionedBaseAdapter;
 import com.dijiaapp.eatserviceapp.data.Cart;
 import com.dijiaapp.eatserviceapp.data.DishesListBean;
 import com.dijiaapp.eatserviceapp.data.FoodType;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -135,6 +137,10 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
         Button plus = (Button) layout.findViewById(R.id.plusBt);
         final TextView amountTv = (TextView) layout.findViewById(R.id.amountTv);
 
+        Picasso.with(mContext).load(dishesListBean.getDishesPicture())
+                .placeholder(R.drawable.pic)
+                .error(R.drawable.pic)
+                .into(((ImageView) layout.findViewById(R.id.imageItem)));
         //当前菜品是否在购物车中，获得数量
         for(Cart cart :carts){
             if(cart.getDishesListBean().getId() == dishesListBean.getId()){
