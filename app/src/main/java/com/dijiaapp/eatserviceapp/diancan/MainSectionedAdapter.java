@@ -137,7 +137,7 @@ public class MainSectionedAdapter extends SectionedBaseAdapter {
         Button plus = (Button) layout.findViewById(R.id.plusBt);
         final TextView amountTv = (TextView) layout.findViewById(R.id.amountTv);
 
-        Picasso.with(mContext).load(dishesListBean.getDishesPicture())
+        Picasso.with(mContext).load(dishesListBean.getDishes_picture())
                 .placeholder(R.drawable.pic)
                 .error(R.drawable.pic)
                 .into(((ImageView) layout.findViewById(R.id.imageItem)));

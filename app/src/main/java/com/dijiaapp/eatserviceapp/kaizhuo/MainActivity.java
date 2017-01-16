@@ -22,6 +22,7 @@ import com.blankj.utilcode.utils.KeyboardUtils;
 import com.blankj.utilcode.utils.StringUtils;
 import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
+import com.dijiaapp.eatserviceapp.data.FoodType;
 import com.dijiaapp.eatserviceapp.data.OrderInfo;
 import com.dijiaapp.eatserviceapp.data.ResultInfo;
 import com.dijiaapp.eatserviceapp.data.Seat;
@@ -228,9 +229,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void exit() {
         if ((System.currentTimeMillis() - mExitTime) > 2000) {
+            if(realm.where(FoodType.class).findFirst()!=null) {
+                realm.beginTransaction();
+                realm.delete(FoodType.class);
+                realm.commitTransaction();
+            }
+//            if(SettingsUtils.isAutoLogin(getApplicationContext())){
+//                realm.beginTransaction();
+//                UserInfo userInfo = realm.where(UserInfo.class).findFirst();
+//                Log.i("gqf",userInfo.toString());
+//                if (userInfo != null) {
+//                    userInfo.deleteFromRealm();
+//                }
+//                realm.commitTransaction();
+//            }
             Toast.makeText(MainActivity.this, "再按一次退出服务员app", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
+
 //            MyConfig.clearSharePre(this, "users");
             ((EatServiceApplication)getApplication()).exit();
         }
@@ -463,6 +479,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+
         realm.close();
 
         KeyboardUtils.hideSoftInput(this);

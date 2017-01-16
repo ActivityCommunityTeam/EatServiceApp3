@@ -26,7 +26,7 @@ public class DishesListBean extends RealmObject{
     private String dishesUnit="";
     private double dishesPrice;
 
-    private String dishesPicture;
+    private String dishes_picture;
     public String getDishesName() {
         return dishesName;
     }
@@ -75,12 +75,12 @@ public class DishesListBean extends RealmObject{
         this.dishesPrice = dishesPrice;
     }
 
-    public String getDishesPicture() {
-        return dishesPicture;
+    public String getDishes_picture() {
+        return dishes_picture;
     }
 
-    public void setDishesPicture(String dishesPicture) {
-        this.dishesPicture = dishesPicture;
+    public void setDishes_picture(String dishes_picture) {
+        this.dishes_picture = dishes_picture;
     }
 
     @Override
@@ -92,7 +92,7 @@ public class DishesListBean extends RealmObject{
                 ", id=" + id +
                 ", dishesUnit='" + dishesUnit + '\'' +
                 ", dishesPrice=" + dishesPrice +
-                ", dishesPicture='" + dishesPicture + '\'' +
+                ", dishes_picture='" + dishes_picture + '\'' +
                 '}';
     }
 }

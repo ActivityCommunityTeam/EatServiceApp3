@@ -7,6 +7,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.dijiaapp.eatserviceapp.data.FoodType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +42,31 @@ public class EatServiceApplication extends Application {
         mList.add(activity);
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        if(realm.where(FoodType.class).findFirst()!=null) {
+            realm.beginTransaction();
+            realm.delete(FoodType.class);
+            realm.commitTransaction();
+        }
+//        if(SettingsUtils.isAutoLogin(getApplicationContext())&&realm.where(UserInfo.class).findFirst()!=null){
+//            realm.beginTransaction();
+//            UserInfo userInfo = realm.where(UserInfo.class).findFirst();
+//            if (userInfo != null) {
+//                userInfo.deleteFromRealm();
+//            }
+//            realm.commitTransaction();
+//        }
+        realm.close();
+    }
+
     /**
      * 遍历退出activity
      */
     public void exit() {
+
         try {
             for (Activity activity : mList) {
                 if (activity != null)
@@ -66,7 +89,7 @@ public class EatServiceApplication extends Application {
         //垃圾回收
         System.gc();
     }
-
+    Realm realm;
 //Realm初始化
     public static String username;
     @Override
@@ -76,7 +99,7 @@ public class EatServiceApplication extends Application {
         mList = new ArrayList<>();
         RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).schemaVersion(2).deleteRealmIfMigrationNeeded().build();
         Realm.setDefaultConfiguration(realmConfig);
-
+        realm = Realm.getDefaultInstance();
     }
     /**
      * 版本对比(是否需要更新版本)

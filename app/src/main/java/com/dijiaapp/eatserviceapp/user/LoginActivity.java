@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.blankj.utilcode.utils.ScreenUtils;
 import com.dijiaapp.eatserviceapp.EatServiceApplication;
 import com.dijiaapp.eatserviceapp.R;
+import com.dijiaapp.eatserviceapp.data.FoodType;
 import com.dijiaapp.eatserviceapp.data.UserInfo;
 import com.dijiaapp.eatserviceapp.kaizhuo.MainActivity;
 import com.dijiaapp.eatserviceapp.network.Network;
@@ -98,9 +100,23 @@ public class LoginActivity extends AppCompatActivity {
 
     public void exit() {
         if ((System.currentTimeMillis() - mExitTime) > 2000) {
+            if(realm.where(FoodType.class).findFirst()!=null) {
+                realm.beginTransaction();
+                realm.delete(FoodType.class);
+                realm.commitTransaction();
+            }
+//            if(SettingsUtils.isAutoLogin(getApplicationContext())){
+//                realm.beginTransaction();
+//                UserInfo userInfo = realm.where(UserInfo.class).findFirst();
+//                if (userInfo != null) {
+//                    userInfo.deleteFromRealm();
+//                }
+//                realm.commitTransaction();
+//            }
             Toast.makeText(LoginActivity.this, "再按一次退出服务员app", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
+
 //            MyConfig.clearSharePre(this, "users");
             finish();
             System.exit(0);
@@ -118,6 +134,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void call(Boolean aBoolean) {
                         SettingsUtils.setPrefRememberPassword(getApplicationContext(), aBoolean);
+                        if(aBoolean==false){
+                            mLoginAutoLogin.setChecked(false);
+                            SettingsUtils.setPrefAutoLogin(getApplicationContext(), aBoolean);
+                        }
                     }
                 });
 
@@ -125,20 +145,28 @@ public class LoginActivity extends AppCompatActivity {
                 .subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
+
                         SettingsUtils.setPrefAutoLogin(getApplicationContext(), aBoolean);
+                        if(aBoolean==true){
+                            SettingsUtils.setPrefRememberPassword(getApplicationContext(), aBoolean);
+                            mLoginRememberPassword.setChecked(true);
+                        }
+
                     }
                 });
 
         if (SettingsUtils.isRememberPassword(getApplicationContext())) {
             UserInfo userInfo = realm.where(UserInfo.class).findFirst();
-            name = userInfo.getUsername();
-            EatServiceApplication.username = name;
-            password = userInfo.getPassword();
-            mLoginNameEt.setText(name);
-            mLoginPasswordEt.setText(password);
-            mLoginBt.setEnabled(true);
-            if (SettingsUtils.isAutoLogin(getApplicationContext()))
-                doLogin();
+            if(userInfo!=null) {
+                name = userInfo.getUsername();
+                EatServiceApplication.username = name;
+                password = userInfo.getPassword();
+                mLoginNameEt.setText(name);
+                mLoginPasswordEt.setText(password);
+                mLoginBt.setEnabled(true);
+                if (SettingsUtils.isAutoLogin(getApplicationContext()))
+                    doLogin();
+            }
         }
 
     }
@@ -193,12 +221,29 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                             deletUser();
                         } else {
+
                             EatServiceApplication.username = name;
+
+                            UserInfo user = realm.where(UserInfo.class).findFirst();
+                            if(user.getHotelId()!=userInfo.getHotelId()){
+                                if(realm.where(FoodType.class).findFirst()!=null) {
+                                    realm.beginTransaction();
+                                    realm.delete(FoodType.class);
+                                    realm.commitTransaction();
+                                }
+                            }
+                            if(user!=null) {
+                                realm.beginTransaction();
+                                user.deleteFromRealm();
+                                realm.commitTransaction();
+                            }
                             realm.beginTransaction();
                             userInfo.setPassword(password);
                             userInfo.setUsername(name);
                             realm.copyToRealmOrUpdate(userInfo);
                             realm.commitTransaction();
+                            Log.i("gqf",userInfo.toString());
+                            Log.i("gqf",realm.where(UserInfo.class).findFirst().toString());
                             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             LoginActivity.this.finish();
@@ -270,10 +315,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+
         realm.close();
         compositeSubscription.unsubscribe();
+
     }
 
 }

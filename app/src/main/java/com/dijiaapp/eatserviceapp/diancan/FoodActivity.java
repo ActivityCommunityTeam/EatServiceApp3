@@ -507,8 +507,9 @@ public class FoodActivity extends AppCompatActivity {
         compositeSubscription = new CompositeSubscription();
         realm = Realm.getDefaultInstance();
         //获取酒店id
-        hotelId = realm.where(UserInfo.class).findFirst().getHotelId();
-
+        //hotelId = realm.where(UserInfo.class).findFirst().getHotelId();
+        UserInfo userInfo = realm.where(UserInfo.class).findFirst();
+        hotelId = userInfo.getHotelId();
         //判断点餐还是加菜
         Intent intent = getIntent();
         isAddFood = intent.getBooleanExtra("addFood", false);
@@ -547,6 +548,10 @@ public class FoodActivity extends AppCompatActivity {
     private void getFood() {
         //获取酒店菜品
         Observable<List<FoodType>> observable = getFoodFromLocal();
+//        if(SettingsUtils.isAutoLogin(getApplicationContext())){
+//            observable = getFoodFromLocal();
+//        }
+
         if (observable == null) {
             getFoodFromNet();
         } else {
@@ -604,6 +609,7 @@ public class FoodActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         realm.close();
+
         EventBus.getDefault().unregister(this);
         compositeSubscription.unsubscribe();
     }
