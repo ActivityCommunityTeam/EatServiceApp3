@@ -31,5 +31,8 @@ public interface SeatSevice {
 
     @GET("dining/isOrder/{seatId}")
     Observable<Boolean> isOrder(@Path("seatId") String seatId);
+
+    @GET("dining/isTurnTable/{seatId}")
+    Observable<Boolean> isTurnTable(@Path("seatId") String seatId);
     
 }

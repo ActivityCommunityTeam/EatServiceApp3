@@ -319,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<OrderInfo>() {
                     @Override
+
                     public void onCompleted() {
 
                     }
@@ -363,16 +364,40 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void orderOverEvent(OrderOverEvent orderOverEvent) {
         OrderInfo orderInfo = orderOverEvent.getOrderInfo();
-        String _status = orderInfo.getStatusId();
-        Log.i("Daniel", "---_status---" + _status);
-        if (_status.equals("01")) {
-            Toast.makeText(this, "订单未确认，不可翻桌！", Toast.LENGTH_SHORT).show();
-        } else if (_status.equals("02")) {
-            String id = orderInfo.getSeatName();
+        isOrderOver(orderInfo.getSeatName());
+//        String _status = orderInfo.getStatusId();
+//        Log.i("Daniel", "---_status---" + _status);
 
-            submitOrderOver(id);
-            setContent(CONTENT_HOME);
-        }
+    }
+
+    private void isOrderOver(final String seatId) {
+        Network.getSeatService().isTurnTable(seatId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if (aBoolean) {
+                            submitOrderOver(seatId);
+                            setContent(CONTENT_HOME);
+                        } else {
+                            Toast.makeText(MainActivity.this, "未结单，不可翻桌！", Toast.LENGTH_SHORT).show();
+//                            String id = orderInfo.getSeatName();
+
+                        }
+                    }
+                });
+
     }
 
     /**

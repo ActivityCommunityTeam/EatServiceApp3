@@ -190,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                     @DebugLog
                     @Override
                     public void onNext(Void aVoid) {
+
                         doLogin();
                     }
                 });
@@ -224,9 +225,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                             deletUser();
                         } else {
-
                             EatServiceApplication.username = name;
-
                             UserInfo user = realm.where(UserInfo.class).findFirst();
                             if(user.getHotelId()!=userInfo.getHotelId()){
                                 if(realm.where(FoodType.class).findFirst()!=null) {
