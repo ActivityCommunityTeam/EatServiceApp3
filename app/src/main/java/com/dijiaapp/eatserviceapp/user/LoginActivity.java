@@ -214,6 +214,9 @@ public class LoginActivity extends AppCompatActivity {
                         deletUser();
                     }
 
+
+
+
                     @DebugLog
                     @Override
                     public void onNext(UserInfo userInfo) {
