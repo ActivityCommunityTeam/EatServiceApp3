@@ -211,26 +211,31 @@ public class LoginActivity extends AppCompatActivity {
                     @DebugLog
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "登录失败，网络问题", Toast.LENGTH_SHORT).show();
                         deletUser();
                     }
                     @DebugLog
                     @Override
                     public void onNext(UserInfo userInfo) {
                         if (userInfo.getHotelId() == 0) {
-                            Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "登录失败，用户不存在", Toast.LENGTH_SHORT).show();
                             deletUser();
                         } else {
                             EatServiceApplication.username = name;
                             UserInfo user = realm.where(UserInfo.class).findFirst();
-                            if(user.getHotelId()!=userInfo.getHotelId()){
-                                if(realm.where(FoodType.class).findFirst()!=null) {
-                                    realm.beginTransaction();
-                                    realm.delete(FoodType.class);
-                                    realm.commitTransaction();
-                                }
-                            }
                             if(user!=null) {
+                                if (user.getHotelId() != userInfo.getHotelId()) {
+                                    if (realm.where(FoodType.class).findFirst() != null) {
+                                        realm.beginTransaction();
+                                        realm.delete(FoodType.class);
+                                        realm.commitTransaction();
+                                    }
+                                } else {
+                                    if (user.getWaiterId()==userInfo.getWaiterId()) {
+                                        name = user.getUsername();
+                                        password = user.getPassword();
+                                    }
+                                }
                                 realm.beginTransaction();
                                 user.deleteFromRealm();
                                 realm.commitTransaction();
