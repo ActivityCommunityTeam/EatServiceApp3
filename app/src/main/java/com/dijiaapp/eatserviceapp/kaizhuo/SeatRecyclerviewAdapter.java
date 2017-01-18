@@ -58,6 +58,7 @@ public class SeatRecyclerviewAdapter extends RecyclerView.Adapter<SeatRecyclervi
             @DebugLog
             @Override
             public void onClick(View view) {
+                Log.e("Daniel","---onClick---");
                 EventBus.getDefault().post(new EnterActivityEvent(SeatEatNumberActivity.class, seat));
             }
         });
