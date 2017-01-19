@@ -73,19 +73,14 @@ public class LoginActivity extends AppCompatActivity {
         if (((EatServiceApplication) getApplication()).getListSize() != 0) {
             ((EatServiceApplication) getApplication()).exit();
         }
-
         compositeSubscription = new CompositeSubscription();
         realm = Realm.getDefaultInstance();
         initLoginSetting();
         initLogin();
         initLoginBt();
-
-
     }
-
     //退出时的时间
     private long mExitTime;
-
     //对返回键进行监听
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -105,24 +100,14 @@ public class LoginActivity extends AppCompatActivity {
                 realm.delete(FoodType.class);
                 realm.commitTransaction();
             }
-//            if(SettingsUtils.isAutoLogin(getApplicationContext())){
-//                realm.beginTransaction();
-//                UserInfo userInfo = realm.where(UserInfo.class).findFirst();
-//                if (userInfo != null) {
-//                    userInfo.deleteFromRealm();
-//                }
-//                realm.commitTransaction();
-//            }
             Toast.makeText(LoginActivity.this, "再按一次退出服务员app", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
 
-//            MyConfig.clearSharePre(this, "users");
             finish();
             System.exit(0);
         }
     }
-
     /**
      * 登录设置
      */
@@ -140,12 +125,10 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
         RxCompoundButton.checkedChanges(mLoginAutoLogin)
                 .subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-
                         SettingsUtils.setPrefAutoLogin(getApplicationContext(), aBoolean);
                         if(aBoolean==true){
                             SettingsUtils.setPrefRememberPassword(getApplicationContext(), aBoolean);
@@ -154,7 +137,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 });
-
         if (SettingsUtils.isRememberPassword(getApplicationContext())) {
             UserInfo userInfo = realm.where(UserInfo.class).findFirst();
             if(userInfo!=null) {
@@ -170,33 +152,27 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
     @DebugLog
     private void initLoginBt() {
-
         Subscription loginBt = RxView.clicks(mLoginBt).throttleFirst(400, TimeUnit.MILLISECONDS)
                 .subscribe(new Observer<Void>() {
                     @Override
                     public void onCompleted() {
 
                     }
-
                     @DebugLog
                     @Override
                     public void onError(Throwable e) {
 
                     }
-
                     @DebugLog
                     @Override
                     public void onNext(Void aVoid) {
-
                         doLogin();
                     }
                 });
         compositeSubscription.add(loginBt);
     }
-
     @DebugLog
     private void doLogin() {
         Subscription logSc = Network.getUserService().login(name, password)
@@ -221,25 +197,30 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "登录失败，用户不存在", Toast.LENGTH_SHORT).show();
                             deletUser();
                         } else {
-                            EatServiceApplication.username = name;
                             UserInfo user = realm.where(UserInfo.class).findFirst();
                             if(user!=null) {
                                 if (user.getHotelId() != userInfo.getHotelId()) {
-                                    if (realm.where(FoodType.class).findFirst() != null) {
-                                        realm.beginTransaction();
-                                        realm.delete(FoodType.class);
-                                        realm.commitTransaction();
-                                    }
+
                                 } else {
+                                    //如果是子自动登录，保存账户密码
                                     if (user.getWaiterId()==userInfo.getWaiterId()) {
                                         name = user.getUsername();
                                         password = user.getPassword();
                                     }
                                 }
+                                //删除本地之前保存的用户信息
                                 realm.beginTransaction();
                                 user.deleteFromRealm();
                                 realm.commitTransaction();
                             }
+                            //先删一遍保存的菜单，保证每次登录更新一次菜单
+                            if (realm.where(FoodType.class).findFirst() != null) {
+                                realm.beginTransaction();
+                                realm.delete(FoodType.class);
+                                realm.commitTransaction();
+                            }
+                            //保存用户信息
+                            EatServiceApplication.username = name;
                             realm.beginTransaction();
                             userInfo.setPassword(password);
                             userInfo.setUsername(name);
