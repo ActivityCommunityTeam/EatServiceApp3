@@ -21,6 +21,7 @@
 
     <color name="blue_jc">#25A6E9</color><!--加餐蓝-->
     <color name="blueDark_jc">#059BE8</color><!--加餐深蓝-->
+    <color name="bottom_img">#838282</color> <!--底部图标色 -->
 
     <color name="title_ddxq">#464646</color> <!--订单详情title-->
 </resources>

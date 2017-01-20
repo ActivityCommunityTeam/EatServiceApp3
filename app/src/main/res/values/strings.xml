@@ -27,6 +27,8 @@
     <string name="submitOrder">提交订单</string>
     <!--首页-->
     <string name="firstPage">点餐宝</string>
+    <string name="footorder_bottom">餐单</string>
+    <string name="mian">我的</string>
     <!--餐单-->
     <string name="foodOrder">点餐中心</string>
     <!--我的-->

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -18,6 +17,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.blankj.utilcode.utils.KeyboardUtils;
 import com.blankj.utilcode.utils.StringUtils;
 import com.dijiaapp.eatserviceapp.EatServiceApplication;
@@ -36,8 +37,6 @@ import com.dijiaapp.eatserviceapp.order.OrderOverEvent;
 import com.dijiaapp.eatserviceapp.order.OrdersFragment;
 import com.dijiaapp.eatserviceapp.update.UpdateMsg;
 import com.dijiaapp.eatserviceapp.update.UpdateService;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(toolbar)
     Toolbar mToolbar;
     @BindView(R.id.bottomBar)
-    BottomBar mBottomBar;
+    com.ashokvarma.bottomnavigation.BottomNavigationBar bottomBar;
     private static final int CONTENT_HOME = 1;
     private CompositeSubscription mcompositeSubscription;
     private UserInfo mUser;
@@ -174,21 +173,47 @@ public class MainActivity extends AppCompatActivity {
         mcompositeSubscription = new CompositeSubscription();
         updateApp(mUser.getHotelId());
 
-        mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        //设置底部栏
+        initBottomBar();
+    }
+
+    private void initBottomBar() {
+        bottomBar.setMode(BottomNavigationBar.MODE_FIXED);
+        bottomBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
+        bottomBar
+                .setActiveColor(R.color.colorPrimary)
+                .setInActiveColor(R.color.bottom_img)
+                .setBarBackgroundColor(R.color.white);
+        bottomBar.addItem(new BottomNavigationItem(R.drawable.ic_bottom_home, R.string.firstPage))
+                .addItem(new BottomNavigationItem(R.drawable.ic_bottom_order,  R.string.footorder_bottom))
+                .addItem(new BottomNavigationItem(R.drawable.ic_bottom_mine, R.string.mian))
+                .initialise();
+
+        bottomBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
-                switch (tabId) {
-                    case R.id.tab_home:
+            public void onTabSelected(int position) {
+                switch (position) {
+                    case 0:
                         setContent(CONTENT_HOME);
                         break;
-                    case R.id.tab_order:
+                    case 1:
                         setContent(CONTENT_ORDERS);
-                        break;
 
-                    case R.id.tab_mine:
+                        break;
+                    case 2:
                         setContent(CONTENT_MY);
                         break;
                 }
+            }
+
+            @Override
+            public void onTabUnselected(int position) {
+
+            }
+
+            @Override
+            public void onTabReselected(int position) {
+
             }
         });
     }
