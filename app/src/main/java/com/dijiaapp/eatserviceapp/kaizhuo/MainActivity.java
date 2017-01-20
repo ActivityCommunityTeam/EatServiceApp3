@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         String _str = getResources().getString(R.string.firstPage);
         setToolbar(_str);
+        setContent(CONTENT_HOME);
 
         mcompositeSubscription = new CompositeSubscription();
         updateApp(mUser.getHotelId());
