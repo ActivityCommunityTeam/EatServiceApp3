@@ -108,7 +108,7 @@ public class SeatActivity extends AppCompatActivity {
     }
 
     /**
-     * 订单详情请求
+·+
      */
     private void getOrderDetail() {
         Subscription subscription_orderDetail = Network.getOrderService().orderDetail(mOrderInfo.getOrderId())

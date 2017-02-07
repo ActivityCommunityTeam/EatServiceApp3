@@ -255,6 +255,7 @@ public class UnAddOrderSeatActivity extends AppCompatActivity {
     private void getData() {
         //接收包裹化对象
         mSeat = getIntent().getParcelableExtra("seat");
+        mSeat.toString();
         setData(mSeat);
 
     }

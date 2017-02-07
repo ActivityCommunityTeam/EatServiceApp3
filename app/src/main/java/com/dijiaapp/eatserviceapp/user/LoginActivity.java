@@ -154,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     @DebugLog
     private void initLoginBt() {
-        Subscription loginBt = RxView.clicks(mLoginBt).throttleFirst(400, TimeUnit.MILLISECONDS)
+        Subscription loginBt = RxView.clicks(mLoginBt).throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(new Observer<Void>() {
                     @Override
                     public void onCompleted() {

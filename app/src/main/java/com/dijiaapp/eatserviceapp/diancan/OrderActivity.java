@@ -336,13 +336,13 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
     public void next() {
         if (isAddFood) {
             addFoodOrder();
-            showDialog();
+
         } else {
             order.setRemark(remark);
             Log.i("Daniel","---order.getRemark()---"+order.getRemark());
             saveOrder();
             //updateSeat();
-            showDialog();
+
         }
     }
 
@@ -372,6 +372,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
                     @DebugLog
                     @Override
                     public void onError(Throwable e) {
+                        Toast.makeText(OrderActivity.this, "订单提交失败！", Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -379,6 +380,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
                     @Override
                     public void onNext(ResultInfo resultInfo) {
                         Log.i("gqf", "onNext" + resultInfo.toString());
+                        showDialog();
                         finishOrder(resultInfo);
                     }
                 });
@@ -405,6 +407,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
 
         @Override
         public void onError(Throwable e) {
+            Toast.makeText(OrderActivity.this, "订单提交失败！", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -412,6 +415,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnFocusChan
         @Override
         public void onNext(ResultInfo resultInfo) {
             if (resultInfo.getCode() == 1001) {
+                showDialog();
                 finishOrder(resultInfo);
 
             }

@@ -170,10 +170,8 @@ public class MainActivity extends AppCompatActivity {
         String _str = getResources().getString(R.string.firstPage);
         setToolbar(_str);
         setContent(CONTENT_HOME);
-
         mcompositeSubscription = new CompositeSubscription();
         updateApp(mUser.getHotelId());
-
         //设置底部栏
         initBottomBar();
     }
